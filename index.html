@@ -46,6 +46,8 @@
         .page.active { display: flex; opacity: 1; height: 100%; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-thumb { background: #D8A5A5; border-radius: 4px; }
+        .eye-icon { cursor: pointer; color: #9ca3af; }
+        .eye-icon:hover { color: #4b5563; }
     </style>
 </head>
 <body>
@@ -59,9 +61,12 @@
                 <p class="text-xs text-gray-500 mb-4 font-bold">Pendaftaran Ruang Guru Baru</p>
                 
                 <div class="space-y-3">
-                    <div>
+                    <div class="relative">
                         <label class="block text-[10px] font-bold text-gray-500 uppercase">Kunci Master</label>
-                        <input type="password" id="input-master-key" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-bold focus:border-primary focus:outline-none" placeholder="Masukkan Kunci Master...">
+                        <input type="password" id="input-master-key" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-bold focus:border-primary focus:outline-none pr-10" placeholder="Masukkan Kunci Master...">
+                        <div class="absolute inset-y-0 right-0 pt-4 pr-3 flex items-center">
+                            <svg onclick="togglePassword('input-master-key')" class="w-5 h-5 eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                        </div>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-gray-500 uppercase">Nama Guru Baru</label>
@@ -72,9 +77,12 @@
                             <label class="block text-[10px] font-bold text-gray-500 uppercase">Token (Custom)</label>
                             <input type="text" id="input-new-token" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-bold uppercase focus:border-primary focus:outline-none" placeholder="Contoh: PRODEV">
                         </div>
-                        <div class="w-1/2">
+                        <div class="w-1/2 relative">
                             <label class="block text-[10px] font-bold text-gray-500 uppercase">PIN Guru</label>
-                            <input type="password" id="input-new-pin" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-bold focus:border-primary focus:outline-none" placeholder="6 Digit Angka">
+                            <input type="password" id="input-new-pin" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-bold focus:border-primary focus:outline-none pr-8" placeholder="6 Digit">
+                            <div class="absolute inset-y-0 right-0 pt-4 pr-2 flex items-center">
+                                <svg onclick="togglePassword('input-new-pin')" class="w-4 h-4 eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -143,9 +151,12 @@
                     <label class="block text-sm font-bold text-gray-700 mb-1">Nama Guru</label>
                     <input type="text" id="input-nama-guru" class="w-full px-4 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-800" placeholder="Ketik nama terdaftar...">
                 </div>
-                <div class="mb-6">
+                <div class="mb-6 relative">
                     <label class="block text-sm font-bold text-gray-700 mb-1">PIN Akses</label>
-                    <input type="password" id="input-pin-guru" class="w-full px-4 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-800" placeholder="Ketik PIN Guru">
+                    <input type="password" id="input-pin-guru" class="w-full px-4 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-800 pr-10" placeholder="Ketik PIN Guru">
+                    <div class="absolute inset-y-0 right-0 pt-7 pr-3 flex items-center">
+                        <svg onclick="togglePassword('input-pin-guru')" class="w-5 h-5 eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </div>
                 </div>
                 <button onclick="loginGuru()" class="w-full bg-primary hover:bg-red-900 text-white font-bold py-2.5 rounded-xl transition-all shadow-md">
                     Buka Dasbor
@@ -170,7 +181,6 @@
             
             <div class="p-4 md:p-6 flex-1 overflow-y-auto w-full">
                 <div class="flex flex-col md:flex-row gap-4 mb-6">
-                    <!-- Pengaturan Token Guru -->
                     <div class="bg-gray-800 rounded-xl p-4 border border-gray-700 flex-1 relative overflow-hidden">
                         <div class="relative z-10">
                             <p class="text-gray-400 text-xs font-bold uppercase mb-1">Token Ujian Guru</p>
@@ -347,14 +357,14 @@
         
         // --- KONFIGURASI SERVER ---
         const SECRET_APP_TOKEN = "MISI RAHASIA DEVI"; 
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYYV2SkA6LjGFfFXpNc5I5XpBheRyjmmCIJu95WNWlZJ2Edln8EEMfVB_yrM1DGZIBRA/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjiCCwTwF52DBHBZwlhVKaS7BMtXMuKsMxpzqA7E4fxugN8vn1C-9oVQP58W66I1O-/exec"; // Masukkan Web App URL di sini
         
         // --- KONFIGURASI FIREBASE ---
         const firebaseConfig = {
-            apiKey: "AIzaSyAozoqP9tSqDj8ZL2gCiYWyggmAtZ45qPA",
+            apiKey: "AIzaSyAozoqP9tSqDj8ZL2gCiYWygmAteZ45qPA",
             authDomain: "siap-tka-3.firebaseapp.com",
             projectId: "siap-tka-3",
-            storageBucket: "siap-tka-3.appspot.com", 
+            storageBucket: "siap-tka-3.firebasestorage.app", 
             messagingSenderId: "273866526572",
             appId: "1:273866526572:web:06d39948c5032764deed49",
             measurementId: "G-GP3Y353817"
@@ -395,6 +405,12 @@
                 inputLainnya.value = "";
             }
         });
+
+        // Fitur Intip Password
+        function togglePassword(inputId) {
+            const el = document.getElementById(inputId);
+            el.type = el.type === "password" ? "text" : "password";
+        }
 
         function navigate(pageId) {
             document.querySelectorAll('.page').forEach(el => {
@@ -530,7 +546,7 @@
                     document.getElementById('input-token-custom').value = activeAdminToken;
                     
                     navigate('page-dashboard');
-                    simpanTokenGuru(false); // Simpan status token ke Firebase agar siswa bisa masuk
+                    simpanTokenGuru(false); 
                     muatRealtimeDashboard();
                 } else {
                     alert(result.pesan);
@@ -546,7 +562,6 @@
 
         function simpanTokenGuru(notif = true) {
             if(!activeAdminToken) return;
-            // Simpan ke Firebase agar klien siswa bisa langsung memverifikasi
             db.ref('tokens/' + activeAdminToken).set({
                 aktif: true,
                 guru: namaGuruAktif,
@@ -629,6 +644,7 @@
             errDiv.classList.add('hidden');
 
             try {
+                // Cek Token
                 const payloadCek = new URLSearchParams({
                     tokenAPI: SECRET_APP_TOKEN,
                     aksi: "cekTokenGuru",
@@ -650,11 +666,20 @@
                 
                 btn.innerHTML = `Mengunduh Soal...`;
                 
-                const resSoal = await fetch(`${SCRIPT_URL}?action=getSoal`);
+                // Fetch Soal menggunakan POST
+                const payloadSoal = new URLSearchParams({
+                    tokenAPI: SECRET_APP_TOKEN,
+                    aksi: "ambilSoal"
+                });
+
+                const resSoal = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: payloadSoal
+                });
                 const dataSoal = await resSoal.json();
                 
-                if(dataSoal.status === 'success') {
-                    listSoal = dataSoal.data.sort(() => Math.random() - 0.5);
+                if(dataSoal.status === 'sukses') {
+                    listSoal = dataSoal.soal.sort(() => Math.random() - 0.5);
                     mulaiSesiFirebase();
                     
                     document.getElementById('exam-siswa-info').innerText = `${nama} - ${kelas}`;
@@ -707,7 +732,7 @@
         function bekukanUjian() {
             isFrozen = true;
             document.getElementById('freeze-overlay').classList.remove('hidden');
-            bekuDetik = 300;
+            bekuDetik = 300; // 5 Menit
 
             clearInterval(bekuInterval);
             bekuInterval = setInterval(() => {
@@ -759,12 +784,9 @@
             const elWacana = document.getElementById('wacana-teks');
             const boxWacana = document.getElementById('box-wacana');
             
-            if (soal.Wacana) {
+            if (soal.wacana && soal.wacana.trim() !== "") {
                 let wacanaHTML = "";
-                if(soal.LinkGambarWacana) {
-                    wacanaHTML += `<img src="${soal.LinkGambarWacana}" alt="Gambar Wacana" class="w-full max-w-sm mx-auto mb-4 rounded-xl border border-gray-200">`;
-                }
-                wacanaHTML += `<div class="prose max-w-none prose-sm whitespace-pre-wrap">${soal.Wacana}</div>`;
+                wacanaHTML += `<div class="prose max-w-none prose-sm whitespace-pre-wrap">${soal.wacana}</div>`;
                 elWacana.innerHTML = wacanaHTML;
                 boxWacana.classList.remove('hidden');
             } else {
@@ -773,13 +795,10 @@
 
             const elPertanyaan = document.getElementById('pertanyaan-teks');
             let tanyHTML = "";
-            if(soal.LinkGambarSoal) {
-                tanyHTML += `<img src="${soal.LinkGambarSoal}" alt="Gambar Soal" class="max-w-[200px] mb-3 rounded-xl shadow-sm">`;
-            }
-            tanyHTML += `<div class="whitespace-pre-wrap">${soal.Pertanyaan}</div>`;
+            tanyHTML += `<div class="whitespace-pre-wrap">${soal.pertanyaan}</div>`;
             elPertanyaan.innerHTML = tanyHTML;
 
-            const opsiTeks = [soal.Opsi_A, soal.Opsi_B, soal.Opsi_C, soal.Opsi_D];
+            const opsiTeks = [soal.opsiA, soal.opsiB, soal.opsiC, soal.opsiD];
             const opsiLabel = ['A', 'B', 'C', 'D'];
             let opsiArr = opsiLabel.map((lbl, i) => ({ lbl, t: opsiTeks[i] })).sort(() => Math.random() - 0.5);
 
@@ -861,7 +880,7 @@
             }
 
             clearInterval(timerInterval);
-            window.onblur = null;
+            window.onblur = null; // Mematikan fungsi beku otomatis saat selesai
             
             let benar = 0;
             let arrayJawabanDikirim = [];
@@ -869,7 +888,7 @@
             listSoal.forEach(s => {
                 let jawab = jawabanSiswa[s.id] || "Kosong";
                 arrayJawabanDikirim.push(jawab);
-                if (jawab === s.KunciJawaban) {
+                if (jawab === s.kunci) {
                     benar++;
                 }
             });
