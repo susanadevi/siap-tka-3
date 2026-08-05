@@ -340,57 +340,85 @@
                 </div>
             </div>
 
-            <!-- AREA KONTEN (Split Screen Layout) -->
+           <!-- AREA KONTEN UTAMA (Proporsi Kiri 80% : Kanan 20%) -->
             <div class="flex flex-col md:flex-row w-full flex-1 overflow-hidden">
                 
-                <!-- AREA WACANA / TEKS -->
-                <div id="wacana-container" class="w-full md:w-[55%] h-[42%] md:h-full bg-white p-4 md:p-6 overflow-y-auto border-b-2 md:border-b-0 md:border-r-2 border-accent/40 leading-relaxed text-sm md:text-base">
-                    <div class="bg-cream/40 p-3 rounded-lg border border-secondary/20 mb-3 text-xs text-secondary font-bold uppercase tracking-wider">
-                        📖 Teks Bacaan / Wacana
-                    </div>
-                    <div id="wacana-content" class="wacana-content text-gray-800">
-                        <!-- Konten Wacana Dimuat Dinamis via JS -->
-                    </div>
-                </div>
-
-                <!-- AREA PERTANYAAN & OPSI -->
-                <div class="w-full md:w-[45%] h-[58%] md:h-full flex flex-col justify-between bg-bgcream p-4 md:p-6 overflow-y-auto relative">
+                <!-- KIRI: PEMBUNGKUS WACANA & SOAL (80% Lebar Desktop) -->
+                <div class="w-full md:w-[80%] flex flex-col md:flex-row h-full">
                     
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span id="tipe-soal-badge" class="px-2.5 py-1 text-[11px] font-bold rounded-full bg-primary/10 text-primary border border-primary/20">Pilihan Ganda</span>
+                    <!-- AREA WACANA / TEKS -->
+                    <div id="wacana-container" class="w-full md:w-[55%] h-[42%] md:h-full bg-white p-4 md:p-6 overflow-y-auto border-b-2 md:border-b-0 md:border-r-2 border-accent/40 leading-relaxed text-sm md:text-base">
+                        <div class="bg-cream/40 p-3 rounded-lg border border-secondary/20 mb-3 text-xs text-secondary font-bold uppercase tracking-wider">
+                            📖 Teks Bacaan / Wacana
                         </div>
-
-                        <div id="soal-pertanyaan" class="font-semibold text-gray-900 text-sm md:text-base leading-relaxed">
-                            <!-- Teks Pertanyaan Dimuat via JS -->
-                        </div>
-
-                        <!-- OPSI JAWABAN -->
-                        <div id="soal-opsi-container" class="space-y-2 mt-4">
-                            <!-- Opsi Jawaban (PG / PGK / Centang) Dimuat via JS -->
+                        <div id="wacana-content" class="wacana-content text-gray-800">
+                            <!-- Konten Wacana Dimuat Dinamis via JS -->
                         </div>
                     </div>
 
-                    <!-- TOMBOL NAVIGASI SOAL -->
-                    <div class="pt-4 border-t border-accent/30 mt-6 flex justify-between items-center gap-2">
-                        <button id="btn-prev" onclick="prevSoal()" class="px-4 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 text-xs md:text-sm flex items-center">
-                            &larr; Sebelum
-                        </button>
+                    <!-- AREA PERTANYAAN & OPSI -->
+                    <div class="w-full md:w-[45%] h-[58%] md:h-full flex flex-col justify-between bg-bgcream p-4 md:p-6 overflow-y-auto relative">
                         
-                        <button id="btn-ragu" onclick="toggleRagu()" class="px-3 py-2 bg-yellow-100 text-yellow-800 border border-yellow-300 font-semibold rounded-lg hover:bg-yellow-200 text-xs md:text-sm">
-                            <input type="checkbox" id="chk-ragu" class="mr-1 pointer-events-none"> Ragu-ragu
-                        </button>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span id="tipe-soal-badge" class="px-2.5 py-1 text-[11px] font-bold rounded-full bg-primary/10 text-primary border border-primary/20">Pilihan Ganda</span>
+                            </div>
 
-                        <button id="btn-next" onclick="nextSoal()" class="px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-red-900 text-xs md:text-sm flex items-center">
-                            Lanjut &rarr;
-                        </button>
-                        
-                        <button id="btn-finish" onclick="konfirmasiSelesai()" class="hidden px-4 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 text-xs md:text-sm">
-                            Selesai Ujian
-                        </button>
+                            <div id="soal-pertanyaan" class="font-semibold text-gray-900 text-sm md:text-base leading-relaxed">
+                                <!-- Teks Pertanyaan Dimuat via JS -->
+                            </div>
+
+                            <!-- OPSI JAWABAN -->
+                            <div id="soal-opsi-container" class="space-y-2 mt-4">
+                                <!-- Opsi Jawaban (PG / PGK / Centang) Dimuat via JS -->
+                            </div>
+                        </div>
+
+                        <!-- TOMBOL NAVIGASI SOAL -->
+                        <div class="pt-4 border-t border-accent/30 mt-6 flex justify-between items-center gap-2">
+                            <button id="btn-prev" onclick="prevSoal()" class="px-3 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 text-xs md:text-sm flex items-center">
+                                &larr; Sebelum
+                            </button>
+                            
+                            <button id="btn-ragu" onclick="toggleRagu()" class="px-3 py-2 bg-yellow-100 text-yellow-800 border border-yellow-300 font-semibold rounded-lg hover:bg-yellow-200 text-xs md:text-sm">
+                                <input type="checkbox" id="chk-ragu" class="mr-1 pointer-events-none"> Ragu-ragu
+                            </button>
+
+                            <button id="btn-next" onclick="nextSoal()" class="px-3 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-red-900 text-xs md:text-sm flex items-center">
+                                Lanjut &rarr;
+                            </button>
+                            
+                            <button id="btn-finish" onclick="konfirmasiSelesai()" class="hidden px-3 py-2 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 text-xs md:text-sm">
+                                Selesai Ujian
+                            </button>
+                        </div>
                     </div>
                 </div>
 
+                <!-- KANAN: PANEL NAVIGASI SOAL (20% Lebar Desktop) -->
+                <div id="nav-grid-modal" class="hidden fixed md:static inset-0 bg-black/50 md:bg-transparent z-30 md:z-auto md:flex flex-col w-full md:w-[20%] bg-white border-l border-accent/40 p-4 overflow-y-auto shadow-inner">
+                    <div class="flex justify-between items-center mb-3 md:mb-4">
+                        <h3 class="font-bold text-gray-800 text-sm md:text-base">Navigasi Soal</h3>
+                        <button onclick="toggleNavGrid()" class="md:hidden text-gray-500 font-bold text-lg">&times;</button>
+                    </div>
+                    
+                    <!-- Grid diubah menjadi 4 kolom agar tidak terlalu sesak di area 20% -->
+                    <div class="grid grid-cols-4 gap-2" id="grid-nomor-soal">
+                        <!-- Tombol Nomor Soal Generasi JS -->
+                    </div>
+
+                    <div class="mt-6 space-y-2 text-[11px] xl:text-xs text-gray-600 border-t pt-4 flex-1">
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-green-600 inline-block shrink-0"></span> Sudah dijawab</div>
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-yellow-400 inline-block shrink-0"></span> Ragu-ragu</div>
+                        <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-gray-200 inline-block shrink-0"></span> Belum dijawab</div>
+                    </div>
+
+                    <button onclick="konfirmasiSelesai()" class="w-full mt-6 py-2.5 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 shadow-md transition-all text-xs md:text-sm">
+                        Kumpulkan Jawaban
+                    </button>
+                </div>
+
+            </div>
             </div>
 
             <!-- PANEL POPUP DAFTAR NOMOR SOAL (DESKTOP & MOBILE SIDEBAR) -->
