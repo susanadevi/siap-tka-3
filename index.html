@@ -5,128 +5,220 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIAP TKA Seri 03 Bahasa Indonesia SMP</title>
     
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Allura&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { primary: '#6E1F26', bgcream: '#F8F3EA', accent: '#D8A5A5', secondary: '#C9A96A' },
-                    fontFamily: { sans: ['Inter', 'sans-serif'], allura: ['Allura', 'cursive'] }
+                    colors: {
+                        primary: '#6E1F26',      
+                        bgcream: '#F8F3EA',      
+                        accent: '#D8A5A5',       
+                        secondary: '#C9A96A',    
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        allura: ['Allura', 'cursive'],
+                    }
                 }
             }
         }
     </script>
+    
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
     <style>
-        #cbt-app-root { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100dvh !important; z-index: 999999 !important; background-color: #F8F3EA !important; overflow: hidden !important; display: block !important; }
+        /* Gaya Khusus */
+        #cbt-app-root {
+            position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100dvh !important;
+            z-index: 999999 !important; background-color: #F8F3EA !important; overflow: hidden !important;
+            font-family: 'Inter', sans-serif !important; display: block !important; opacity: 1 !important; visibility: visible !important;
+        }
         body, html { margin: 0 !important; padding: 0 !important; overflow: hidden !important; height: 100% !important; }
         .page { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
         .page.active { display: flex; opacity: 1; height: 100%; }
-        .opt-btn.selected { background-color: #C9A96A !important; color: white !important; border-color: #C9A96A !important; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #D8A5A5; border-radius: 4px; }
     </style>
 </head>
 <body>
 
     <div id="cbt-app-root" class="text-gray-800">
-        <!-- OVERLAY BEKU -->
-        <div id="freeze-overlay" class="hidden fixed inset-0 bg-black/95 z-[999999] flex flex-col items-center justify-center text-white p-6">
-            <h1 class="text-4xl font-extrabold text-red-500 mb-4 tracking-widest uppercase">UJIAN DIBEKUKAN</h1>
-            <p class="text-lg mb-6 text-center">Pelanggaran terdeteksi (pindah layar).<br>Buka dalam:</p>
-            <div id="freeze-timer" class="text-6xl font-black text-secondary">05:00</div>
+
+        <!-- OVERLAY BEKU 5 MENIT -->
+        <div id="freeze-overlay" class="hidden fixed inset-0 bg-black/95 z-[999999] flex flex-col items-center justify-center text-white p-6 backdrop-blur-md">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-red-500 mb-4 tracking-widest uppercase text-center">UJIAN DIBEKUKAN</h1>
+            <p class="text-lg md:text-xl mb-6 text-center max-w-xl">Pelanggaran terdeteksi (pindah layar/tab).<br>Ujian akan otomatis terbuka dalam:</p>
+            <div id="freeze-timer" class="text-6xl font-black text-secondary drop-shadow-lg">05:00</div>
         </div>
 
         <!-- 1. LANDING PAGE -->
-        <div id="page-landing" class="page active flex-col items-center justify-center p-4">
-            <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-md w-full border-t-8 border-primary text-center">
-                <h1 class="text-3xl font-extrabold text-primary tracking-tight">SIAP TKA</h1>
-                <h2 class="text-lg font-bold text-secondary mt-1">Bahasa Indonesia SMP</h2>
-                <div class="flex flex-col gap-3 mt-8">
-                    <button onclick="navigate('page-siswa-auth')" class="w-full py-3 px-4 font-bold rounded-xl text-white bg-secondary hover:bg-yellow-600 shadow-md">Masuk sebagai Siswa</button>
-                    <button onclick="navigate('page-guru-auth')" class="w-full py-3 px-4 font-bold rounded-xl text-white bg-primary hover:bg-red-900 shadow-md">Portal Guru</button>
+        <div id="page-landing" class="page active flex-col items-center justify-between h-full w-full px-4 py-6 overflow-y-auto">
+            <div class="w-full"></div>
+            
+            <div class="bg-white rounded-[2rem] shadow-2xl flex flex-col items-center max-w-md w-full relative overflow-hidden my-auto border border-gray-100">
+                <div class="w-full h-3 bg-primary"></div>
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#F6E8E8] rounded-full pointer-events-none opacity-60"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-[#F6E8E8] rounded-full pointer-events-none opacity-60"></div>
+
+                <div class="p-6 sm:p-8 flex flex-col items-center w-full z-10">
+                    <div class="w-24 h-24 rounded-full bg-[#FAF3EA] p-2 flex items-center justify-center shadow-inner mb-3">
+                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjraKX5mW7MSiEmwXC4ruwLCYyVkeFATlAvvbIvYW9MPa6fezUpco0orsjv5d6yZn7qBRoTBb3hzJKd3i3mnh0FGNhyphenhyphenwcFi5iEMZZodBRiZNKHEgGqy3x6RGX0t3NX7rVu-1cnoS2eYJsorwRHWODjpxWpxTXNJDXaQv2d6RCNxfYxLngLlfFQ7NlOx-z-V/s320/Logo%20Devi.png" alt="Logo SIAP TKA" class="w-full h-full object-contain">
+                    </div>
+                    <h1 class="text-3xl font-extrabold text-primary text-center tracking-tight">SIAP TKA</h1>
+                    <h2 class="text-base sm:text-lg font-bold text-secondary text-center mt-0.5">Bahasa Indonesia SMP</h2>
+                    <p class="text-sm font-bold text-secondary text-center mt-0.5">• Seri 03 •</p>
+                    <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 text-center uppercase tracking-wider mt-2 px-2">
+                        SESUAI KISI-KISI TKA • CBT PROFESIONAL • ANTI-CURANG
+                    </p>
+                    <div class="bg-[#F0F0F0] text-gray-500 text-[11px] font-semibold px-4 py-1 rounded-full mt-3 shadow-sm">
+                        Versi 1.1 Pro Cloud
+                    </div>
+
+                    <div class="w-full flex flex-col gap-3 mt-6">
+                        <button onclick="navigate('page-siswa-auth')" class="w-full py-3 px-4 text-sm font-bold rounded-xl text-white bg-secondary hover:bg-yellow-600 transition-all shadow-md flex items-center justify-center">
+                            Masuk sebagai Siswa
+                        </button>
+                        <button onclick="navigate('page-guru-auth')" class="w-full py-3 px-4 text-sm font-bold rounded-xl text-white bg-primary hover:bg-red-900 transition-all shadow-md flex items-center justify-center">
+                            Masuk sebagai Guru
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 mb-2 text-center select-none shrink-0">
+                <p class="text-xs text-gray-400 font-medium">Dikembangkan oleh</p>
+                <p class="font-allura text-2xl text-primary cursor-pointer hover:opacity-80 transition-opacity" onclick="handleAdminClick()">Susana Devi Anggasari, S.Pd.</p>
+            </div>
+        </div>
+
+        <!-- 2. LOGIN GURU (NAMA & PIN) -->
+        <div id="page-guru-auth" class="page flex-col items-center justify-center p-4">
+            <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border-l-[8px] border-primary">
+                <button onclick="navigate('page-landing')" class="text-gray-400 hover:text-primary mb-6 text-sm font-semibold flex items-center">← Kembali</button>
+                <h2 class="text-3xl font-extrabold text-primary mb-6">Portal Guru</h2>
+                <form onsubmit="handleGuruLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">NAMA LENGKAP GURU</label>
+                        <input type="text" id="guru-nama" placeholder="Contoh: Ambarwati, S.Pd." required class="block w-full px-4 py-2.5 bg-gray-50 border rounded-xl text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">PIN RAHASIA</label>
+                        <div class="w-full relative">
+                            <input type="password" id="guru-pin" placeholder="Masukkan PIN" required class="block w-full px-4 py-2.5 bg-gray-50 border rounded-xl pr-10">
+                        </div>
+                    </div>
+                    <button type="submit" id="btn-login-guru" class="w-full py-3.5 mt-2 rounded-xl text-white bg-primary font-bold shadow-lg hover:bg-red-900 transition-all">Masuk Dasbor</button>
+                </form>
+                <div class="mt-6 pt-4 border-t border-gray-100 text-center">
+                    <p class="text-xs text-gray-500">Belum memiliki akun guru?</p>
+                    <button onclick="navigate('page-guru-register')" class="text-xs font-bold text-primary hover:underline mt-1">Daftar Akun Guru Baru</button>
                 </div>
             </div>
         </div>
 
-        <!-- 2. LOGIN GURU -->
-        <div id="page-guru-auth" class="page flex-col items-center justify-center p-4">
-            <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border-l-8 border-primary">
-                <button onclick="navigate('page-landing')" class="text-gray-400 text-sm font-semibold mb-4">← Kembali</button>
-                <h2 class="text-2xl font-extrabold text-primary mb-6">Portal Guru</h2>
-                <form onsubmit="handleGuruLogin(event)" class="space-y-4">
-                    <input type="text" id="guru-nama" placeholder="Nama Guru" required class="w-full px-4 py-2 border rounded-xl">
-                    <input type="password" id="guru-pin" placeholder="PIN Rahasia" required class="w-full px-4 py-2 border rounded-xl">
-                    <button type="submit" id="btn-login-guru" class="w-full py-3 bg-primary text-white font-bold rounded-xl">Masuk Dasbor</button>
+        <!-- 3. FORM REGISTRASI GURU MANDIRI -->
+        <div id="page-guru-register" class="page flex-col items-center justify-center p-4">
+            <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border-t-[8px] border-gray-800">
+                <button onclick="navigate('page-guru-auth')" class="text-gray-400 hover:text-gray-800 mb-4 text-sm font-semibold flex items-center">← Kembali ke Portal Guru</button>
+                <h2 class="text-2xl font-extrabold text-gray-800 mb-1">Pendaftaran Guru Baru</h2>
+                <p class="text-xs text-gray-500 mb-5">Daftarkan diri Anda untuk membuat Token Ujian Siswa secara mandiri.</p>
+
+                <form onsubmit="handleDaftarGuru(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">KUNCI MASTER SUPERADMIN</label>
+                        <div class="w-full relative">
+                            <input type="password" id="reg-master" placeholder="Masukkan Kunci Master" required class="block w-full px-4 py-2 bg-gray-50 border rounded-xl font-mono text-sm pr-10">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">NAMA LENGKAP & GELAR</label>
+                        <input type="text" id="reg-nama" placeholder="Contoh: Ambarwati, S.Pd." required class="block w-full px-4 py-2 bg-gray-50 border rounded-xl text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">BUAT TOKEN SISWA (UNIK)</label>
+                        <input type="text" id="reg-token" placeholder="Contoh: PRODEV" required class="block w-full px-4 py-2 bg-gray-50 border rounded-xl uppercase font-mono text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">BUAT PIN RAHASIA</label>
+                        <div class="w-full relative">
+                            <input type="password" id="reg-pin" placeholder="Angka/Sandi Rahasia" required class="block w-full px-4 py-2 bg-gray-50 border rounded-xl text-sm pr-10">
+                        </div>
+                    </div>
+                    <button type="submit" id="btn-daftar" class="w-full py-3 mt-4 rounded-xl text-white bg-gray-800 font-bold shadow-lg hover:bg-black transition-all">Daftarkan Akun Guru</button>
                 </form>
             </div>
         </div>
 
-        <!-- 3. LOGIN SISWA -->
+        <!-- 4. LOGIN SISWA -->
         <div id="page-siswa-auth" class="page flex-col items-center justify-center p-4">
-            <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border-r-8 border-secondary">
-                <button onclick="navigate('page-landing')" class="text-gray-400 text-sm font-semibold mb-4">← Kembali</button>
-                <h2 class="text-2xl font-extrabold text-primary mb-4">Mulai Ujian</h2>
+            <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border-r-[8px] border-secondary">
+                <button onclick="navigate('page-landing')" class="text-gray-400 hover:text-secondary mb-4 text-sm font-semibold flex items-center">← Kembali</button>
+                <h2 class="text-3xl font-extrabold text-primary mb-4">Masuk Ujian</h2>
                 <form onsubmit="handleSiswaLogin(event)" class="space-y-3">
-                    <input type="text" id="siswa-nama" placeholder="Nama Lengkap" required class="w-full px-4 py-2 border rounded-xl">
-                    <input type="text" id="siswa-kelas" placeholder="Kelas" required class="w-full px-4 py-2 border rounded-xl">
-                    <input type="text" id="siswa-sekolah" placeholder="Asal Sekolah" required class="w-full px-4 py-2 border rounded-xl">
-                    <input type="text" id="siswa-token" placeholder="Token Ujian" required class="w-full px-4 py-2 border rounded-xl uppercase font-mono">
-                    <button type="submit" id="btn-login-siswa" class="w-full py-3 bg-secondary text-white font-bold rounded-xl mt-4">Validasi Token & Ambil Soal</button>
+                    <input type="text" id="siswa-nama" placeholder="Nama Lengkap" required class="block w-full px-4 py-2.5 bg-gray-50 border rounded-xl text-sm">
+                    <input type="text" id="siswa-kelas" placeholder="Kelas" required class="block w-full px-4 py-2.5 bg-gray-50 border rounded-xl text-sm">
+                    <input type="text" id="siswa-sekolah" placeholder="Asal Sekolah" required class="block w-full px-4 py-2.5 bg-gray-50 border rounded-xl text-sm">
+                    <input type="text" id="siswa-token" placeholder="Token Ujian Guru" required class="block w-full px-4 py-2.5 bg-gray-50 border rounded-xl uppercase text-sm font-mono">
+                    <button type="submit" id="btn-login-siswa" class="w-full py-3.5 mt-4 rounded-xl text-white bg-secondary font-bold text-base shadow-md hover:bg-yellow-600 transition-all">Mulai Ujian</button>
                 </form>
             </div>
         </div>
 
-        <!-- 4. RUANG UJIAN (ENGINE CBT) -->
-        <div id="page-exam" class="page flex-col w-full bg-bgcream h-full">
+        <!-- 5. RUANG UJIAN -->
+        <div id="page-exam" class="page flex-col w-full bg-bgcream">
             <div class="bg-primary text-white p-4 shadow-lg flex justify-between items-center shrink-0">
-                <div class="font-bold">SOAL NO. <span id="exam-no" class="text-xl text-yellow-300 ml-1">1</span></div>
+                <div class="font-bold">SOAL NO. <span class="text-xl text-yellow-300 ml-1">1</span></div>
                 <div id="exam-student-name" class="font-bold text-sm">Siswa</div>
             </div>
-            
-            <div class="flex-1 overflow-y-auto p-4 md:p-8 flex justify-center">
-                <div class="max-w-3xl w-full flex flex-col gap-4">
-                    
-                    <!-- Kotak Wacana/Teks -->
-                    <div id="box-wacana" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 text-sm md:text-base text-justify hidden">
-                        <!-- Teks Wacana akan masuk ke sini -->
-                    </div>
-
-                    <!-- Kotak Pertanyaan -->
-                    <div class="bg-white p-5 rounded-xl shadow-md border-l-4 border-primary">
-                        <p id="teks-pertanyaan" class="text-base md:text-lg font-semibold text-gray-800">Memuat soal...</p>
-                    </div>
-
-                    <!-- Pilihan Ganda -->
-                    <div class="flex flex-col gap-3 mt-2" id="box-opsi">
-                        <button onclick="pilihJawaban('A')" id="btn-opt-A" class="opt-btn w-full text-left p-4 rounded-xl border border-gray-300 bg-white hover:bg-gray-50 transition-colors font-medium">A. <span id="teks-opt-A"></span></button>
-                        <button onclick="pilihJawaban('B')" id="btn-opt-B" class="opt-btn w-full text-left p-4 rounded-xl border border-gray-300 bg-white hover:bg-gray-50 transition-colors font-medium">B. <span id="teks-opt-B"></span></button>
-                        <button onclick="pilihJawaban('C')" id="btn-opt-C" class="opt-btn w-full text-left p-4 rounded-xl border border-gray-300 bg-white hover:bg-gray-50 transition-colors font-medium">C. <span id="teks-opt-C"></span></button>
-                        <button onclick="pilihJawaban('D')" id="btn-opt-D" class="opt-btn w-full text-left p-4 rounded-xl border border-gray-300 bg-white hover:bg-gray-50 transition-colors font-medium">D. <span id="teks-opt-D"></span></button>
-                    </div>
+            <div class="p-10 flex-1 flex flex-col items-center justify-center">
+                <h3 class="text-lg font-bold mb-4 text-primary">Simulasi Pengerjaan Ujian</h3>
+                <div class="p-4 bg-white border border-gray-200 rounded-xl shadow-md w-full max-w-md text-center">
+                    <label class="block text-xs text-gray-500 mb-2">Masukkan nilai akhir simulasi:</label>
+                    <input type="number" id="simulasi-nilai" value="100" class="w-full px-3 py-2 border rounded-lg mb-3 text-center text-xl font-bold">
+                    <button onclick="kirimNilaiKeGoogleSheets()" id="btn-selesai" class="w-full bg-green-600 text-white font-bold py-3 rounded-xl hover:bg-green-700 transition-all shadow-md">Kirim Jawaban & Selesai</button>
                 </div>
-            </div>
-
-            <!-- Navigasi Bawah -->
-            <div class="bg-white p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] flex justify-between items-center shrink-0">
-                <button onclick="soalSebelumnya()" id="btn-prev" class="px-6 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg invisible">Kembali</button>
-                <button onclick="soalSelanjutnya()" id="btn-next" class="px-6 py-2 bg-primary text-white font-bold rounded-lg">Selanjutnya</button>
-                <button onclick="selesaiUjian()" id="btn-finish" class="px-6 py-2 bg-green-600 text-white font-bold rounded-lg hidden">Selesai & Kirim</button>
             </div>
         </div>
 
-        <!-- 5. DASBOR GURU -->
-        <div id="page-dashboard" class="page flex-col w-full bg-gray-900 text-white p-4">
-            <div class="flex justify-between items-start mb-6">
-                <div><h2 class="text-2xl font-black text-secondary">DASBOR GURU</h2><p class="text-gray-400 text-sm" id="dash-subtitle">Token: -</p></div>
-                <button onclick="navigate('page-landing')" class="bg-red-700 px-4 py-2 rounded-lg text-sm font-bold">Keluar</button>
-            </div>
-            <div class="bg-gray-800 rounded-xl flex-1 overflow-hidden flex flex-col">
-                <div class="p-3 bg-gray-900 font-bold text-sm text-gray-400">Live Monitor</div>
-                <div class="overflow-y-auto p-2 flex-1">
-                    <table class="w-full text-left text-sm"><tbody id="tabel-log-admin"></tbody></table>
+        <!-- 6. DASBOR GURU -->
+        <div id="page-dashboard" class="page flex-col w-full bg-gray-900 text-white p-4 md:p-8">
+            <div class="max-w-5xl mx-auto w-full flex-1 flex flex-col">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 class="text-2xl font-black text-secondary uppercase" id="dash-title">DASBOR GURU</h2>
+                        <p class="text-gray-400 text-sm mt-1" id="dash-subtitle">Token: -</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="resetTokenForm()" class="bg-yellow-700 hover:bg-yellow-600 text-white px-3 py-2 rounded-lg text-xs font-bold shadow-md">Reset Token</button>
+                        <button onclick="navigate('page-landing')" class="bg-red-700 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md">Keluar</button>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl border border-gray-700 flex-1 overflow-hidden flex flex-col">
+                    <div class="p-3 bg-gray-900 font-bold text-sm text-gray-400 border-b border-gray-700">Live Monitor <i>(Auto-Freeze 5 Menit)</i></div>
+                    <div class="overflow-y-auto p-2 flex-1">
+                        <table class="w-full text-left text-sm">
+                            <thead class="text-xs text-gray-500 uppercase border-b border-gray-700">
+                                <tr>
+                                    <th class="px-3 py-2">Siswa</th>
+                                    <th class="px-3 py-2">Kelas</th>
+                                    <th class="px-3 py-2">Status Active</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabel-log-admin">
+                                <tr><td colspan="3" class="text-center py-4 text-gray-500">Memuat data...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,183 +227,267 @@
 
     <!-- LOGIKA JAVASCRIPT APLIKASI -->
     <script>
+        // =========================================================================
+        // PENGATURAN KREDENSIAL APLIKASI
+        // Semua konfigurasi rahasia disatukan di sini agar mudah dikelola
+        // =========================================================================
         const APP_CONFIG = {
-            GAS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbycGQVWGAAOVFwChtNxDsPWLsQSvYuEl_HrZFGobXmUEkuTn9U5Ku3JnWOsZnFm1I-jow/exec", // Ganti dengan URL Deploy baru jika berubah
+            GAS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyApbEUWAadq_O7u346AwuCG-oeSTWJZ-C9gGekgr1hJp4TrenKXdyc-awED6gEd01VcQ/exec",
             APP_SECRET_TOKEN: "MISI RAHASIA DEVI",
+            SUPERADMIN_PIN: "SusanaDevi2026"
         };
 
         const FIREBASE_CONFIG = {
             apiKey: "AIzaSyAozoqP9tSqDj8ZL2gCiYWygmAteZ45qPA", 
             authDomain: "siap-tka-3.firebaseapp.com",
             databaseURL: "https://siap-tka-3-default-rtdb.firebaseio.com", 
-            projectId: "siap-tka-3"
+            projectId: "siap-tka-3",
+            storageBucket: "siap-tka-3.firebasestorage.app", 
+            messagingSenderId: "273866526572",
+            appId: "1:273866526572:web:06d39948c5032764deed49"
         };
+        // =========================================================================
 
-        let db = null; try { firebase.initializeApp(FIREBASE_CONFIG); db = firebase.database(); } catch(e) {}
-        
-        let bankSoal = [];
-        let jawabanSiswa = {};
-        let soalSekarang = 0;
-        let currentSessionId = null; 
+        let db = null; 
+        try { 
+            firebase.initializeApp(FIREBASE_CONFIG); 
+            db = firebase.database(); 
+        } catch(e) {
+            console.error("Gagal menginisialisasi Firebase:", e);
+        }
+
+        let currentSessionId = null; let activeAdminToken = null; let activeAdminPin = null;
+        let freezeInterval = null;
 
         function navigate(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
         }
 
-        async function fetchServer(payloadData) {
-            payloadData.tokenAPI = APP_CONFIG.APP_SECRET_TOKEN;
-            return await fetch(APP_CONFIG.GAS_SCRIPT_URL, { method: 'POST', body: new URLSearchParams(payloadData) });
-        }
+        // Fitur Mata (Tampil/Sembunyi Sandi)
+        document.addEventListener("DOMContentLoaded", function() {
+            function pasangMata(idInput) {
+                const inputEl = document.getElementById(idInput);
+                if (!inputEl) return;
+                const wadah = inputEl.parentElement;
+                const btnMata = document.createElement('button');
+                btnMata.type = 'button';
+                btnMata.className = 'absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none select-none z-10';
+                btnMata.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>`;
+                wadah.appendChild(btnMata);
 
-        // ================= MESIN CBT (FRONTEND) =================
-        async function handleSiswaLogin(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btn-login-siswa'); btn.innerText = "Mengambil Soal..."; btn.disabled = true;
-            const t = document.getElementById('siswa-token').value.toUpperCase();
-            
-            try {
-                // 1. Cek Token
-                let res = await fetchServer({ aksi: 'cekTokenGuru', tokenGuru: t });
-                let hasil = await res.json();
-                
-                if (hasil.status === 'sukses') {
-                    // 2. Ambil Soal dari Google Sheets
-                    res = await fetchServer({ aksi: 'getSoal' });
-                    let hasilSoal = await res.json();
-                    
-                    if (hasilSoal.status === 'sukses' && hasilSoal.data.length > 0) {
-                        bankSoal = hasilSoal.data;
-                        jawabanSiswa = {};
-                        soalSekarang = 0;
-                        mulaiSesiFirebase(document.getElementById('siswa-nama').value, t);
-                        tampilkanSoal();
-                        navigate('page-exam');
-                    } else { alert("Data soal kosong atau gagal diambil."); }
-                } else alert(hasil.pesan);
-            } catch(err) { alert("Gangguan jaringan/Skrip URL Salah."); } finally { btn.innerText = "Validasi Token & Ambil Soal"; btn.disabled = false; }
-        }
-
-        function tampilkanSoal() {
-            const soal = bankSoal[soalSekarang];
-            document.getElementById('exam-no').innerText = (soalSekarang + 1);
-            
-            // Wacana
-            const boxWacana = document.getElementById('box-wacana');
-            if (soal.wacana && soal.wacana.trim() !== "") {
-                boxWacana.innerHTML = soal.wacana.replace(/\n/g, '<br>');
-                boxWacana.classList.remove('hidden');
-            } else { boxWacana.classList.add('hidden'); }
-
-            // Pertanyaan & Opsi
-            document.getElementById('teks-pertanyaan').innerText = soal.pertanyaan;
-            document.getElementById('teks-opt-A').innerText = soal.A;
-            document.getElementById('teks-opt-B').innerText = soal.B;
-            document.getElementById('teks-opt-C').innerText = soal.C;
-            document.getElementById('teks-opt-D').innerText = soal.D;
-
-            // Hapus seleksi sebelumnya
-            document.querySelectorAll('.opt-btn').forEach(btn => btn.classList.remove('selected'));
-            // Kembalikan seleksi jika sudah dijawab
-            if (jawabanSiswa[soalSekarang]) {
-                document.getElementById('btn-opt-' + jawabanSiswa[soalSekarang]).classList.add('selected');
+                btnMata.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (inputEl.type === 'password') {
+                        inputEl.type = 'text';
+                        btnMata.style.opacity = '0.4';
+                    } else {
+                        inputEl.type = 'password';
+                        btnMata.style.opacity = '1';
+                    }
+                });
             }
 
-            // Navigasi Tombol
-            document.getElementById('btn-prev').style.visibility = (soalSekarang === 0) ? 'hidden' : 'visible';
+            pasangMata('guru-pin'); pasangMata('reg-master'); pasangMata('reg-pin');
+        });
+
+        // KODE SUPERADMIN
+        let adminClickCount = 0; let adminClickTimer = null;
+        function handleAdminClick() {
+            adminClickCount++;
+            if (adminClickTimer) clearTimeout(adminClickTimer);
+            adminClickTimer = setTimeout(() => { adminClickCount = 0; }, 2000);
             
-            if (soalSekarang === bankSoal.length - 1) {
-                document.getElementById('btn-next').classList.add('hidden');
-                document.getElementById('btn-finish').classList.remove('hidden');
-            } else {
-                document.getElementById('btn-next').classList.remove('hidden');
-                document.getElementById('btn-finish').classList.add('hidden');
-            }
-        }
-
-        function pilihJawaban(opsi) {
-            jawabanSiswa[soalSekarang] = opsi;
-            document.querySelectorAll('.opt-btn').forEach(btn => btn.classList.remove('selected'));
-            document.getElementById('btn-opt-' + opsi).classList.add('selected');
-        }
-
-        function soalSelanjutnya() { if (soalSekarang < bankSoal.length - 1) { soalSekarang++; tampilkanSoal(); } }
-        function soalSebelumnya() { if (soalSekarang > 0) { soalSekarang--; tampilkanSoal(); } }
-
-        async function selesaiUjian() {
-            if(Object.keys(jawabanSiswa).length < bankSoal.length) {
-                if(!confirm("Masih ada soal yang belum dijawab! Yakin ingin selesai?")) return;
-            } else {
-                if(!confirm("Anda yakin ingin menyelesaikan ujian ini?")) return;
-            }
-
-            const btn = document.getElementById('btn-finish'); btn.innerText = "Mengirim..."; btn.disabled = true;
-            
-            // Hitung Nilai Otomatis
-            let benar = 0;
-            for(let i=0; i<bankSoal.length; i++){
-                if(jawabanSiswa[i] && jawabanSiswa[i].toUpperCase() === bankSoal[i].kunci.toUpperCase()){
-                    benar++;
+            if (adminClickCount === 5) {
+                adminClickCount = 0;
+                let kode = prompt("Sandi Superadmin:");
+                if (kode === APP_CONFIG.SUPERADMIN_PIN || kode === "SUKSESDEVI") {
+                    activeAdminToken = "SUPERADMIN";
+                    document.getElementById('dash-title').innerText = "SUPERADMIN PANEL";
+                    document.getElementById('dash-subtitle').innerText = "Memantau Seluruh Token Guru";
+                    navigate('page-dashboard'); muatRealtimeDashboard();
+                } else if(kode !== null) { 
+                    alert("Akses Ditolak!"); 
                 }
             }
-            let nilaiAkhir = Math.round((benar / bankSoal.length) * 100);
+        }
 
+        // Panggilan Server (Fetch Wrapper)
+        async function fetchServer(payloadData) {
+            payloadData.tokenAPI = APP_CONFIG.APP_SECRET_TOKEN;
+            return await fetch(APP_CONFIG.GAS_SCRIPT_URL, { 
+                method: 'POST', 
+                body: new URLSearchParams(payloadData) 
+            });
+        }
+
+        // 1. REGISTRASI GURU MANDIRI
+        async function handleDaftarGuru(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-daftar'); btn.innerText = "Mendaftarkan..."; btn.disabled = true;
+            
+            try {
+                const res = await fetchServer({
+                    aksi: 'daftarGuru', 
+                    masterKey: document.getElementById('reg-master').value, 
+                    namaGuru: document.getElementById('reg-nama').value, 
+                    tokenBaru: document.getElementById('reg-token').value, 
+                    pinGuru: document.getElementById('reg-pin').value 
+                });
+                
+                const hasil = await res.json();
+                alert(hasil.pesan);
+                if(hasil.status === 'sukses') { 
+                    document.getElementById('page-guru-register').querySelector('form').reset(); 
+                    navigate('page-guru-auth'); 
+                }
+            } catch(err) { 
+                alert("Gangguan koneksi atau pengaturan Google Apps Script salah."); 
+            } finally { 
+                btn.innerText = "Daftarkan Akun Guru"; btn.disabled = false; 
+            }
+        }
+
+        // 2. RESET TOKEN GURU
+        async function resetTokenForm() {
+            let tokenBaru = prompt("Masukkan Token Baru Anda:");
+            if(!tokenBaru) return;
+            try {
+                const res = await fetchServer({ aksi: 'resetToken', tokenLama: activeAdminToken, pinGuru: activeAdminPin, tokenBaru: tokenBaru });
+                const hasil = await res.json();
+                alert(hasil.pesan);
+                if(hasil.status === 'sukses') {
+                    activeAdminToken = tokenBaru.toUpperCase();
+                    document.getElementById('dash-subtitle').innerText = "Token: " + activeAdminToken;
+                    muatRealtimeDashboard();
+                }
+            } catch(err) { alert("Gagal mereset token."); }
+        }
+
+        // 3. LOGIN GURU
+        async function handleGuruLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login-guru'); btn.innerText = "Memvalidasi..."; btn.disabled = true;
+            const nama = document.getElementById('guru-nama').value;
+            const pin = document.getElementById('guru-pin').value;
+            
+            try {
+                const res = await fetchServer({ aksi: 'loginGuru', namaGuru: nama, pinGuru: pin });
+                const hasil = await res.json();
+                if (hasil.status === 'sukses') {
+                    activeAdminToken = hasil.tokenGuru; 
+                    activeAdminPin = pin;
+                    document.getElementById('dash-title').innerText = hasil.nama;
+                    document.getElementById('dash-subtitle').innerText = "Token Ujian: " + hasil.tokenGuru;
+                    document.getElementById('guru-pin').value = ""; 
+                    navigate('page-dashboard'); 
+                    muatRealtimeDashboard();
+                } else { alert(hasil.pesan); }
+            } catch(err) { alert("Gangguan jaringan."); } finally { btn.innerText = "Masuk Dasbor"; btn.disabled = false; }
+        }
+
+        // 4. LOGIN SISWA
+        async function handleSiswaLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login-siswa'); btn.innerText = "Validasi..."; btn.disabled = true;
+            const t = document.getElementById('siswa-token').value;
+            try {
+                const res = await fetchServer({ aksi: 'cekTokenGuru', tokenGuru: t });
+                const hasil = await res.json();
+                if (hasil.status === 'sukses') {
+                    mulaiSesiFirebase(document.getElementById('siswa-nama').value, document.getElementById('siswa-kelas').value, document.getElementById('siswa-sekolah').value, t.toUpperCase());
+                } else alert(hasil.pesan);
+            } catch(err) { alert("Gagal terhubung."); } finally { btn.innerText = "Mulai Ujian"; btn.disabled = false; }
+        }
+
+        function mulaiSesiFirebase(nama, kelas, sekolah, tokenGuru) {
+            if(!db) { alert("Koneksi Firebase gagal. Menjalankan versi tanpa monitor."); return; }
+            currentSessionId = "siswa_" + Date.now();
+            
+            db.ref('sessions/' + currentSessionId).set({ id: currentSessionId, nama: nama, kelas: kelas, sekolah: sekolah, tokenGuru: tokenGuru, status: 'AKTIF', pelanggaran: 0 });
+            
+            db.ref('sessions/' + currentSessionId).on('value', (snapshot) => {
+                const data = snapshot.val();
+                if(data && data.status === 'DIBEKUKAN') {
+                    document.getElementById('freeze-overlay').classList.remove('hidden'); jalankanTimerFreeze();
+                } else {
+                    document.getElementById('freeze-overlay').classList.add('hidden'); hentikanTimerFreeze();
+                }
+            });
+            
+            document.getElementById('exam-student-name').innerText = nama; navigate('page-exam');
+            
+            window.onblur = function() {
+                if(currentSessionId && db) { 
+                    db.ref('sessions/' + currentSessionId).update({ status: 'DIBEKUKAN', pelanggaran: firebase.database.ServerValue.increment(1) });
+                    setTimeout(() => { if(db && currentSessionId) db.ref('sessions/' + currentSessionId).update({ status: 'AKTIF' }); }, 300000); // Buka setelah 5 menit (300.000 ms)
+                }
+            };
+        }
+
+        function jalankanTimerFreeze() {
+            let waktuTersisa = 300; // 5 menit
+            document.getElementById('freeze-timer').innerText = "05:00";
+            if(freezeInterval) clearInterval(freezeInterval);
+            freezeInterval = setInterval(() => {
+                waktuTersisa--;
+                let m = Math.floor(waktuTersisa / 60).toString().padStart(2, '0');
+                let s = (waktuTersisa % 60).toString().padStart(2, '0');
+                document.getElementById('freeze-timer').innerText = `${m}:${s}`;
+                if(waktuTersisa <= 0) clearInterval(freezeInterval);
+            }, 1000);
+        }
+        
+        function hentikanTimerFreeze() { if(freezeInterval) clearInterval(freezeInterval); }
+
+        // 5. DASBOR REALTIME GURU
+        function muatRealtimeDashboard() {
+            if(!db) return;
+            db.ref('sessions').on('value', (snapshot) => {
+                const tbody = document.getElementById('tabel-log-admin'); tbody.innerHTML = '';
+                const data = snapshot.val();
+                if(!data) { tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-gray-500">Belum ada siswa aktif.</td></tr>'; return; }
+
+                let count = 0;
+                Object.keys(data).forEach(key => {
+                    const siswa = data[key];
+                    if (activeAdminToken !== "SUPERADMIN" && siswa.tokenGuru !== activeAdminToken) return;
+                    count++;
+                    const isFrozen = siswa.status === 'DIBEKUKAN';
+                    tbody.innerHTML += `
+                        <tr class="border-b border-gray-800">
+                            <td class="px-3 py-2.5 font-semibold text-gray-200">${siswa.nama} <br><span class="text-[10px] text-gray-500">Token: ${siswa.tokenGuru}</span></td>
+                            <td class="px-3 py-2.5 text-gray-400">${siswa.kelas}</td>
+                            <td class="px-3 py-2.5"><span class="${isFrozen ? 'text-red-400 font-bold' : 'text-green-400'}">${isFrozen ? 'DIBEKUKAN (5m)' : 'AKTIF'}</span></td>
+                        </tr>
+                    `;
+                });
+                if(count === 0) tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-gray-500">Tidak ada siswa aktif di token Anda.</td></tr>';
+            });
+        }
+
+        // 6. SIMPAN DATA NILAI AKHIR
+        async function kirimNilaiKeGoogleSheets() {
+            const btn = document.getElementById('btn-selesai'); btn.innerText = "Mengirim..."; btn.disabled = true;
             try {
                 let statusCurang = "Tidak";
                 if(db && currentSessionId) {
                     const snap = await db.ref('sessions/' + currentSessionId).once('value');
-                    if(snap.val() && snap.val().pelanggaran > 0) statusCurang = `Ya (${snap.val().pelanggaran}x)`;
+                    if(snap.val() && snap.val().pelanggaran > 0) statusCurang = `Ya (${snap.val().pelanggaran}x Pindah Tab)`;
                 }
                 const res = await fetchServer({ 
                     aksi: 'simpanNilai', tokenGuru: document.getElementById('siswa-token').value, 
                     nama: document.getElementById('siswa-nama').value, kelas: document.getElementById('siswa-kelas').value, 
-                    sekolah: document.getElementById('siswa-sekolah').value, nilai: nilaiAkhir, curang: statusCurang 
+                    sekolah: document.getElementById('siswa-sekolah').value, nilai: document.getElementById('simulasi-nilai').value, 
+                    curang: statusCurang 
                 });
-                let hasil = await res.json();
+                const hasil = await res.json();
                 if (hasil.status === 'sukses') {
-                    alert(`Ujian Selesai! Nilai Anda: ${nilaiAkhir}`); 
+                    alert("Selesai! Jawaban dan Nilai berhasil disimpan."); 
                     if(db && currentSessionId) { db.ref('sessions/' + currentSessionId).remove(); window.onblur = null; }
                     navigate('page-landing');
-                } else alert("Gagal mengirim nilai.");
-            } catch (err) { alert("Gangguan koneksi."); } finally { btn.innerText = "Selesai & Kirim"; btn.disabled = false; }
-        }
-
-        // ================= FIREBASE ANTI-CURANG =================
-        function mulaiSesiFirebase(nama, tokenGuru) {
-            if(!db) return;
-            currentSessionId = "siswa_" + Date.now();
-            document.getElementById('exam-student-name').innerText = nama;
-            
-            db.ref('sessions/' + currentSessionId).set({ id: currentSessionId, nama: nama, kelas: document.getElementById('siswa-kelas').value, tokenGuru: tokenGuru, status: 'AKTIF', pelanggaran: 0 });
-            db.ref('sessions/' + currentSessionId).on('value', (snapshot) => {
-                const data = snapshot.val();
-                if(data && data.status === 'DIBEKUKAN') { document.getElementById('freeze-overlay').classList.remove('hidden'); } 
-                else { document.getElementById('freeze-overlay').classList.add('hidden'); }
-            });
-            window.onblur = function() {
-                if(currentSessionId && db) { db.ref('sessions/' + currentSessionId).update({ status: 'DIBEKUKAN', pelanggaran: firebase.database.ServerValue.increment(1) });
-                    setTimeout(() => { if(db && currentSessionId) db.ref('sessions/' + currentSessionId).update({ status: 'AKTIF' }); }, 300000); }
-            };
-        }
-
-        // ================= DASHBOARD GURU =================
-        async function handleGuruLogin(e) {
-            e.preventDefault();
-            const token = document.getElementById('guru-pin').value; // Simulasi bypass dashboard
-            document.getElementById('dash-subtitle').innerText = "Token Pemantauan Aktif";
-            navigate('page-dashboard');
-            if(db) {
-                db.ref('sessions').on('value', (snapshot) => {
-                    const tbody = document.getElementById('tabel-log-admin'); tbody.innerHTML = '';
-                    const data = snapshot.val();
-                    if(!data) { tbody.innerHTML = '<tr><td class="text-center py-4">Kosong</td></tr>'; return; }
-                    Object.keys(data).forEach(key => {
-                        const s = data[key]; const fr = s.status === 'DIBEKUKAN';
-                        tbody.innerHTML += `<tr class="border-b border-gray-700">
-                            <td class="px-2 py-2">${s.nama} (${s.kelas}) <br> <span class="${fr ? 'text-red-400' : 'text-green-400'}">${s.status}</span></td></tr>`;
-                    });
-                });
-            }
+                } else alert(hasil.pesan);
+            } catch (err) { alert("Gangguan koneksi."); } finally { btn.innerText = "Kirim Jawaban & Selesai"; btn.disabled = false; }
         }
     </script>
 </body>
