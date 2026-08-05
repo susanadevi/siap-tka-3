@@ -127,22 +127,26 @@
                     <p class="text-gray-400 text-xs" id="display-nama-guru"></p>
                 </div>
                 <button onclick="logoutGuru()" class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 font-bold rounded-lg shadow-sm">
-                    Tutup Dasbor
+                    Keluar Dasbor
                 </button>
             </div>
             
             <div class="p-4 md:p-6 flex-1 overflow-y-auto w-full">
                 <div class="flex flex-col md:flex-row gap-4 mb-6">
+                    <!-- Pengaturan Token Guru -->
                     <div class="bg-gray-800 rounded-xl p-4 border border-gray-700 flex-1 relative overflow-hidden">
                         <div class="relative z-10">
-                            <p class="text-gray-400 text-xs font-bold uppercase mb-1">Token Ruangan</p>
-                            <h3 id="display-token" class="text-4xl font-mono font-black text-yellow-500 tracking-wider">MENGAMBIL...</h3>
-                            <button onclick="buatTokenBaru()" class="mt-3 bg-gray-700 hover:bg-gray-600 text-white text-xs px-3 py-1.5 rounded font-bold transition-all border border-gray-600 shadow-sm">
-                                Generate Token Baru
+                            <p class="text-gray-400 text-xs font-bold uppercase mb-1">Token Ujian Guru (Bisa Buat Sendiri)</p>
+                            <div class="flex gap-2 items-center mt-2">
+                                <input type="text" id="input-token-custom" class="bg-gray-900 border border-gray-600 text-yellow-400 font-mono font-black text-2xl px-4 py-2 rounded-xl uppercase tracking-wider w-full focus:outline-none focus:border-yellow-500" placeholder="PRODEV">
+                                <button onclick="acakTokenGuru()" class="bg-gray-700 hover:bg-gray-600 text-white text-xs px-3 py-3 rounded-xl font-bold transition-all border border-gray-600 shrink-0">
+                                    Acak
+                                </button>
+                            </div>
+                            <button onclick="simpanTokenGuru()" class="mt-3 w-full bg-secondary hover:bg-yellow-600 text-white text-xs py-2.5 rounded-xl font-extrabold transition-all shadow-md">
+                                Simpan & Aktifkan Token Ini
                             </button>
-                        </div>
-                        <div class="absolute -right-4 -bottom-4 text-gray-700 opacity-20">
-                            <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            <p class="text-[10px] text-gray-400 mt-1.5 italic">*Token tersimpan dan bisa digunakan siswa kapan saja selama belum diganti.</p>
                         </div>
                     </div>
                     
@@ -210,20 +214,18 @@
                         <label class="block text-[11px] font-extrabold text-gray-500 mb-1 uppercase tracking-wider">Sekolah</label>
                         <select id="input-siswa-sekolah" class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-bold text-gray-700 focus:border-secondary focus:outline-none transition-colors" required>
                             <option value="">Pilih Sekolah</option>
-                            <option value="SMPN 1 Bojonegoro">SMPN 1 Bojonegoro</option>
-                            <option value="SMPN 2 Bojonegoro">SMPN 2 Bojonegoro</option>
-                            <option value="SMPN 5 Bojonegoro">SMPN 5 Bojonegoro</option>
+                            <option value="SMP Negeri 1 Singorojo">SMP Negeri 1 Singorojo</option>
                             <option value="Lainnya">Lainnya...</option>
                         </select>
                         <input type="text" id="input-sekolah-lainnya" class="w-full mt-2 px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-bold text-gray-700 hidden" placeholder="Ketik nama sekolah...">
                     </div>
                     <div>
                         <label class="block text-[11px] font-extrabold text-gray-500 mb-1 uppercase tracking-wider">Token Ujian</label>
-                        <input type="text" id="input-siswa-token" class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-bold text-gray-700 uppercase focus:border-secondary focus:outline-none transition-colors font-mono" placeholder="Minta token ke Guru" required autocomplete="off">
+                        <input type="text" id="input-siswa-token" class="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-bold text-gray-700 uppercase focus:border-secondary focus:outline-none transition-colors font-mono" placeholder="Ketik token dari Guru" required autocomplete="off">
                     </div>
                 </div>
 
-                <div id="login-error" class="text-red-500 text-xs font-bold mt-3 text-center hidden"></div>
+                <div id="login-error" class="text-red-500 text-xs font-bold mt-3 text-center hidden bg-red-50 p-2 rounded-lg border border-red-200"></div>
 
                 <div class="mt-6">
                     <button id="btn-masuk-ujian" onclick="loginSiswa()" class="w-full bg-secondary hover:bg-yellow-600 text-white font-extrabold py-3 rounded-xl transition-all shadow-md text-sm">
@@ -258,17 +260,12 @@
                 </div>
             </div>
 
-            <!-- Area Soal (Rasio 70 Wacana : 30 Soal) -->
             <div class="flex-1 overflow-hidden p-2 md:p-4 max-w-[1400px] mx-auto w-full flex flex-col md:flex-row gap-4">
                 
-                <!-- Kolom Wacana (70%) -->
                 <div id="box-wacana" class="w-full md:w-[70%] bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-amber-100 overflow-y-auto max-h-[35vh] md:max-h-full">
-                    <div id="wacana-teks" class="text-sm md:text-base text-gray-800 leading-relaxed font-serif pb-4">
-                        <!-- Wacana dimuat di sini -->
-                    </div>
+                    <div id="wacana-teks" class="text-sm md:text-base text-gray-800 leading-relaxed font-serif pb-4"></div>
                 </div>
                 
-                <!-- Kolom Pertanyaan & Opsi (30%) -->
                 <div class="w-full md:w-[30%] flex flex-col justify-between h-full overflow-y-auto overflow-x-hidden p-1">
                     <div class="bg-white rounded-2xl shadow-sm border border-amber-100 flex flex-col h-full overflow-hidden">
                         
@@ -277,16 +274,10 @@
                         </div>
                         
                         <div class="p-4 md:p-5 flex-1 overflow-y-auto">
-                            <div id="pertanyaan-teks" class="text-sm md:text-base font-bold text-gray-800 mb-6 leading-normal break-words">
-                                <!-- Pertanyaan -->
-                            </div>
-                            
-                            <div id="opsi-container" class="space-y-3">
-                                <!-- Opsi Jawaban (A,B,C,D) -->
-                            </div>
+                            <div id="pertanyaan-teks" class="text-sm md:text-base font-bold text-gray-800 mb-6 leading-normal break-words"></div>
+                            <div id="opsi-container" class="space-y-3"></div>
                         </div>
                         
-                        <!-- Navigasi Bawah Kolom Soal -->
                         <div class="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center gap-2 shrink-0">
                             <button id="btn-prev" onclick="prevSoal()" class="w-1/2 py-2.5 px-4 bg-white border border-gray-200 text-gray-600 font-bold rounded-xl text-xs hover:bg-gray-100 transition-colors shadow-sm disabled:opacity-50 flex items-center justify-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -302,14 +293,11 @@
                 
             </div>
 
-            <!-- Peta Navigasi Otomatis Di Bawah -->
             <div class="max-w-[1400px] mx-auto w-full p-2 md:p-4 shrink-0 bg-white border-t border-amber-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-20">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                     <div class="w-full">
                         <h4 class="text-[10px] md:text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Navigasi Nomor Soal</h4>
-                        <div id="grid-nav-soal" class="flex flex-wrap gap-1.5 md:gap-2 overflow-y-auto max-h-[100px] md:max-h-24 pr-2">
-                            <!-- Tombol nomor soal (1-40) dimuat di sini -->
-                        </div>
+                        <div id="grid-nav-soal" class="flex flex-wrap gap-1.5 md:gap-2 overflow-y-auto max-h-[100px] md:max-h-24 pr-2"></div>
                     </div>
                     <div class="w-full md:w-auto shrink-0 flex justify-end">
                         <button onclick="submitJawabanSiswa()" id="btn-selesai-bawah" class="w-full md:w-auto px-6 py-3 md:py-2 bg-green-600 hover:bg-green-700 text-white font-black text-sm md:text-base rounded-xl shadow-md transition-all hidden animate-pulse">
@@ -324,13 +312,9 @@
     </div>
 
     <script>
-        /* ========================================================
-           1. KONFIGURASI APLIKASI & GOOGLE APPS SCRIPT
-           ======================================================== */
-        const APP_VERSION = "v3.0.0-PRO";
+        const APP_VERSION = "v3.1.0-PERMANENT-TOKEN";
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYYV2SkA6LjGFfFXpNc5I5XpBheRyjmmCIJu95WNWlZJ2Edln8EEMfVB_yrM1DGZIBRA/exec";
         
-        // KONFIGURASI FIREBASE KTP (JANGAN DIUBAH JIKA SUDAH SESUAI GAMBAR)
         const firebaseConfig = {
             apiKey: "AIzaSyAozoqP9tSqDj8ZL2gCiYWyggmAtZ45qPA",
             authDomain: "siap-tka-3.firebaseapp.com",
@@ -344,25 +328,23 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Variabel Global
         let listSoal = [];
         let jawabanSiswa = {};
         let currentIndex = 0;
-        let sisaDetik = 90 * 60; // 90 Menit
+        let sisaDetik = 90 * 60;
         let timerInterval = null;
         let waktuMulai = "";
         
-        // Anti-Curang
         let jumlahPelanggaran = 0;
         let curangStatus = "Tidak";
         let isFrozen = false;
         let bekuDetik = 0;
         let bekuInterval = null;
         
-        // Session
         let currentSessionId = "";
         let currentSiswa = { nama: "", kelas: "", sekolah: "", tokenGuru: "" };
-        let activeAdminToken = "";
+        let activeAdminToken = "PRODEV";
+        let namaGuruAktif = "Guru";
         let realtimeListener = null;
 
         document.getElementById('input-siswa-sekolah').addEventListener('change', function() {
@@ -377,14 +359,12 @@
             }
         });
 
-        // Routing SPA (Single Page Application)
         function navigate(pageId) {
             document.querySelectorAll('.page').forEach(el => {
                 el.classList.remove('active');
             });
             document.getElementById(pageId).classList.add('active');
             
-            // Cleanups
             if (pageId !== 'page-dashboard' && realtimeListener) {
                 db.ref('sessions').off('value', realtimeListener);
             }
@@ -397,9 +377,7 @@
             }
         }
 
-        /* ========================================================
-           2. SISTEM LOGIN GURU & FIREBASE DASHBOARD
-           ======================================================== */
+        /* GURU & TOKEN CUSTOM PERMANEN */
         let clickCount = 0;
         function handleAdminClick() {
             clickCount++;
@@ -413,35 +391,49 @@
             const pin = document.getElementById('input-pin-guru').value;
             const nama = document.getElementById('input-nama-guru').value.trim() || "Guru";
             
-            if(pin === "1234") {
+            if(pin === "1234" || pin === "123456") {
+                namaGuruAktif = nama;
                 document.getElementById('display-nama-guru').innerText = `Halo, ${nama}`;
+                document.getElementById('input-token-custom').value = activeAdminToken;
                 navigate('page-dashboard');
-                buatTokenBaru();
+                simpanTokenGuru(false);
                 muatRealtimeDashboard();
             } else {
                 alert("PIN Salah! Akses ditolak.");
             }
         }
 
-        function buatTokenBaru() {
+        function acakTokenGuru() {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             let token = '';
             for (let i = 0; i < 6; i++) {
                 token += chars.charAt(Math.floor(Math.random() * chars.length));
             }
-            activeAdminToken = token;
-            document.getElementById('display-token').innerText = token;
+            document.getElementById('input-token-custom').value = token;
+        }
+
+        function simpanTokenGuru(notif = true) {
+            const tokenInput = document.getElementById('input-token-custom').value.trim().toUpperCase();
+            if(!tokenInput) {
+                alert("Token tidak boleh kosong!");
+                return;
+            }
+            activeAdminToken = tokenInput;
             
-            db.ref('tokens/' + token).set({
+            // Simpan ke Firebase tanpa pernah menghapusnya saat logout
+            db.ref('tokens/' + tokenInput).set({
                 aktif: true,
+                guru: namaGuruAktif,
                 dibuat: new Date().getTime()
             });
+
+            if(notif) {
+                alert(`Token "${tokenInput}" berhasil disimpan & diaktifkan! Siswa bisa menggunakannya kapan saja.`);
+            }
         }
 
         function logoutGuru() {
-            if(activeAdminToken) {
-                db.ref('tokens/' + activeAdminToken).remove();
-            }
+            // Token TIDAK dihapus agar tetap bisa digunakan kapan saja oleh siswa
             navigate('page-landing');
         }
 
@@ -457,7 +449,6 @@
                     tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-gray-500 text-xs">Belum ada siswa yang login</td></tr>';
                 } else {
                     Object.values(data).forEach(siswa => {
-                        // Hanya tampilkan siswa dengan token guru ini
                         if (siswa.tokenGuru !== activeAdminToken) return;
 
                         if(siswa.status === 'DIBEKUKAN') beku++;
@@ -470,7 +461,6 @@
                         else statusBadge = '<span class="text-blue-400 font-bold">AKTIF</span>';
 
                         let textCurang = siswa.pelanggaran > 0 ? `<span class="text-red-400 font-bold">Ya (${siswa.pelanggaran}x)</span>` : `<span class="text-gray-400">Tidak</span>`;
-                        
                         let displayNilai = siswa.nilai !== '-' ? siswa.nilai : '-';
 
                         tbody.innerHTML += `
@@ -493,9 +483,7 @@
             });
         }
 
-        /* ========================================================
-           3. SISTEM LOGIN SISWA & PENARIKAN SOAL
-           ======================================================== */
+        /* LOGIN SISWA */
         async function loginSiswa() {
             const btn = document.getElementById('btn-masuk-ujian');
             const errDiv = document.getElementById('login-error');
@@ -514,12 +502,18 @@
 
             btn.disabled = true;
             btn.innerHTML = `Memeriksa Token... <svg class="animate-spin inline w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+            errDiv.classList.add('hidden');
 
             try {
-                // Cek token valid di Firebase
-                const tokenRef = await db.ref('tokens/' + token).once('value');
-                if(!tokenRef.exists()) {
-                    throw new Error("TOKEN TIDAK VALID ATAU KADALUARSA! Silakan minta token baru ke Guru.");
+                const tokenPromise = db.ref('tokens/' + token).once('value');
+                const timeoutPromise = new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error("TOKEN TIDAK DITEMUKAN! Pastikan Guru sudah menyimpan token tersebut di Dasbor.")), 4000)
+                );
+
+                const tokenRef = await Promise.race([tokenPromise, timeoutPromise]);
+
+                if(!tokenRef.exists() || !tokenRef.val().aktif) {
+                    throw new Error("TOKEN TIDAK VALID! Periksa kembali atau minta token aktif ke Guru.");
                 }
 
                 currentSiswa = { nama, kelas, sekolah, tokenGuru: token };
@@ -527,21 +521,18 @@
                 
                 btn.innerHTML = `Mengunduh Soal...`;
                 
-                // Ambil soal dari Google Apps Script
                 const res = await fetch(`${SCRIPT_URL}?action=getSoal`);
                 const data = await res.json();
                 
                 if(data.status === 'success') {
-                    // Acak urutan soal
                     listSoal = data.data.sort(() => Math.random() - 0.5);
                     mulaiSesiFirebase();
                     
                     document.getElementById('exam-siswa-info').innerText = `${nama} - ${kelas}`;
                     navigate('page-exam');
-                    
                     mulaiUjian();
                 } else {
-                    throw new Error("Gagal mengambil soal dari server.");
+                    throw new Error("Gagal mengambil soal dari server Google Script.");
                 }
 
             } catch (error) {
@@ -569,7 +560,6 @@
                 curang: 'Tidak'
             });
 
-            // Deteksi Pindah Tab (Anti Curang)
             window.onblur = () => {
                 if(isFrozen) return;
                 jumlahPelanggaran++;
@@ -583,19 +573,12 @@
 
                 bekukanUjian();
             };
-
-            window.onfocus = () => {
-               // Tetap diam, biarkan timer beku berjalan.
-            };
         }
 
-        /* ========================================================
-           4. SISTEM CBT & ANTI-CURANG (FREEZE)
-           ======================================================== */
         function bekukanUjian() {
             isFrozen = true;
             document.getElementById('freeze-overlay').classList.remove('hidden');
-            bekuDetik = 300; // 5 Menit hukuman
+            bekuDetik = 300;
 
             clearInterval(bekuInterval);
             bekuInterval = setInterval(() => {
@@ -618,7 +601,6 @@
             jawabanSiswa = {};
             sisaDetik = 90 * 60;
             
-            // Pencegahan klik kanan & copy paste
             document.addEventListener('contextmenu', event => event.preventDefault());
             document.addEventListener('copy', event => event.preventDefault());
 
@@ -626,7 +608,7 @@
             
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
-                if(isFrozen) return; // Waktu ujian ikut berhenti saat dibekukan (opsional)
+                if(isFrozen) return;
                 sisaDetik--;
                 
                 let m = Math.floor(sisaDetik / 60).toString().padStart(2, '0');
@@ -645,7 +627,6 @@
             const soal = listSoal[currentIndex];
             document.getElementById('nomor-soal').innerText = currentIndex + 1;
             
-            // Format Wacana (Gambar & Paragraf)
             const elWacana = document.getElementById('wacana-teks');
             const boxWacana = document.getElementById('box-wacana');
             
@@ -661,7 +642,6 @@
                 elWacana.innerHTML = `<div class="text-gray-400 italic text-center mt-10">Tidak ada wacana/stimulus untuk soal ini.</div>`;
             }
 
-            // Render Pertanyaan
             const elPertanyaan = document.getElementById('pertanyaan-teks');
             let tanyHTML = "";
             if(soal.LinkGambarSoal) {
@@ -670,11 +650,8 @@
             tanyHTML += `<div class="whitespace-pre-wrap">${soal.Pertanyaan}</div>`;
             elPertanyaan.innerHTML = tanyHTML;
 
-            // Render Opsi Jawaban
             const opsiTeks = [soal.Opsi_A, soal.Opsi_B, soal.Opsi_C, soal.Opsi_D];
             const opsiLabel = ['A', 'B', 'C', 'D'];
-            
-            // Acak Opsi
             let opsiArr = opsiLabel.map((lbl, i) => ({ lbl, t: opsiTeks[i] })).sort(() => Math.random() - 0.5);
 
             const elOpsi = document.getElementById('opsi-container');
@@ -692,12 +669,11 @@
                 
                 btn.onclick = () => {
                     jawabanSiswa[soal.id] = o.lbl;
-                    renderSoal(); // re-render to update UI
+                    renderSoal();
                 };
                 elOpsi.appendChild(btn);
             });
 
-            // Navigasi Bawah Kolom
             document.getElementById('btn-prev').disabled = currentIndex === 0;
             const btnNext = document.getElementById('btn-next');
             if (currentIndex === listSoal.length - 1) {
@@ -710,7 +686,6 @@
                 btnNext.onclick = nextSoal;
             }
 
-            // Panggil Render Peta Navigasi Otomatis (di Bawah)
             renderNavigasi();
         }
 
@@ -738,7 +713,6 @@
                 grid.appendChild(btn);
             });
 
-            // Tampilkan tombol "Kirim & Selesai" jika sudah di nomor terakhir
             const btnSelesaiBawah = document.getElementById('btn-selesai-bawah');
             if (currentIndex === listSoal.length - 1) {
                 btnSelesaiBawah.classList.remove('hidden');
@@ -747,9 +721,6 @@
             }
         }
 
-        /* ========================================================
-           5. SUBMIT JAWABAN & PENILAIAN
-           ======================================================== */
         async function submitJawabanSiswa() {
             const totalDijawab = Object.keys(jawabanSiswa).length;
             if (totalDijawab < listSoal.length) {
@@ -761,9 +732,8 @@
             }
 
             clearInterval(timerInterval);
-            window.onblur = null; // Matikan anti curang
+            window.onblur = null;
             
-            // Hitung Nilai (Benar * 2.5) asumsikan 40 Soal = 100
             let benar = 0;
             let arrayJawabanDikirim = [];
 
@@ -778,7 +748,6 @@
             const bobotSoal = 100 / listSoal.length;
             const nilaiAkhir = Math.round(benar * bobotSoal);
 
-            // Update Firebase ke Status Selesai agar Guru tau Nilainya
             if(db && currentSessionId) {
                 db.ref('sessions/' + currentSessionId).update({
                     status: 'SELESAI',
@@ -787,7 +756,6 @@
                 });
             }
 
-            // Tampilkan UI Loading Fullscreen
             document.body.innerHTML = `
                 <div class="fixed inset-0 bg-primary z-[999999] flex flex-col items-center justify-center text-white">
                     <svg class="animate-spin w-16 h-16 text-secondary mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -796,7 +764,6 @@
                 </div>
             `;
 
-            // Susun Payload untuk Google Apps Script
             const payload = {
                 action: "submitJawaban",
                 waktu: waktuMulai,
@@ -821,7 +788,6 @@
                 const result = await response.json();
                 
                 if(result.status === 'success') {
-                    // Tampilkan Sukses
                     document.body.innerHTML = `
                         <div class="fixed inset-0 bg-bgcream z-[999999] flex flex-col items-center justify-center p-4">
                             <div class="bg-white p-8 rounded-3xl shadow-xl max-w-sm w-full text-center border-t-4 border-green-500">
@@ -839,8 +805,7 @@
                 }
 
             } catch (error) {
-                alert("Terjadi kesalahan koneksi saat mengirim jawaban. Silakan foto layar ini dan lapor pengawas. Error: " + error.message);
-                // Kembalikan tombol jika gagal (fallback)
+                alert("Terjadi kesalahan koneksi saat mengirim jawaban. Error: " + error.message);
                 window.location.reload();
             }
         }
