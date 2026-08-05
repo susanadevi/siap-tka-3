@@ -9,6 +9,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Allura&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* Perbaikan responsif untuk gambar dan teks panjang di area ujian */
+  .wacana-content img,
+  #exam-question img,
+  #exam-options img {
+      max-width: 100% !important;
+      height: auto !important;
+      object-fit: contain;
+      border-radius: 6px;
+      margin: 10px auto;
+  }
+
+  /* Mencegah teks panjang atau URL merusak layout */
+  .wacana-content,
+  #exam-question,
+  #exam-options {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+  }
+</style>
     
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
