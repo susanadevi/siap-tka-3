@@ -8,7 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -24,6 +24,7 @@
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
                         allura: ['Allura', 'cursive'],
                     }
                 }
@@ -46,6 +47,7 @@
         .page.active { display: flex; opacity: 1; height: 100%; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-thumb { background: #D8A5A5; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: #F8F3EA; }
     </style>
 </head>
 <body>
@@ -75,14 +77,14 @@
 
                     <h1 class="text-3xl font-extrabold text-primary text-center tracking-tight">SIAP TKA</h1>
                     <h2 class="text-base sm:text-lg font-bold text-secondary text-center mt-0.5">Bahasa Indonesia SMP</h2>
-                    <p class="text-sm font-bold text-secondary text-center mt-0.5">• Seri 03 •</p>
+                    <p class="text-sm font-bold text-secondary text-center mt-0.5">• Seri 03 • 25 Soal TKA •</p>
 
                     <p class="text-[10px] sm:text-[11px] font-bold text-gray-400 text-center uppercase tracking-wider mt-2 px-2">
                         SESUAI KISI-KISI TKA • CBT PROFESIONAL • ANTI-CURANG
                     </p>
 
                     <div class="bg-[#F0F0F0] text-gray-500 text-[11px] font-semibold px-4 py-1 rounded-full mt-3 shadow-sm">
-                        Versi 1.1 Pro Cloud
+                        Versi 1.2 Pro Cloud Engine
                     </div>
 
                     <div class="w-full flex flex-col gap-3 mt-6">
@@ -171,7 +173,7 @@
                 <h2 class="text-3xl font-extrabold text-primary mb-4">Masuk Ujian</h2>
                 <form onsubmit="handleSiswaLogin(event)" class="space-y-3">
                     <input type="text" id="siswa-nama" placeholder="Nama Lengkap" required class="block w-full px-4 py-2.5 bg-gray-50 border rounded-xl text-sm">
-                    <input type="text" id="siswa-kelas" placeholder="Kelas" required class="block w-full px-4 py-2.5 bg-gray-50 border rounded-xl text-sm">
+                    <input type="text" id="siswa-kelas" placeholder="Kelas (Contoh: IX A)" required class="block w-full px-4 py-2.5 bg-gray-50 border rounded-xl text-sm">
                     <input type="text" id="siswa-sekolah" placeholder="Asal Sekolah" required class="block w-full px-4 py-2.5 bg-gray-50 border rounded-xl text-sm">
                     <input type="text" id="siswa-token" placeholder="Token Ujian Guru" required class="block w-full px-4 py-2.5 bg-gray-50 border rounded-xl uppercase text-sm font-mono">
                     <button type="submit" id="btn-login-siswa" class="w-full py-3.5 mt-4 rounded-xl text-white bg-secondary font-bold text-base shadow-md hover:bg-yellow-600 transition-all">Mulai Ujian</button>
@@ -179,68 +181,136 @@
             </div>
         </div>
 
-        <!-- 5. RUANG UJIAN (CBT ENGINE) -->
-        <div id="page-exam" class="page flex-col w-full bg-bgcream h-screen">
-            <!-- Header Status -->
-            <div class="bg-primary text-white p-4 shadow-lg flex justify-between items-center shrink-0 z-10 relative">
-                <div class="font-bold">SOAL NO. <span id="current-question-num" class="text-xl text-yellow-300 ml-1">1</span> <span id="total-question-count" class="text-sm font-normal text-gray-300">/ 0</span></div>
-                <div id="exam-student-name" class="font-bold text-sm">Siswa</div>
-            </div>
-            
-            <!-- Loading Indicator -->
-            <div id="loading-soal" class="flex-1 flex flex-col items-center justify-center">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-3"></div>
-                <p class="text-gray-500 font-semibold">Memuat soal ujian...</p>
+        <!-- 5. RUANG UJIAN (CBT ENGINE DEVI PRO) -->
+        <div id="page-exam" class="page flex-col w-full h-full bg-bgcream overflow-hidden">
+            <!-- Header CBT -->
+            <div class="bg-primary text-white px-4 py-3 shadow-md flex justify-between items-center shrink-0 z-20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white/10 px-3 py-1 rounded-lg text-xs md:text-sm font-bold tracking-wide">
+                        SOAL NO. <span id="exam-question-number" class="text-yellow-300 text-base md:text-lg">1</span> / 25
+                    </div>
+                    <span id="exam-badge-type" class="hidden md:inline-block bg-secondary text-white text-[10px] uppercase font-extrabold px-2 py-0.5 rounded">Pilihan Ganda</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="bg-black/20 px-3 py-1 rounded-lg text-xs font-mono flex items-center gap-1.5 border border-white/10">
+                        <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span id="exam-timer">60:00</span>
+                    </div>
+                    <button onclick="toggleNavDrawer()" class="bg-secondary/80 hover:bg-secondary text-white px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1 transition-all">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+                        <span class="hidden sm:inline">Daftar Soal</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Kontainer Soal Utama -->
-            <div id="container-soal" class="hidden flex-1 flex-col overflow-hidden">
-                <div class="flex-1 overflow-y-auto p-4 md:p-6 pb-24">
-                    <div class="max-w-3xl mx-auto space-y-6">
-                        
-                        <!-- Wacana (Tersembunyi jika kosong) -->
-                        <div id="box-wacana" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 hidden">
-                            <h4 class="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Wacana / Teks</h4>
-                            <p id="text-wacana" class="text-gray-700 text-sm md:text-base leading-relaxed whitespace-pre-line"></p>
-                        </div>
-                        
-                        <!-- Pertanyaan & Opsi -->
-                        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
-                            <h4 class="text-xs font-bold text-primary mb-2 uppercase tracking-wider">Pertanyaan</h4>
-                            <p id="text-pertanyaan" class="text-gray-800 font-medium text-base md:text-lg mb-6 leading-relaxed whitespace-pre-line"></p>
-                            
-                            <div class="space-y-3">
-                                <button id="btn-opsi-A" onclick="pilihJawaban('A')" class="btn-opsi border-2 border-gray-200 hover:border-secondary p-3.5 rounded-xl text-left flex items-start gap-3 transition-all w-full">
-                                    <span class="badge-opsi font-bold px-2.5 py-0.5 rounded-lg text-xs bg-gray-100 text-gray-600">A</span>
-                                    <span id="text-opsi-A" class="text-gray-700 text-sm md:text-base mt-0.5"></span>
-                                </button>
-                                <button id="btn-opsi-B" onclick="pilihJawaban('B')" class="btn-opsi border-2 border-gray-200 hover:border-secondary p-3.5 rounded-xl text-left flex items-start gap-3 transition-all w-full">
-                                    <span class="badge-opsi font-bold px-2.5 py-0.5 rounded-lg text-xs bg-gray-100 text-gray-600">B</span>
-                                    <span id="text-opsi-B" class="text-gray-700 text-sm md:text-base mt-0.5"></span>
-                                </button>
-                                <button id="btn-opsi-C" onclick="pilihJawaban('C')" class="btn-opsi border-2 border-gray-200 hover:border-secondary p-3.5 rounded-xl text-left flex items-start gap-3 transition-all w-full">
-                                    <span class="badge-opsi font-bold px-2.5 py-0.5 rounded-lg text-xs bg-gray-100 text-gray-600">C</span>
-                                    <span id="text-opsi-C" class="text-gray-700 text-sm md:text-base mt-0.5"></span>
-                                </button>
-                                <button id="btn-opsi-D" onclick="pilihJawaban('D')" class="btn-opsi border-2 border-gray-200 hover:border-secondary p-3.5 rounded-xl text-left flex items-start gap-3 transition-all w-full">
-                                    <span class="badge-opsi font-bold px-2.5 py-0.5 rounded-lg text-xs bg-gray-100 text-gray-600">D</span>
-                                    <span id="text-opsi-D" class="text-gray-700 text-sm md:text-base mt-0.5"></span>
-                                </button>
+            <!-- Area Soal & Stimulus -->
+            <div class="flex-1 flex flex-col md:flex-row overflow-hidden p-3 md:p-5 gap-4 relative">
+                <!-- Sisi Kiri: Stimulus / Teks Wacana -->
+                <div class="w-full md:w-1/2 h-1/2 md:h-full bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-200/80 overflow-y-auto flex flex-col">
+                    <div class="flex items-center justify-between border-b pb-3 mb-3 border-gray-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            Stimulus / Wacana Bacaan
+                        </span>
+                        <span id="stimulus-category" class="text-[10px] bg-gray-100 font-bold px-2.5 py-1 rounded-full text-gray-600">Teks Berita</span>
+                    </div>
+                    <div id="stimulus-content" class="prose max-w-none text-sm leading-relaxed text-gray-700 flex-1">
+                        <!-- Stimulus HTML diinjeksikan secara dinamis -->
+                    </div>
+                </div>
+
+                <!-- Sisi Kanan: Pertanyaan & Pilihan Jawaban -->
+                <div class="w-full md:w-1/2 h-1/2 md:h-full bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-200/80 overflow-y-auto flex flex-col justify-between">
+                    <div>
+                        <div class="mb-4">
+                            <span id="exam-meta-info" class="text-xs font-semibold text-gray-400 block mb-1">Pertanyaan Soal</span>
+                            <div id="question-text" class="text-sm md:text-base font-bold text-gray-800 leading-snug">
+                                <!-- Pertanyaan diinjeksikan dinamis -->
                             </div>
                         </div>
 
+                        <!-- Opsi Jawaban Container -->
+                        <div id="options-container" class="space-y-3 my-4">
+                            <!-- Opsi Pilihan diinjeksikan dinamis -->
+                        </div>
+                    </div>
+
+                    <!-- Tombol Navigasi Bawah -->
+                    <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-2 shrink-0">
+                        <button id="btn-prev" onclick="prevQuestion()" class="px-4 py-2.5 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-xl font-bold text-xs md:text-sm flex items-center transition-all">
+                            ← Sebelumnya
+                        </button>
+                        
+                        <label class="flex items-center gap-2 cursor-pointer bg-amber-50 px-3 py-2 rounded-xl border border-amber-200 hover:bg-amber-100 transition-all select-none">
+                            <input type="checkbox" id="cb-ragu" onchange="toggleRaguRagu(this.checked)" class="w-4 h-4 text-amber-500 rounded focus:ring-amber-400">
+                            <span class="text-xs font-bold text-amber-800">Ragu-ragu</span>
+                        </label>
+
+                        <button id="btn-next" onclick="nextQuestion()" class="px-5 py-2.5 bg-primary text-white hover:bg-red-900 rounded-xl font-bold text-xs md:text-sm flex items-center transition-all shadow-md">
+                            Berikutnya →
+                        </button>
                     </div>
                 </div>
-                
-                <!-- Navigasi Bawah -->
-                <div class="bg-white border-t border-gray-200 p-4 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] relative z-10">
-                    <div class="max-w-3xl mx-auto flex items-center justify-between">
-                        <button id="btn-prev" onclick="soalSebelumnya()" class="px-5 py-2.5 rounded-xl text-sm font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all">← Seb</button>
-                        <div id="status-terjawab" class="text-xs font-bold text-secondary bg-amber-50 px-3 py-1.5 rounded-full border border-amber-100">Terjawab: 0/0</div>
-                        <button id="btn-next" onclick="soalSelanjutnya()" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-primary hover:bg-red-900 transition-all shadow-md">Sel →</button>
-                        <button id="btn-selesai" onclick="konfirmasiSelesai()" class="hidden px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-green-600 hover:bg-green-700 transition-all shadow-md">Kirim ✓</button>
+            </div>
+
+            <!-- Drawer Navigasi Soal (Grid No. 1-25) -->
+            <div id="nav-drawer" class="hidden fixed inset-0 bg-black/50 z-50 flex justify-end backdrop-blur-sm transition-opacity">
+                <div class="bg-white w-full max-w-sm h-full p-6 shadow-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-6 border-b pb-3">
+                            <h3 class="font-extrabold text-primary text-base">NAVIGASI SOAL</h3>
+                            <button onclick="toggleNavDrawer()" class="text-gray-400 hover:text-gray-600 font-bold text-xl">&times;</button>
+                        </div>
+                        <div class="grid grid-cols-5 gap-2.5 max-h-[60vh] overflow-y-auto p-1" id="question-grid">
+                            <!-- Grid No. 1-25 diinjeksikan dinamis -->
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between text-xs text-gray-500">
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-secondary"></span> Terjawab</span>
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber-400"></span> Ragu</span>
+                            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-gray-200"></span> Belum</span>
+                        </div>
+                        <button onclick="konfirmasiSelesaiUjian()" class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-extrabold rounded-xl text-sm shadow-lg transition-all">
+                            Selesaikan Ujian Sekarang
+                        </button>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- MODAL SELESAI UJIAN & HASIL -->
+        <div id="modal-hasil" class="hidden fixed inset-0 bg-black/80 z-[99999] flex items-center justify-center p-4 backdrop-blur-md">
+            <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center border-t-[8px] border-secondary animate-fade-in">
+                <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 text-secondary">
+                    <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                </div>
+                <h2 class="text-2xl font-black text-primary mb-1">UJIAN SELESAI!</h2>
+                <p class="text-xs text-gray-500 mb-6">Jawaban dan statistik pengerjaan Anda telah terekam di sistem.</p>
+
+                <div class="bg-bgcream p-5 rounded-2xl mb-6 border border-amber-200/60">
+                    <span class="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-1">NILAI AKHIR SIMULASI</span>
+                    <span id="final-score-display" class="text-5xl font-black text-primary">0</span>
+                    <div class="mt-4 pt-3 border-t border-amber-200/50 flex justify-around text-xs font-bold">
+                        <div>
+                            <span class="text-gray-400 block text-[10px]">BENAR</span>
+                            <span id="stat-benar" class="text-green-600 text-base">0</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block text-[10px]">SALAH</span>
+                            <span id="stat-salah" class="text-red-500 text-base">0</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block text-[10px]">AKURASI</span>
+                            <span id="stat-akurasi" class="text-secondary text-base">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="selesaiDanKeluar()" class="w-full py-3.5 bg-primary hover:bg-red-900 text-white font-extrabold rounded-xl shadow-lg transition-all text-sm">
+                    Kembali ke Halaman Utama
+                </button>
             </div>
         </div>
 
@@ -281,55 +351,475 @@
     </div>
 
     <script>
-        // ==========================================
-        // KONFIGURASI KREDENSIAL & FIREBASE
-        // ==========================================
-        
-        // PENTING: Ganti URL di bawah dengan URL Deployment BARU milik Anda
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8hse2M_jTp6t2wTgP7CK70RwdmpyzTsZe7Mvd9KKketZmUsVZ9WE5Z2JK6-jnrQEeTw/exec"; 
-        const APP_SECRET_TOKEN = "MISI RAHASIA DEVI";
+        // KREDENSIAL APLIKASI
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzz7LolZFbe7CgHXOdgz7DzxcvkjGO1hnu1vxqczJ2XB3rjFGCegUTFZewZB-S92CHQDQ/exec";
+        const SECRET_APP_TOKEN = "MISI RAHASIA DEVI";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyAozoqP9tSqDj8ZL2gCiYWygmAteZ45qPA", 
-            authDomain: "siap-tka-3.firebaseapp.com",
-            databaseURL: "https://siap-tka-3-default-rtdb.firebaseio.com", 
-            projectId: "siap-tka-3",
-            storageBucket: "siap-tka-3.firebasestorage.app", 
-            messagingSenderId: "273866526572",
+            apiKey: "AIzaSyAozoqP9tSqDj8ZL2gCiYWygmAteZ45qPA", authDomain: "siap-tka-3.firebaseapp.com",
+            databaseURL: "https://siap-tka-3-default-rtdb.firebaseio.com", projectId: "siap-tka-3",
+            storageBucket: "siap-tka-3.firebasestorage.app", messagingSenderId: "273866526572",
             appId: "1:273866526572:web:06d39948c5032764deed49"
         };
+        let db = null; try { firebase.initializeApp(firebaseConfig); db = firebase.database(); } catch(e) {}
 
-        let db = null; 
-        try { firebase.initializeApp(firebaseConfig); db = firebase.database(); } catch(e) {}
-
-        let currentSessionId = null; 
-        let activeAdminToken = null; 
-        let activeAdminPin = null;
+        let currentSessionId = null; let activeAdminToken = null; let activeAdminPin = null;
         let freezeInterval = null;
 
-        // VARIABEL PENGERJAAN UJIAN
-        let listSoal = [];
-        let currentIndex = 0;
-        let jawabanSiswaMap = {}; // Format: { idSoal: "A", idSoal2: "B" }
+        // DATA 25 SOAL BAHASA INDONESIA SMP TKA
+        const examQuestions = [
+            {
+                id: 1, type: "PG", category: "Teks Berita",
+                stimulus: `<h4 class="font-bold text-primary mb-2 text-base">Panen Raya Padi Organik di Desa Sumberagung</h4>
+                <p class="mb-3">Kelompok tani muda di Desa Sumberagung, Kabupaten Ponorogo, berhasil memanen padi organik seluas dua hektare pekan lalu. Hasil panen mencapai enam ton per hektare, lebih tinggi dibandingkan hasil panen padi konvensional di daerah tersebut.</p>
+                <p class="mb-3">Ketua kelompok tani, Dimas Prasetyo, mengatakan bahwa keberhasilan ini merupakan hasil kerja keras selama tiga tahun. “Kami mulai belajar bertani organik sejak 2022. Awalnya hasil panen memang lebih rendah, tetapi setelah tanah kembali subur, produksi justru meningkat,” ujar Dimas.</p>
+                <p class="mb-3">Metode pertanian organik yang diterapkan meliputi penggunaan pupuk kompos dari kotoran ternak, pengendalian hama alami dengan tanaman pengusir serangga, dan penghentian total penggunaan pestisida kimia. Proses peralihan ini membutuhkan waktu karena tanah perlu direhabilitasi terlebih dahulu.</p>
+                <p class="mb-3">Dinas Pertanian Kabupaten Ponorogo menyambut baik keberhasilan tersebut. Kepala Dinas Pertanian, Retno Wulandari, menyatakan pihaknya akan mendampingi lebih banyak kelompok tani untuk beralih ke pertanian organik. Selain lebih ramah lingkungan, beras organik juga dijual dengan harga lebih tinggi di pasaran, sehingga meningkatkan pendapatan petani.</p>
+                <p>Ke depan, kelompok tani ini berencana memperluas lahan organik hingga lima hektare pada musim tanam berikutnya.</p>`,
+                question: "Berdasarkan teks tersebut, apa yang menyebabkan hasil panen padi organik Kelompok Tani Desa Sumberagung lebih tinggi dibandingkan padi konvensional?",
+                options: [
+                    "Penggunaan pestisida kimia dalam jumlah terbatas.",
+                    "Perluasan lahan tanam hingga lima hektare.",
+                    "Tanah yang telah pulih kesuburannya setelah menerapkan metode organik.",
+                    "Bantuan pendampingan rutin dari Dinas Pertanian sejak awal."
+                ],
+                key: "C"
+            },
+            {
+                id: 2, type: "PG", category: "Teks Eksplanasi",
+                stimulus: `<h4 class="font-bold text-primary mb-2 text-base">Mengapa Langit Tampak Biru?</h4>
+                <p class="mb-3">Pernahkah kamu memperhatikan warna langit pada siang hari? Hampir setiap hari, langit tampak berwarna biru cerah ketika cuaca sedang baik. Fenomena ini ternyata bukan disebabkan oleh warna udara itu sendiri, melainkan oleh cara cahaya matahari berinteraksi dengan partikel-partikel di atmosfer bumi.</p>
+                <p class="mb-3">Cahaya matahari yang tampak putih sebenarnya terdiri atas berbagai warna dengan panjang gelombang berbeda, mulai dari merah hingga ungu. Ketika cahaya tersebut memasuki atmosfer, ia bertabrakan dengan molekul-molekul gas seperti nitrogen dan oksigen. Peristiwa ini disebut <b>hamburan Rayleigh</b>. Cahaya dengan panjang gelombang pendek, seperti biru dan ungu, terhambur ke segala arah jauh lebih kuat dibandingkan cahaya dengan panjang gelombang panjang seperti merah dan jingga. Karena mata manusia lebih peka terhadap warna biru dibandingkan ungu, langit pun tampak dominan berwarna biru.</p>
+                <p class="mb-3">Fenomena hamburan ini juga menjelaskan mengapa langit berubah warna menjadi merah atau jingga saat matahari terbenam. Pada waktu tersebut, posisi matahari berada rendah di cakrawala sehingga cahaya harus menempuh jarak yang lebih panjang melalui atmosfer sebelum sampai ke mata kita. Sepanjang perjalanan itu, hampir seluruh cahaya biru sudah terhambur ke arah lain, sehingga yang tersisa dan sampai ke mata adalah cahaya dengan panjang gelombang panjang seperti merah dan jingga.</p>
+                <p>Dengan memahami proses hamburan cahaya ini, kita dapat mengetahui bahwa warna langit sesungguhnya bukanlah sifat tetap atmosfer, melainkan hasil interaksi dinamis antara cahaya matahari dan partikel udara yang berubah sesuai posisi matahari.</p>`,
+                question: "Berdasarkan teks, apa yang dimaksud dengan hamburan Rayleigh?",
+                options: [
+                    "Perubahan warna cahaya matahari ketika melewati awan.",
+                    "Peristiwa bertabrakannya cahaya matahari dengan molekul gas di atmosfer.",
+                    "Proses terbentuknya warna langit merah pada malam hari.",
+                    "Pergerakan posisi matahari dari pagi hingga senja."
+                ],
+                key: "B"
+            },
+            {
+                id: 3, type: "PG", category: "Teks Eksplanasi",
+                stimulus: `<i>(Sama dengan stimulus Teks Eksplanasi: Mengapa Langit Tampak Biru?)</i>`,
+                stimulusRef: 2,
+                question: "Apa hubungan antara paragraf kedua dan paragraf ketiga pada teks tersebut?",
+                options: [
+                    "Paragraf ketiga membantah penjelasan pada paragraf kedua.",
+                    "Paragraf ketiga menerapkan prinsip pada paragraf kedua untuk menjelaskan fenomena lain.",
+                    "Paragraf ketiga menjelaskan definisi istilah yang muncul pada paragraf kedua.",
+                    "Paragraf ketiga membandingkan dua teori berbeda tentang warna langit."
+                ],
+                key: "B"
+            },
+            {
+                id: 4, type: "PG", category: "Teks Eksplanasi",
+                stimulus: `<i>(Sama dengan stimulus Teks Eksplanasi: Mengapa Langit Tampak Biru?)</i>`,
+                stimulusRef: 2,
+                question: "Jika suatu planet memiliki atmosfer yang jauh lebih tipis daripada atmosfer Bumi, manakah simpulan yang paling tepat mengenai warna langit siang hari di planet tersebut berdasarkan prinsip pada teks?",
+                options: [
+                    "Langit akan tetap berwarna biru cerah seperti di Bumi karena warna langit tidak dipengaruhi oleh atmosfer.",
+                    "Langit akan berwarna merah sepanjang hari karena cahaya biru tidak dapat menembus atmosfer yang tipis.",
+                    "Hamburan cahaya akan berkurang sehingga langit tampak lebih gelap dan warna birunya tidak sejelas di Bumi.",
+                    "Warna langit tidak dapat diprediksi karena bergantung sepenuhnya pada jarak planet dari matahari."
+                ],
+                key: "C"
+            },
+            {
+                id: 5, type: "PG", category: "Cerpen",
+                stimulus: `<h4 class="font-bold text-primary mb-2 text-base">Kunci Loker Nomor 12</h4>
+                <p class="mb-3">Bel istirahat baru saja berbunyi ketika Raka menemukan sebuah flashdisk tergeletak di dekat loker nomor 12. Ia mengambilnya dan memeriksa label kecil yang tertempel: “Kunci Jawaban Ulangan Matematika – Bu Sinta”. Jantung Raka berdegup kencang. Besok pagi ia akan mengikuti ulangan matematika, mata pelajaran yang selama ini membuatnya kesulitan.</p>
+                <p class="mb-3">Raka menatap flashdisk itu lama sekali. Pikirannya melayang membayangkan nilai sempurna tanpa harus belajar semalaman. Namun, bayangan wajah kakeknya tiba-tiba muncul. Kakek selalu berkata, “Nilai yang didapat dengan cara curang tidak akan pernah membuatmu bangga pada dirimu sendiri.”</p>
+                <p class="mb-3">“Kenapa bengong, Rak?” tanya Dimas, teman sebangkunya, yang tiba-tiba muncul dari balik pintu kelas.</p>
+                <p class="mb-3">Raka menunjukkan flashdisk itu. “Aku nemu ini di dekat loker nomor 12. Sepertinya isinya kunci jawaban ulangan besok.”</p>
+                <p class="mb-3">Mata Dimas berbinar. “Wah, keren! Kita bisa lihat sebentar saja, kan? Tidak ada yang tahu.”</p>
+                <p class="mb-3">Raka menggeleng pelan. “Aku juga sempat kepikiran begitu. Tapi kalau kita pakai, kita cuma menipu diri sendiri. Nilai bagus tapi kita nggak benar-benar paham materinya.”</p>
+                <p class="mb-3">“Terus mau diapain?” tanya Dimas.</p>
+                <p class="mb-3">“Kukembalikan ke Bu Sinta,” jawab Raka mantap.</p>
+                <p class="mb-3">Sore itu, Raka mendatangi ruang guru dan menyerahkan flashdisk tersebut kepada Bu Sinta. Ia menjelaskan tempat ia menemukannya. Bu Sinta tampak terkejut sekaligus lega. “Terima kasih sudah jujur, Raka. Flashdisk ini memang tertinggal saat aku menyiapkan soal ulangan. Untung kamu menemukannya dan mengembalikannya,” kata Bu Sinta sambil tersenyum.</p>
+                <p class="mb-3">Malam harinya, Raka belajar sungguh-sungguh menghadapi ulangan matematika. Ia membuka kembali catatan-catatan lama dan mengerjakan soal-soal latihan yang pernah diberikan gurunya. Meskipun lelah, ia merasa lega karena tidak perlu menyimpan rahasia yang membebani pikirannya.</p>
+                <p>Keesokan harinya, Raka mengerjakan ulangan dengan tenang. Beberapa soal terasa sulit, tetapi ia tetap berusaha menyelesaikannya sebisa mungkin. Ketika hasil ulangan dibagikan tiga hari kemudian, nilai Raka memang bukan yang tertinggi di kelas. Namun, ia merasa nilai itu benar-benar miliknya sendiri, hasil dari usaha dan kejujurannya.</p>`,
+                question: "Apa maksud kalimat ‘kita cuma menipu diri sendiri’ yang diucapkan Raka dalam cerita tersebut?",
+                options: [
+                    "Menggunakan kunci jawaban tidak akan mengubah nilai ulangan yang didapat.",
+                    "Nilai bagus yang diperoleh dengan cara curang tidak mencerminkan kemampuan yang sebenarnya.",
+                    "Bu Sinta pasti akan mengetahui jika mereka menggunakan kunci jawaban tersebut.",
+                    "Dimas akan merasa bersalah jika mereka menggunakan kunci jawaban itu."
+                ],
+                key: "B"
+            },
+            {
+                id: 6, type: "PG", category: "Cerpen",
+                stimulus: `<i>(Sama dengan stimulus Cerpen: Kunci Loker Nomor 12)</i>`,
+                stimulusRef: 5,
+                question: "Bagaimana watak tokoh Raka dapat disimpulkan berdasarkan keseluruhan cerita tersebut?",
+                options: [
+                    "Raka adalah anak yang cerdas sehingga tidak memerlukan kunci jawaban.",
+                    "Raka adalah anak yang jujur dan berpegang pada prinsip meskipun sempat tergoda untuk berbuat curang.",
+                    "Raka adalah anak yang penakut sehingga tidak berani menyimpan kunci jawaban.",
+                    "Raka adalah anak yang patuh hanya karena takut dimarahi gurunya."
+                ],
+                key: "B"
+            },
+            {
+                id: 7, type: "PG", category: "Cerpen",
+                stimulus: `<i>(Sama dengan stimulus Cerpen: Kunci Loker Nomor 12)</i>`,
+                stimulusRef: 5,
+                question: "Manakah situasi kehidupan sehari-hari yang paling relevan dengan nilai yang ditunjukkan Raka dalam cerita tersebut?",
+                options: [
+                    "Seorang siswa menyalin tugas temannya karena tidak sempat mengerjakan sendiri.",
+                    "Seorang siswa mengembalikan kelebihan uang kembalian yang salah diberikan oleh kasir.",
+                    "Seorang siswa memilih untuk tidak masuk sekolah karena malas belajar.",
+                    "Seorang siswa meminjam buku catatan teman tanpa izin untuk belajar."
+                ],
+                key: "B"
+            },
+            {
+                id: 8, type: "PGK_KATEGORI", category: "Cerpen",
+                stimulus: `<i>(Sama dengan stimulus Cerpen: Kunci Loker Nomor 12)</i>`,
+                stimulusRef: 5,
+                question: "Jika pada akhir cerita Raka memutuskan menggunakan kunci jawaban tersebut, bagaimana kemungkinan perubahan pesan moral cerita? Tentukan Benar atau Salah untuk setiap pernyataan berikut!",
+                statements: [
+                    "Pesan tentang pentingnya kejujuran dalam cerita akan hilang.",
+                    "Cerita akan tetap mengajarkan nilai kejujuran meskipun Raka bertindak curang.",
+                    "Pembaca berpotensi menganggap tindakan curang dapat dibenarkan demi hasil yang baik."
+                ],
+                key: ["Benar", "Salah", "Benar"]
+            },
+            {
+                id: 9, type: "PG", category: "Puisi",
+                stimulus: `<h4 class="font-bold text-primary mb-2 text-base text-center">Nelayan Tua</h4>
+                <div class="font-serif italic text-center text-gray-700 space-y-3 bg-amber-50/50 p-4 rounded-xl border border-amber-100">
+                    <p>Sejak subuh belum lagi terang<br>Ia dayung perahu menembus ombak<br>Wajahnya keriput dimakan garam<br>Tangannya kasar bekas jaring dan pukat</p>
+                    <p>Laut bukan lagi sahabat yang ramah<br>Kadang murka, kadang memberi berkah<br>Namun ia tetap kembali tiap fajar<br>Membawa harap di dasar perahu tua</p>
+                    <p>Anak-anaknya kini di kota jauh<br>Meninggalkan desa, mengejar mimpi baru<br>Ia tak pernah menahan langkah mereka<br>Hanya berdoa dari tepi dermaga</p>
+                    <p>Ketika senja jingga membakar cakrawala<br>Ia duduk sendiri menambal jala<br>Laut yang dulu penuh ikan berlimpah<br>Kini kian sepi, entah sampai kapan</p>
+                </div>`,
+                question: "Apa yang digambarkan pada bait kedua puisi tersebut?",
+                options: [
+                    "Kekecewaan nelayan terhadap hasil tangkapannya.",
+                    "Sikap nelayan yang tetap gigih menghadapi laut meski penuh tantangan.",
+                    "Permintaan nelayan agar laut selalu ramah kepadanya.",
+                    "Ketakutan nelayan terhadap ombak besar di laut."
+                ],
+                key: "B"
+            },
+            {
+                id: 10, type: "PG", category: "Puisi",
+                stimulus: `<i>(Sama dengan stimulus Puisi: Nelayan Tua)</i>`,
+                stimulusRef: 9,
+                question: "Apa makna kias dari larik ‘membawa harap di dasar perahu tua’ pada puisi tersebut?",
+                options: [
+                    "Nelayan menyembunyikan harapannya di dalam perahu miliknya.",
+                    "Nelayan selalu berangkat melaut dengan penuh harapan meski usianya sudah tua.",
+                    "Perahu tua tersebut memiliki nilai sejarah yang penting bagi nelayan.",
+                    "Nelayan berharap mendapatkan perahu baru yang lebih layak."
+                ],
+                key: "B"
+            },
+            {
+                id: 11, type: "PG", category: "Puisi",
+                stimulus: `<i>(Sama dengan stimulus Puisi: Nelayan Tua)</i>`,
+                stimulusRef: 9,
+                question: "Isu apa yang tersirat pada bait keempat puisi tersebut dan relevan dengan kondisi lingkungan saat ini?",
+                options: [
+                    "Kurangnya minat generasi muda untuk menjadi nelayan.",
+                    "Penurunan hasil tangkapan laut yang mengindikasikan masalah kelestarian sumber daya laut.",
+                    "Kesulitan nelayan dalam memperbaiki peralatan tangkap ikan yang rusak.",
+                    "Persaingan antarnelayan dalam memperebutkan wilayah tangkapan ikan."
+                ],
+                key: "B"
+            },
+            {
+                id: 12, type: "PG", category: "Teks Prosedur",
+                stimulus: `<h4 class="font-bold text-primary mb-2 text-base">Cara Membuat Pupuk Kompos dari Sampah Dapur</h4>
+                <p class="mb-3">Sampah dapur seperti sisa sayuran dan kulit buah dapat diolah menjadi pupuk kompos yang bermanfaat bagi tanaman. Berikut langkah-langkah sederhana untuk membuatnya.</p>
+                <ol class="list-decimal pl-5 space-y-2 text-sm text-gray-700">
+                    <li><b>Pertama</b>, siapkan wadah berlubang atau komposter sebagai tempat pengomposan. Lubang-lubang kecil pada wadah berfungsi menjaga sirkulasi udara agar proses pembusukan berjalan optimal.</li>
+                    <li><b>Kedua</b>, kumpulkan sampah organik seperti sisa sayuran, kulit buah, dan ampas kopi. Hindari memasukkan sampah yang mengandung minyak, daging, atau bahan yang sulit terurai.</li>
+                    <li><b>Ketiga</b>, potong sampah organik menjadi bagian-bagian kecil agar proses penguraian berlangsung lebih cepat. Masukkan potongan tersebut ke dalam wadah komposter secara berlapis dengan tanah atau daun kering.</li>
+                    <li><b>Keempat</b>, aduk campuran tersebut setiap dua atau tiga hari sekali menggunakan alat pengaduk. Pengadukan ini penting untuk menjaga kelembapan dan memastikan oksigen tercampur merata.</li>
+                    <li><b>Kelima</b>, diamkan campuran selama tiga hingga empat minggu hingga berubah warna menjadi cokelat kehitaman dan tidak berbau menyengat. Kompos yang sudah matang siap digunakan sebagai pupuk untuk tanaman di kebun maupun pot.</li>
+                </ol>`,
+                question: "Apa fungsi pengadukan campuran kompos yang dilakukan setiap dua atau tiga hari sekali berdasarkan teks tersebut?",
+                options: [
+                    "Mempercepat perubahan warna kompos menjadi cokelat kehitaman.",
+                    "Menjaga kelembapan dan memastikan oksigen tercampur merata dalam kompos.",
+                    "Mengurangi bau menyengat yang dihasilkan sampah organik.",
+                    "Memisahkan sampah organik yang belum terurai sempurna."
+                ],
+                key: "B"
+            },
+            {
+                id: 13, type: "PG", category: "Poster Kampanye",
+                stimulus: `<div class="bg-gradient-to-br from-red-700 to-amber-800 text-white p-5 rounded-2xl shadow-md">
+                    <span class="bg-yellow-400 text-black font-black text-[10px] px-2 py-0.5 rounded tracking-widest uppercase">POSTER KAMPANYE</span>
+                    <h3 class="text-xl font-extrabold mt-2 mb-1">MATIKAN, JANGAN BIARKAN MENYALA SIA-SIA!</h3>
+                    <p class="text-xs bg-black/30 p-3 rounded-lg border border-white/20 italic mb-4">
+                        "Tahukah kamu bahwa lampu yang menyala di ruangan kosong selama satu jam dapat memboroskan listrik yang setara dengan menyalakan lampu belajar selama tiga jam?"
+                    </p>
+                    <h5 class="font-bold text-sm text-yellow-300 border-b border-yellow-300/40 pb-1 mb-2">3 Langkah Hemat Energi:</h5>
+                    <ul class="text-xs space-y-1.5 list-disc pl-4">
+                        <li>Matikan lampu saat meninggalkan ruangan.</li>
+                        <li>Cabut charger dari stopkontak setelah selesai digunakan.</li>
+                        <li>Gunakan cahaya matahari pada siang hari.</li>
+                    </ul>
+                    <p class="text-center font-black text-xs text-yellow-300 uppercase mt-4 pt-2 border-t border-white/20">
+                        Hemat energi hari ini, selamatkan bumi untuk generasi mendatang!
+                    </p>
+                </div>`,
+                question: "Mengapa perbandingan ‘lampu menyala di ruangan kosong selama satu jam setara dengan menyalakan lampu belajar selama tiga jam’ efektif digunakan dalam poster tersebut?",
+                options: [
+                    "Kalimat tersebut menggunakan data statistik resmi dari pemerintah.",
+                    "Perbandingan tersebut membuat pembaca lebih mudah membayangkan besarnya pemborosan energi secara konkret.",
+                    "Kalimat tersebut menunjukkan bahwa lampu belajar lebih boros dibandingkan lampu ruangan.",
+                    "Perbandingan tersebut bertujuan menakut-nakuti pembaca agar mematuhi poster."
+                ],
+                key: "B"
+            },
+            {
+                id: 14, type: "PG", category: "Teks Editorial",
+                stimulus: `<h4 class="font-bold text-primary mb-2 text-base">Gawai di Tangan Remaja: Berkah atau Ancaman?</h4>
+                <p class="mb-3">Penggunaan gawai atau gadget di kalangan remaja semakin sulit dihindari. Survei terbaru sebuah lembaga riset pendidikan menunjukkan bahwa rata-rata remaja Indonesia menghabiskan lebih dari lima jam sehari untuk mengakses ponsel pintar, baik untuk belajar, bermain media sosial, maupun menonton video.</p>
+                <p class="mb-3">Di satu sisi, gawai memberi banyak manfaat. Remaja dapat mengakses informasi pelajaran dengan cepat, berkomunikasi dengan teman, dan mengembangkan kreativitas melalui berbagai aplikasi. Beberapa siswa bahkan berhasil menghasilkan karya digital, seperti desain grafis atau video pendek, berkat kemudahan akses teknologi ini.</p>
+                <p class="mb-3">Namun, di sisi lain, penggunaan gawai yang berlebihan menimbulkan sejumlah persoalan. Banyak remaja mengalami penurunan konsentrasi belajar karena terlalu sering membuka media sosial di sela-sela waktu belajar. Selain itu, paparan konten yang tidak sesuai usia juga menjadi kekhawatiran orang tua dan pendidik.</p>
+                <p class="mb-3">Sayangnya, tidak semua sekolah memiliki kebijakan yang jelas mengenai penggunaan gawai selama jam pelajaran. Sebagian sekolah melarang total penggunaan ponsel, sementara sekolah lain justru mendorong pemanfaatan gawai sebagai media pembelajaran interaktif. Perbedaan kebijakan ini menunjukkan belum adanya kesepahaman bersama tentang cara terbaik mengelola penggunaan teknologi di lingkungan pendidikan.</p>
+                <p class="mb-3">Sudah saatnya sekolah, orang tua, dan pemerintah duduk bersama merumuskan pedoman yang seimbang. Pedoman tersebut idealnya tidak melarang gawai secara total, melainkan mengajarkan siswa untuk menggunakannya secara bijak dan bertanggung jawab. Dengan begitu, remaja tetap dapat menikmati manfaat teknologi tanpa terjebak pada dampak negatifnya.</p>
+                <p>Pendidikan literasi digital sejak dini menjadi kunci utama. Bukan gawai yang perlu dijauhkan dari remaja, melainkan pemahaman tentang cara menggunakannya secara sehat dan produktif yang perlu ditanamkan sejak awal.</p>`,
+                question: "Berdasarkan teks, apa dampak negatif penggunaan gawai berlebihan yang disebutkan dalam teks tersebut?",
+                options: [
+                    "Remaja menjadi lebih kreatif dalam membuat karya digital.",
+                    "Penurunan konsentrasi belajar dan paparan konten yang tidak sesuai usia.",
+                    "Sekolah kesulitan menyediakan fasilitas gawai bagi siswa.",
+                    "Orang tua kehilangan komunikasi dengan anak-anak mereka."
+                ],
+                key: "B"
+            },
+            {
+                id: 15, type: "PG", category: "Teks Editorial",
+                stimulus: `<i>(Sama dengan stimulus Teks Editorial: Gawai di Tangan Remaja)</i>`,
+                stimulusRef: 14,
+                question: "Bagaimana sikap penulis terhadap penggunaan gawai oleh remaja berdasarkan keseluruhan teks tersebut?",
+                options: [
+                    "Penulis sepenuhnya menolak penggunaan gawai oleh remaja karena dampak negatifnya lebih besar.",
+                    "Penulis mendukung penggunaan gawai tanpa batasan karena manfaatnya sangat besar.",
+                    "Penulis menyarankan penggunaan gawai secara bijak dengan pendampingan literasi digital, bukan pelarangan total.",
+                    "Penulis bersikap netral tanpa memberikan pandangan apa pun tentang penggunaan gawai."
+                ],
+                key: "C"
+            },
+            {
+                id: 16, type: "PGK_MCMA", category: "Teks Editorial",
+                stimulus: `<i>(Sama dengan stimulus Teks Editorial: Gawai di Tangan Remaja)</i>`,
+                stimulusRef: 14,
+                question: "Apa saja alasan penulis menganggap perbedaan kebijakan gawai antarsekolah sebagai suatu persoalan? Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.",
+                options: [
+                    "Menunjukkan belum adanya kesepahaman bersama tentang cara mengelola teknologi di sekolah.",
+                    "Membuat siswa bingung menentukan sikap yang benar terhadap gawai.",
+                    "Menghambat sekolah dalam mendapatkan bantuan dana dari pemerintah.",
+                    "Menyebabkan kesenjangan cara pandang tentang pendidikan teknologi antarsekolah."
+                ],
+                key: [0, 3]
+            },
+            {
+                id: 17, type: "PG", category: "Teks Diskusi",
+                stimulus: `<h4 class="font-bold text-primary mb-2 text-base">Perlukah Sekolah Mempertahankan Seragam?</h4>
+                <p class="mb-3">Perdebatan mengenai perlu tidaknya seragam sekolah dipertahankan kembali muncul di berbagai forum pendidikan. Sebagian pihak berpendapat seragam sebaiknya dipertahankan, sementara pihak lain menilai siswa perlu diberi kebebasan berpakaian.</p>
+                <p class="mb-3">Kelompok yang mendukung seragam berargumen bahwa seragam menciptakan kesetaraan di antara siswa. Tanpa seragam, perbedaan status ekonomi keluarga siswa dapat terlihat jelas dari pakaian yang dikenakan, yang berpotensi memicu kesenjangan sosial dan perundungan. Seragam juga dianggap membantu menumbuhkan disiplin dan identitas kebersamaan sebagai bagian dari satu sekolah. Selain itu, seragam memudahkan pengawasan keamanan karena siswa dari sekolah tertentu dapat dikenali dengan mudah.</p>
+                <p class="mb-3">Di sisi lain, kelompok yang menolak kewajiban seragam berpendapat bahwa pakaian bebas dapat mendukung kreativitas dan ekspresi diri siswa. Mereka menilai kemampuan akademik tidak berkaitan dengan jenis pakaian yang dikenakan. Beberapa penelitian di luar negeri bahkan menunjukkan bahwa kebebasan berpakaian tidak berdampak signifikan terhadap kedisiplinan maupun prestasi belajar siswa. Kelompok ini juga menyoroti bahwa biaya seragam dapat menjadi beban tambahan bagi keluarga kurang mampu, terutama jika sekolah mewajibkan penggantian seragam setiap tahun ajaran baru.</p>
+                <p class="mb-3">Beberapa sekolah kini mencoba jalan tengah dengan menerapkan seragam pada hari-hari tertentu dan mengizinkan pakaian bebas rapi pada hari lain, seperti hari Jumat. Kebijakan ini dianggap dapat mengakomodasi kedua kepentingan, yaitu menjaga identitas sekolah sekaligus memberi ruang ekspresi bagi siswa.</p>
+                <p>Pada akhirnya, keputusan mengenai kebijakan seragam sebaiknya mempertimbangkan kondisi masing-masing sekolah, termasuk latar belakang sosial ekonomi siswa dan tujuan pendidikan karakter yang ingin dicapai.</p>`,
+                question: "Apa alasan yang dikemukakan kelompok pendukung seragam sekolah dalam teks tersebut?",
+                options: [
+                    "Seragam membuat siswa lebih mudah membeli pakaian dengan harga murah.",
+                    "Seragam menciptakan kesetaraan dan memudahkan pengawasan keamanan siswa.",
+                    "Seragam terbukti secara ilmiah meningkatkan prestasi akademik siswa.",
+                    "Seragam membantu siswa lebih bebas berekspresi melalui gaya berpakaian."
+                ],
+                key: "B"
+            },
+            {
+                id: 18, type: "PG", category: "Teks Diskusi",
+                stimulus: `<i>(Sama dengan stimulus Teks Diskusi: Perlukah Sekolah Mempertahankan Seragam?)</i>`,
+                stimulusRef: 17,
+                question: "Apa perbedaan mendasar antara sudut pandang pendukung dan penolak kewajiban seragam sekolah berdasarkan teks tersebut?",
+                options: [
+                    "Pendukung seragam mengutamakan kesetaraan sosial, sedangkan penolak mengutamakan ekspresi diri dan biaya.",
+                    "Pendukung seragam mengutamakan biaya murah, sedangkan penolak mengutamakan keamanan sekolah.",
+                    "Pendukung seragam menolak hasil penelitian, sedangkan penolak seragam mendukung hasil penelitian tanpa syarat.",
+                    "Pendukung seragam fokus pada prestasi akademik, sedangkan penolak fokus pada kedisiplinan siswa."
+                ],
+                key: "A"
+            },
+            {
+                id: 19, type: "PGK_KATEGORI", category: "Teks Diskusi",
+                stimulus: `<i>(Sama dengan stimulus Teks Diskusi: Perlukah Sekolah Mempertahankan Seragam?)</i>`,
+                stimulusRef: 17,
+                question: "Tentukan Benar atau Salah untuk setiap pernyataan berikut mengenai kebijakan ‘seragam pada hari tertentu dan pakaian bebas rapi pada hari lain’!",
+                statements: [
+                    "Kebijakan tersebut menghapus total biaya seragam yang harus ditanggung siswa.",
+                    "Kebijakan tersebut menjaga identitas sekolah sekaligus memberi ruang ekspresi bagi siswa.",
+                    "Kebijakan tersebut terbukti meningkatkan prestasi akademik siswa secara signifikan."
+                ],
+                key: ["Salah", "Benar", "Salah"]
+            },
+            {
+                id: 20, type: "PGK_MCMA", category: "Infografik",
+                stimulus: `<div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl shadow-sm text-emerald-950">
+                    <span class="bg-emerald-700 text-white font-black text-[10px] px-2 py-0.5 rounded uppercase tracking-wider">INFOGRAFIK DATA</span>
+                    <h4 class="text-base font-extrabold text-emerald-900 mt-2 mb-3">Jejak Sampah Plastik di Indonesia</h4>
+                    <div class="grid grid-cols-2 gap-2 mb-3 text-center">
+                        <div class="bg-white p-3 rounded-xl border border-emerald-100 shadow-sm">
+                            <span class="text-xl md:text-2xl font-black text-emerald-700 block">6,8 Juta</span>
+                            <span class="text-[10px] text-gray-500 font-bold uppercase">Ton Sampah Plastik / Tahun</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-emerald-100 shadow-sm">
+                            <span class="text-xl md:text-2xl font-black text-amber-600 block">10%</span>
+                            <span class="text-[10px] text-gray-500 font-bold uppercase">Berhasil Didaur Ulang</span>
+                        </div>
+                    </div>
+                    <ul class="text-xs space-y-2 bg-white/70 p-3 rounded-xl">
+                        <li>🌊 <b>620 ribu ton</b> sampah plastik diperkirakan mencemari lautan setiap tahun.</li>
+                        <li>⏳ <b>Waktu urai kantong plastik:</b> 10 – 20 tahun.</li>
+                        <li>🍾 <b>Waktu urai botol plastik:</b> lebih dari 450 tahun.</li>
+                    </ul>
+                    <span class="text-[10px] text-gray-400 block mt-2 text-right">Sumber: KLHK RI</span>
+                </div>`,
+                question: "Pernyataan mana saja yang sesuai dengan data pada infografik tersebut? Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.",
+                options: [
+                    "Hanya sebagian kecil sampah plastik di Indonesia yang berhasil didaur ulang.",
+                    "Waktu urai botol plastik lebih lama dibandingkan kantong plastik.",
+                    "Seluruh sampah plastik yang dihasilkan Indonesia mencemari lautan.",
+                    "Jumlah sampah plastik yang didaur ulang lebih besar daripada yang tidak didaur ulang."
+                ],
+                key: [0, 1]
+            },
+            {
+                id: 21, type: "PG", category: "Tabel Data",
+                stimulus: `<h4 class="font-bold text-primary mb-2 text-base">Tabel Minat Membaca Siswa Kelas VII Berdasarkan Jenis Bacaan</h4>
+                <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm my-3">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-primary text-white uppercase font-bold">
+                            <tr>
+                                <th class="p-2.5">Jenis Bacaan</th>
+                                <th class="p-2.5 text-center">Jumlah Siswa (dari 40 siswa)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr><td class="p-2.5 font-semibold">Novel / Cerita Fiksi</td><td class="p-2.5 text-center font-bold text-primary">15</td></tr>
+                            <tr class="bg-gray-50"><td class="p-2.5 font-semibold">Komik</td><td class="p-2.5 text-center">10</td></tr>
+                            <tr><td class="p-2.5 font-semibold">Buku Pengetahuan Umum</td><td class="p-2.5 text-center">8</td></tr>
+                            <tr class="bg-gray-50"><td class="p-2.5 font-semibold">Majalah / Artikel Daring</td><td class="p-2.5 text-center">5</td></tr>
+                            <tr><td class="p-2.5 font-semibold">Lainnya</td><td class="p-2.5 text-center">2</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-[11px] text-gray-500 italic">Data diperoleh dari survei minat baca yang dilakukan oleh pengurus perpustakaan sekolah pada awal semester.</p>`,
+                question: "Berdasarkan tabel tersebut, jenis bacaan apa yang paling diminati oleh siswa kelas VII?",
+                options: [
+                    "Komik",
+                    "Novel/Cerita Fiksi",
+                    "Buku Pengetahuan Umum",
+                    "Majalah/Artikel Daring"
+                ],
+                key: "B"
+            },
+            {
+                id: 22, type: "PG", category: "Media Sosial",
+                stimulus: `<div class="bg-white rounded-2xl border border-sky-100 shadow-sm p-4 max-w-sm mx-auto font-sans">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-9 h-9 rounded-full bg-sky-500 flex items-center justify-center text-white font-black text-xs">BPBD</div>
+                        <div>
+                            <h5 class="font-bold text-xs leading-none text-gray-900">BPBD Kotaku <span class="text-sky-500">✔</span></h5>
+                            <span class="text-[10px] text-gray-400">@BPBD_Kotaku</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-800 mb-2 font-medium">🧵 <b>UPDATE:</b> Potensi banjir di wilayah bantaran sungai akibat curah hujan tinggi tiga hari terakhir.</p>
+                    <div class="text-[11px] text-gray-700 bg-sky-50/60 p-3 rounded-xl space-y-1.5 border border-sky-100">
+                        <p>1/ Warga di RW 03 dan RW 05 diimbau untuk waspada dan menyiapkan barang penting di tempat yang lebih tinggi.</p>
+                        <p>2/ Posko pengungsian sementara telah disiapkan di Balai Desa dan Masjid Al-Ikhlas.</p>
+                        <p>3/ Hindari beraktivitas di dekat aliran sungai hingga situasi dinyatakan aman oleh petugas.</p>
+                        <p class="text-sky-800 font-bold">4/ Pantau terus informasi resmi dari akun ini. Jangan mudah percaya informasi yang belum terverifikasi.</p>
+                    </div>
+                    <p class="text-[11px] font-bold text-sky-600 mt-2">Tetap tenang dan saling membantu, ya! 🙏 #SiagaBanjir #InformasiResmi</p>
+                </div>`,
+                question: "Mengapa imbauan pada poin ke-4 unggahan tersebut penting disampaikan kepada masyarakat dalam situasi kebencanaan?",
+                options: [
+                    "Agar masyarakat tidak perlu mencari informasi dari sumber lain selain akun tersebut.",
+                    "Agar masyarakat terhindar dari kepanikan akibat informasi yang belum tentu benar atau simpang siur.",
+                    "Agar masyarakat lebih fokus mengikuti akun resmi di media sosial.",
+                    "Agar masyarakat dapat menyebarkan informasi tersebut ke akun lain dengan cepat."
+                ],
+                key: "B"
+            },
+            {
+                id: 23, type: "PG", category: "Surat Pembaca",
+                stimulus: `<h4 class="font-bold text-primary mb-2 text-base">Surat Pembaca: Usulan Taman Baca di Taman Kota</h4>
+                <div class="text-xs text-gray-700 space-y-2 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <p><b>Kepada Redaksi Yth,</b></p>
+                    <p>Saya seorang pelajar SMP yang tinggal di dekat Taman Kota Melati. Setiap sore, taman ini selalu ramai dikunjungi warga, terutama anak-anak dan remaja yang ingin bersantai atau berolahraga. Sayangnya, taman ini belum memiliki fasilitas taman baca atau pojok literasi yang dapat dimanfaatkan pengunjung, khususnya pelajar seperti saya.</p>
+                    <p>Padahal, menurut saya, keberadaan taman baca di ruang publik seperti Taman Kota Melati akan sangat bermanfaat. Selain menjadi tempat rekreasi, taman ini bisa menjadi sarana edukasi bagi anak-anak dan remaja di sekitar kompleks. Beberapa kota lain sudah menerapkan konsep serupa, misalnya dengan menyediakan rak buku sederhana yang bisa diakses gratis oleh siapa saja.</p>
+                    <p>Saya juga melihat banyak pengunjung yang hanya duduk-duduk tanpa kegiatan produktif sambil menunggu waktu magrib tiba. Jika ada taman baca, waktu tersebut bisa dimanfaatkan untuk membaca buku atau majalah anak-anak yang mendidik.</p>
+                    <p>Melalui surat ini, saya berharap Dinas Perpustakaan dan Kearsipan Kota dapat mempertimbangkan usulan penambahan fasilitas taman baca di Taman Kota Melati. Usulan ini tentu membutuhkan dukungan berbagai pihak, baik dari segi anggaran maupun perawatan buku agar tidak mudah rusak atau hilang.</p>
+                    <p>Semoga usulan sederhana ini dapat menjadi bahan pertimbangan demi kemajuan literasi di lingkungan kita bersama.</p>
+                    <p class="pt-2 font-semibold">Hormat saya,<br><span class="text-primary font-bold">Nadia Kirana</span> (Siswa SMP di sekitar Taman Kota Melati)</p>
+                </div>`,
+                question: "Apa tujuan utama penulis mengirimkan surat pembaca tersebut?",
+                options: [
+                    "Melaporkan kerusakan fasilitas yang ada di Taman Kota Melati.",
+                    "Mengusulkan penambahan fasilitas taman baca di Taman Kota Melati.",
+                    "Mengeluhkan banyaknya pengunjung yang tidak tertib di taman.",
+                    "Meminta penambahan petugas kebersihan di taman kota."
+                ],
+                key: "B"
+            },
+            {
+                id: 24, type: "PG", category: "Surat Pembaca",
+                stimulus: `<i>(Sama dengan stimulus Surat Pembaca: Usulan Taman Baca di Taman Kota)</i>`,
+                stimulusRef: 23,
+                question: "Bukti apa yang digunakan penulis untuk memperkuat usulannya tentang pentingnya taman baca di Taman Kota Melati?",
+                options: [
+                    "Data jumlah pengunjung taman yang dikumpulkan penulis secara langsung.",
+                    "Pengamatan penulis bahwa banyak pengunjung hanya duduk tanpa kegiatan produktif serta contoh penerapan di kota lain.",
+                    "Hasil wawancara penulis dengan petugas Dinas Perpustakaan setempat.",
+                    "Perbandingan biaya pembangunan taman baca di beberapa kota besar."
+                ],
+                key: "B"
+            },
+            {
+                id: 25, type: "PG", category: "Teks Diskusi",
+                stimulus: `<h4 class="font-bold text-primary mb-2 text-base">Pembelajaran Daring, Efektifkah untuk Semua Siswa?</h4>
+                <p class="mb-3">Sejak pandemi beberapa tahun lalu, pembelajaran daring menjadi alternatif yang terus digunakan sebagian sekolah, terutama untuk kegiatan tertentu seperti pengayaan materi atau saat kondisi cuaca ekstrem menghalangi siswa datang ke sekolah.</p>
+                <p class="mb-3">Pendukung metode ini menilai pembelajaran daring memberi fleksibilitas waktu dan tempat belajar. Siswa dapat mengulang video pembelajaran kapan saja hingga benar-benar paham, sesuatu yang sulit dilakukan pada pembelajaran tatap muka biasa.</p>
+                <p class="mb-3">Namun, tidak semua siswa merasakan manfaat yang sama. Siswa yang tinggal di daerah dengan akses internet terbatas kerap kesulitan mengikuti pembelajaran daring secara maksimal. Selain itu, interaksi sosial antarsiswa yang biasanya terjadi di kelas menjadi berkurang, padahal interaksi tersebut penting untuk perkembangan keterampilan sosial remaja.</p>
+                <p class="mb-3">Sejumlah guru juga mengungkapkan bahwa memantau pemahaman siswa lebih sulit dilakukan secara daring dibandingkan tatap muka langsung, karena guru tidak dapat langsung melihat ekspresi maupun kesulitan siswa saat belajar.</p>
+                <p>Melihat kelebihan dan kekurangan tersebut, banyak pihak berpendapat bahwa pembelajaran campuran atau hybrid, yang memadukan tatap muka dan daring secara proporsional, mungkin menjadi solusi paling sesuai untuk kondisi pendidikan yang beragam di Indonesia.</p>`,
+                question: "Mengapa pembelajaran campuran (hybrid) dianggap sebagai solusi yang paling sesuai berdasarkan permasalahan yang diuraikan dalam teks tersebut?",
+                options: [
+                    "Karena pembelajaran hybrid fully menghilangkan kebutuhan akan internet.",
+                    "Karena pembelajaran hybrid dapat mengakomodasi kelebihan fleksibilitas daring sekaligus mempertahankan interaksi sosial dan pemantauan langsung dari tatap muka.",
+                    "Karena pembelajaran hybrid terbukti lebih murah dibandingkan metode lainnya.",
+                    "Karena pembelajaran hybrid hanya cocok diterapkan di kota besar dengan akses internet baik."
+                ],
+                key: "B"
+            }
+        ];
 
-        // FUNGSI UTAMA FETCH API KE BACKEND (FORMAT JSON)
-        async function fetchAPI(payload) {
-            payload.tokenAPI = APP_SECRET_TOKEN;
-            const res = await fetch(SCRIPT_URL, {
-                method: "POST",
-                body: JSON.stringify(payload)
-            });
-            return await res.json();
-        }
+        // STATE ENGINE UJIAN
+        let currentQuestionIdx = 0;
+        let userAnswers = new Array(examQuestions.length).fill(null);
+        let userDoubt = new Array(examQuestions.length).fill(false);
+        let examTimerSeconds = 60 * 60; // 60 menit
+        let timerInterval = null;
 
         function navigate(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
         }
 
-        // ==========================================
-        // SUNTIK TOMBOL MATA (PASSWORD) & SUPERADMIN
-        // ==========================================
+        // SUNTIK TOMBOL LIHAT SANDI
         document.addEventListener("DOMContentLoaded", function() {
             function pasangMata(idInput) {
                 const inputEl = document.getElementById(idInput);
@@ -358,6 +848,7 @@
             pasangMata('reg-pin');
         });
 
+        // KODE SUPERADMIN (KLIK NAMA 5X)
         let adminClickCount = 0; let adminClickTimer = null;
         function handleAdminClick() {
             adminClickCount++;
@@ -375,86 +866,47 @@
             }
         }
 
-        // ==========================================
         // 1. REGISTRASI GURU MANDIRI
-        // ==========================================
         async function handleDaftarGuru(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-daftar'); btn.innerText = "Mendaftarkan..."; btn.disabled = true;
             
+            const payload = new URLSearchParams({
+                aksi: 'daftarGuru', 
+                tokenAPI: SECRET_APP_TOKEN, 
+                masterKey: document.getElementById('reg-master').value, 
+                namaGuru: document.getElementById('reg-nama').value, 
+                tokenBaru: document.getElementById('reg-token').value, 
+                pinGuru: document.getElementById('reg-pin').value 
+            });
+
             try {
-                const hasil = await fetchAPI({
-                    action: 'registerGuru',
-                    masterToken: document.getElementById('reg-master').value,
-                    nama: document.getElementById('reg-nama').value,
-                    token: document.getElementById('reg-token').value,
-                    pin: document.getElementById('reg-pin').value
-                });
-                
-                alert(hasil.message);
-                if(hasil.status === 'success') { 
+                const res = await fetch(SCRIPT_URL, { method: 'POST', body: payload });
+                const hasil = await res.json();
+                alert(hasil.pesan);
+                if(hasil.status === 'sukses') { 
                     document.getElementById('page-guru-register').querySelector('form').reset(); 
                     navigate('page-guru-auth'); 
                 }
             } catch(err) { 
-                alert("Gangguan koneksi/Akses GAS belum diatur ke 'Anyone'."); 
+                alert("Gangguan koneksi atau pengaturan GAS belum dibuka public."); 
             } finally { 
-                btn.innerText = "Daftarkan Akun Guru"; 
-                btn.disabled = false; 
+                btn.innerText = "Daftarkan Akun Guru"; btn.disabled = false; 
             }
         }
 
-        // ==========================================
-        // 2. LOGIN GURU & AMBIL RESULT DASBOR
-        // ==========================================
-        async function handleGuruLogin(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btn-login-guru'); btn.innerText = "Memvalidasi..."; btn.disabled = true;
-            
-            const nama = document.getElementById('guru-nama').value;
-            const pin = document.getElementById('guru-pin').value;
-            
-            try {
-                const hasil = await fetchAPI({
-                    action: 'getHasilGuru',
-                    nama: nama,
-                    pin: pin
-                });
-
-                if (hasil.status === 'success') {
-                    activeAdminToken = hasil.tokenGuru; 
-                    activeAdminPin = pin;
-                    document.getElementById('dash-title').innerText = hasil.namaGuru;
-                    document.getElementById('dash-subtitle').innerText = "Token Ujian: " + hasil.tokenGuru;
-                    document.getElementById('guru-pin').value = ""; 
-                    navigate('page-dashboard'); 
-                    muatRealtimeDashboard();
-                } else {
-                    alert(hasil.message);
-                }
-            } catch(err) { 
-                alert("Gangguan jaringan atau verifikasi gagal."); 
-            } finally { 
-                btn.innerText = "Masuk Dasbor"; 
-                btn.disabled = false; 
-            }
-        }
-
-        // ==========================================
-        // 3. RESET TOKEN GURU
-        // ==========================================
+        // 2. RESET TOKEN GURU
         async function resetTokenForm() {
             let tokenBaru = prompt("Masukkan Token Baru Anda:");
             if(!tokenBaru) return;
             try {
-                const hasil = await fetchAPI({
-                    action: 'resetToken',
-                    tokenLama: activeAdminToken,
-                    tokenBaru: tokenBaru,
-                    pin: activeAdminPin
+                const res = await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    body: new URLSearchParams({ aksi: 'resetToken', tokenAPI: SECRET_APP_TOKEN, tokenLama: activeAdminToken, pinGuru: activeAdminPin, tokenBaru: tokenBaru })
                 });
-                alert(hasil.message);
-                if(hasil.status === 'success') {
+                const hasil = await res.json();
+                alert(hasil.pesan);
+                if(hasil.status === 'sukses') {
                     activeAdminToken = tokenBaru.toUpperCase();
                     document.getElementById('dash-subtitle').innerText = "Token: " + activeAdminToken;
                     muatRealtimeDashboard();
@@ -462,194 +914,52 @@
             } catch(err) { alert("Gagal mereset token."); }
         }
 
-        // ==========================================
-        // 4. LOGIN SISWA & AMBIL SOAL UJIAN
-        // ==========================================
+        // 3. LOGIN GURU (NAMA & PIN)
+        async function handleGuruLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login-guru'); btn.innerText = "Memvalidasi..."; btn.disabled = true;
+            const nama = document.getElementById('guru-nama').value;
+            const pin = document.getElementById('guru-pin').value;
+            
+            try {
+                const res = await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    body: new URLSearchParams({ aksi: 'loginGuru', tokenAPI: SECRET_APP_TOKEN, namaGuru: nama, pinGuru: pin })
+                });
+                const hasil = await res.json();
+                if (hasil.status === 'sukses') {
+                    activeAdminToken = hasil.tokenGuru; 
+                    activeAdminPin = pin;
+                    document.getElementById('dash-title').innerText = hasil.nama;
+                    document.getElementById('dash-subtitle').innerText = "Token Ujian: " + hasil.tokenGuru;
+                    document.getElementById('guru-pin').value = ""; 
+                    navigate('page-dashboard'); 
+                    muatRealtimeDashboard();
+                } else { alert(hasil.pesan); }
+            } catch(err) { 
+                alert("Gangguan jaringan."); 
+            } finally { 
+                btn.innerText = "Masuk Dasbor"; btn.disabled = false; 
+            }
+        }
+
+        // 4. LOGIN SISWA & INISIALISASI UJIAN REAL
         async function handleSiswaLogin(e) {
             e.preventDefault();
-            const btn = document.getElementById('btn-login-siswa'); btn.innerText = "Memuat Soal..."; btn.disabled = true;
-            const tokenInput = document.getElementById('siswa-token').value;
-
+            const btn = document.getElementById('btn-login-siswa'); btn.innerText = "Validasi..."; btn.disabled = true;
+            const t = document.getElementById('siswa-token').value;
             try {
-                const hasil = await fetchAPI({
-                    action: 'getSoal',
-                    token: tokenInput
+                const res = await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    body: new URLSearchParams({ aksi: 'cekTokenGuru', tokenAPI: SECRET_APP_TOKEN, tokenGuru: t })
                 });
-
-                if (hasil.status === 'success' && hasil.data.length > 0) {
-                    listSoal = hasil.data;
-                    currentIndex = 0;
-                    jawabanSiswaMap = {};
-                    
-                    mulaiSesiFirebase(
-                        document.getElementById('siswa-nama').value, 
-                        document.getElementById('siswa-kelas').value, 
-                        document.getElementById('siswa-sekolah').value, 
-                        tokenInput.toUpperCase()
-                    );
-
-                    document.getElementById('total-question-count').innerText = `/ ${listSoal.length}`;
-                    document.getElementById('loading-soal').classList.add('hidden');
-                    document.getElementById('container-soal').classList.remove('hidden');
-                    document.getElementById('container-soal').classList.add('flex');
-                    
-                    tampilkanSoal(currentIndex);
-                } else {
-                    alert(hasil.message);
-                }
-            } catch(err) { 
-                alert("Gagal terhubung dengan server ujian."); 
-            } finally { 
-                btn.innerText = "Mulai Ujian"; 
-                btn.disabled = false; 
-            }
+                const hasil = await res.json();
+                if (hasil.status === 'sukses') {
+                    mulaiSesiFirebase(document.getElementById('siswa-nama').value, document.getElementById('siswa-kelas').value, document.getElementById('siswa-sekolah').value, t.toUpperCase());
+                } else alert(hasil.pesan);
+            } catch(err) { alert("Gagal terhubung."); } finally { btn.innerText = "Mulai Ujian"; btn.disabled = false; }
         }
 
-        // ==========================================
-        // 5. RENDER SOAL & NAVIGASI
-        // ==========================================
-        function tampilkanSoal(idx) {
-            if (idx < 0 || idx >= listSoal.length) return;
-            
-            const s = listSoal[idx];
-            document.getElementById('current-question-num').innerText = idx + 1;
-            
-            // Render Wacana (Backend mengirimkan properti 'wacana')
-            const boxWacana = document.getElementById('box-wacana');
-            if (s.wacana && String(s.wacana).trim() !== "") {
-                boxWacana.classList.remove('hidden');
-                document.getElementById('text-wacana').innerText = s.wacana;
-            } else {
-                boxWacana.classList.add('hidden');
-            }
-            
-            // Render Pertanyaan & Opsi
-            document.getElementById('text-pertanyaan').innerText = s.pertanyaan;
-            document.getElementById('text-opsi-A').innerText = s.opsiA;
-            document.getElementById('text-opsi-B').innerText = s.opsiB;
-            document.getElementById('text-opsi-C').innerText = s.opsiC;
-            document.getElementById('text-opsi-D').innerText = s.opsiD;
-            
-            updateHighlightOpsi();
-
-            // Navigasi Tombol
-            document.getElementById('btn-prev').disabled = (idx === 0);
-            if (idx === listSoal.length - 1) {
-                document.getElementById('btn-next').classList.add('hidden');
-                document.getElementById('btn-selesai').classList.remove('hidden');
-            } else {
-                document.getElementById('btn-next').classList.remove('hidden');
-                document.getElementById('btn-selesai').classList.add('hidden');
-            }
-            
-            const jumlahTerjawab = Object.keys(jawabanSiswaMap).length;
-            document.getElementById('status-terjawab').innerText = `Terjawab: ${jumlahTerjawab}/${listSoal.length}`;
-        }
-
-        function pilihJawaban(opsi) {
-            const idSoal = listSoal[currentIndex].id;
-            jawabanSiswaMap[idSoal] = opsi;
-            updateHighlightOpsi();
-            const jumlahTerjawab = Object.keys(jawabanSiswaMap).length;
-            document.getElementById('status-terjawab').innerText = `Terjawab: ${jumlahTerjawab}/${listSoal.length}`;
-        }
-
-        function updateHighlightOpsi() {
-            const idSoal = listSoal[currentIndex].id;
-            const terpilih = jawabanSiswaMap[idSoal];
-            
-            ['A', 'B', 'C', 'D'].forEach(o => {
-                const btn = document.getElementById(`btn-opsi-${o}`);
-                const badge = btn.querySelector('.badge-opsi');
-                if (terpilih === o) {
-                    btn.className = "btn-opsi border-2 border-secondary bg-amber-50/60 p-3.5 rounded-xl text-left flex items-start gap-3 transition-all shadow-sm w-full";
-                    badge.className = "badge-opsi font-bold px-2.5 py-0.5 rounded-lg text-xs bg-secondary text-white";
-                } else {
-                    btn.className = "btn-opsi border-2 border-gray-200 hover:border-secondary p-3.5 rounded-xl text-left flex items-start gap-3 transition-all w-full";
-                    badge.className = "badge-opsi font-bold px-2.5 py-0.5 rounded-lg text-xs bg-gray-100 text-gray-600";
-                }
-            });
-        }
-
-        function soalSebelumnya() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                tampilkanSoal(currentIndex);
-            }
-        }
-
-        function soalSelanjutnya() {
-            if (currentIndex < listSoal.length - 1) {
-                currentIndex++;
-                tampilkanSoal(currentIndex);
-            }
-        }
-
-        function konfirmasiSelesai() {
-            const total = listSoal.length;
-            const dijawab = Object.keys(jawabanSiswaMap).length;
-            if (dijawab < total) {
-                if (!confirm(`Anda baru menjawab ${dijawab} dari ${total} soal. Yakin ingin mengirim jawaban?`)) return;
-            } else {
-                if (!confirm("Yakin ingin menyelesaikan ujian dan mengirim jawaban?")) return;
-            }
-            kirimUjianKeBackend();
-        }
-
-        // ==========================================
-        // 6. SUBMIT JAWABAN & PENILAIAN DI SERVER
-        // ==========================================
-        async function kirimUjianKeBackend() {
-            const btn = document.getElementById('btn-selesai'); 
-            btn.innerText = "Mengirim..."; 
-            btn.disabled = true;
-
-            // Susun array jawaban: [{ idSoal: 1, jawaban: "A" }, ...]
-            const arrayJawaban = listSoal.map(s => ({
-                idSoal: s.id,
-                jawaban: jawabanSiswaMap[s.id] || "-"
-            }));
-
-            try {
-                let statusCurang = "Tidak";
-                if(db && currentSessionId) {
-                    const snap = await db.ref('sessions/' + currentSessionId).once('value');
-                    if(snap.val() && snap.val().pelanggaran > 0) {
-                        statusCurang = `Ya (${snap.val().pelanggaran}x Pindah Tab)`;
-                    }
-                }
-
-                const hasil = await fetchAPI({
-                    action: 'submitUjian',
-                    tokenGuru: document.getElementById('siswa-token').value,
-                    namaSiswa: document.getElementById('siswa-nama').value,
-                    kelas: document.getElementById('siswa-kelas').value,
-                    sekolah: document.getElementById('siswa-sekolah').value,
-                    keteranganCurang: statusCurang,
-                    jawaban: arrayJawaban
-                });
-
-                if (hasil.status === 'success') {
-                    alert(`Ujian Selesai!\nNilai Akhir: ${hasil.nilai}\nJawaban Benar: ${hasil.benar} dari ${hasil.totalSoal} Soal`); 
-                    if(db && currentSessionId) { 
-                        db.ref('sessions/' + currentSessionId).remove(); 
-                        window.onblur = null; 
-                    }
-                    navigate('page-landing');
-                } else {
-                    alert(hasil.message);
-                }
-            } catch (err) { 
-                alert("Gangguan koneksi saat menyimpan hasil ujian."); 
-            } finally { 
-                btn.innerText = "Kirim & Selesai ✓"; 
-                btn.disabled = false; 
-            }
-        }
-
-        // ==========================================
-        // REALTIME MONITORING & TIMER FREEZE (FIREBASE)
-        // ==========================================
         function mulaiSesiFirebase(nama, kelas, sekolah, tokenGuru) {
             currentSessionId = "siswa_" + Date.now();
             if(db) {
@@ -666,7 +976,21 @@
                     }
                 });
             }
-            document.getElementById('exam-student-name').innerText = nama; 
+
+            // Inisialisasi Ujian Real CBT
+            currentQuestionIdx = 0;
+            userAnswers = new Array(examQuestions.length).fill(null);
+            userDoubt = new Array(examQuestions.length).fill(false);
+            
+            // Inisialisasi Jawaban Kosong untuk tipe PGK_KATEGORI / PGK_MCMA
+            examQuestions.forEach((q, idx) => {
+                if(q.type === 'PGK_KATEGORI') userAnswers[idx] = new Array(q.statements.length).fill(null);
+                else if(q.type === 'PGK_MCMA') userAnswers[idx] = [];
+            });
+
+            mulaikontrolTimer();
+            renderQuestion(currentQuestionIdx);
+            renderQuestionGrid();
             navigate('page-exam');
             
             window.onblur = function() {
@@ -675,6 +999,22 @@
                     setTimeout(() => { if(db && currentSessionId) db.ref('sessions/' + currentSessionId).update({ status: 'AKTIF' }); }, 300000);
                 }
             };
+        }
+
+        function mulaikontrolTimer() {
+            examTimerSeconds = 60 * 60;
+            if(timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                examTimerSeconds--;
+                let m = Math.floor(examTimerSeconds / 60).toString().padStart(2, '0');
+                let s = (examTimerSeconds % 60).toString().padStart(2, '0');
+                document.getElementById('exam-timer').innerText = `${m}:${s}`;
+                if(examTimerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Waktu pengerjaan telah habis! Jawaban Anda akan otomatis dikirim.");
+                    hitungDanKirimHasil();
+                }
+            }, 1000);
         }
 
         function jalankanTimerFreeze() {
@@ -691,6 +1031,294 @@
         }
         function hentikanTimerFreeze() { if(freezeInterval) clearInterval(freezeInterval); }
 
+        // ==========================================
+        // RENDER ENGINE SOAL CBT
+        // ==========================================
+        function renderQuestion(index) {
+            const q = examQuestions[index];
+            document.getElementById('exam-question-number').innerText = index + 1;
+            document.getElementById('stimulus-category').innerText = q.category;
+            
+            // Render Badge Tipe
+            const badgeType = document.getElementById('exam-badge-type');
+            if(q.type === 'PG') badgeType.innerText = 'Pilihan Ganda';
+            else if(q.type === 'PGK_KATEGORI') badgeType.innerText = 'PG Kompleks (Kategori)';
+            else if(q.type === 'PGK_MCMA') badgeType.innerText = 'PG Kompleks (Jawaban Banyak)';
+
+            // Render Stimulus (Gunakan rujukan jika ada)
+            let stimHTML = q.stimulus;
+            if(q.stimulusRef) {
+                const targetRef = examQuestions.find(x => x.id === q.stimulusRef);
+                if(targetRef) stimHTML = targetRef.stimulus;
+            }
+            document.getElementById('stimulus-content').innerHTML = stimHTML;
+
+            // Render Teks Soal
+            document.getElementById('question-text').innerText = q.question;
+
+            // Checkbox Ragu
+            document.getElementById('cb-ragu').checked = userDoubt[index];
+
+            // Render Opsi Jawaban Sesuai Jenis Soal
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            if (q.type === 'PG') {
+                const letters = ['A', 'B', 'C', 'D'];
+                q.options.forEach((opt, oIdx) => {
+                    const letter = letters[oIdx];
+                    const isSelected = userAnswers[index] === letter;
+                    container.innerHTML += `
+                        <button onclick="pilihJawabanPG('${letter}')" class="w-full text-left p-3.5 rounded-xl border ${isSelected ? 'border-primary bg-red-50/60 ring-2 ring-primary/20 font-semibold' : 'border-gray-200 bg-white hover:bg-gray-50'} transition-all flex items-start gap-3">
+                            <span class="w-7 h-7 rounded-lg ${isSelected ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'} flex items-center justify-center font-bold text-xs shrink-0">${letter}</span>
+                            <span class="text-xs md:text-sm text-gray-800 pt-0.5">${opt}</span>
+                        </button>
+                    `;
+                });
+            } else if (q.type === 'PGK_KATEGORI') {
+                let currentAns = userAnswers[index] || new Array(q.statements.length).fill(null);
+                let tableHTML = `
+                    <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-gray-100 text-gray-700 uppercase font-bold">
+                                <tr>
+                                    <th class="p-3">Pernyataan</th>
+                                    <th class="p-3 text-center w-20">Benar</th>
+                                    <th class="p-3 text-center w-20">Salah</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                `;
+                q.statements.forEach((stmt, sIdx) => {
+                    const isBenar = currentAns[sIdx] === 'Benar';
+                    const isSalah = currentAns[sIdx] === 'Salah';
+                    tableHTML += `
+                        <tr>
+                            <td class="p-3 text-gray-800 font-medium">${stmt}</td>
+                            <td class="p-3 text-center">
+                                <input type="radio" name="kat_${index}_${sIdx}" onchange="pilihJawabanKategori(${sIdx}, 'Benar')" ${isBenar ? 'checked' : ''} class="w-4 h-4 text-primary focus:ring-primary cursor-pointer">
+                            </td>
+                            <td class="p-3 text-center">
+                                <input type="radio" name="kat_${index}_${sIdx}" onchange="pilihJawabanKategori(${sIdx}, 'Salah')" ${isSalah ? 'checked' : ''} class="w-4 h-4 text-primary focus:ring-primary cursor-pointer">
+                            </td>
+                        </tr>
+                    `;
+                });
+                tableHTML += `</tbody></table></div>`;
+                container.innerHTML = tableHTML;
+            } else if (q.type === 'PGK_MCMA') {
+                let currentSet = userAnswers[index] || [];
+                q.options.forEach((opt, oIdx) => {
+                    const isChecked = currentSet.includes(oIdx);
+                    container.innerHTML += `
+                        <label class="flex items-start gap-3 p-3.5 rounded-xl border ${isChecked ? 'border-primary bg-red-50/60 ring-2 ring-primary/20' : 'border-gray-200 bg-white hover:bg-gray-50'} cursor-pointer transition-all">
+                            <input type="checkbox" onchange="toggleJawabanMCMA(${oIdx})" ${isChecked ? 'checked' : ''} class="w-4 h-4 mt-0.5 text-primary rounded focus:ring-primary">
+                            <span class="text-xs md:text-sm text-gray-800 font-medium">${opt}</span>
+                        </label>
+                    `;
+                });
+            }
+
+            // Tombol Prev / Next state
+            document.getElementById('btn-prev').disabled = index === 0;
+            document.getElementById('btn-prev').style.opacity = index === 0 ? '0.4' : '1';
+            
+            const btnNext = document.getElementById('btn-next');
+            if(index === examQuestions.length - 1) {
+                btnNext.innerText = 'Selesai Ujian';
+                btnNext.className = 'px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold text-xs md:text-sm flex items-center transition-all shadow-md';
+            } else {
+                btnNext.innerText = 'Berikutnya →';
+                btnNext.className = 'px-5 py-2.5 bg-primary text-white hover:bg-red-900 rounded-xl font-bold text-xs md:text-sm flex items-center transition-all shadow-md';
+            }
+
+            renderQuestionGrid();
+        }
+
+        function pilihJawabanPG(letter) {
+            userAnswers[currentQuestionIdx] = letter;
+            renderQuestion(currentQuestionIdx);
+        }
+
+        function pilihJawabanKategori(statementIdx, val) {
+            if(!Array.isArray(userAnswers[currentQuestionIdx])) {
+                userAnswers[currentQuestionIdx] = new Array(examQuestions[currentQuestionIdx].statements.length).fill(null);
+            }
+            userAnswers[currentQuestionIdx][statementIdx] = val;
+            renderQuestionGrid();
+        }
+
+        function toggleJawabanMCMA(optionIdx) {
+            if(!Array.isArray(userAnswers[currentQuestionIdx])) {
+                userAnswers[currentQuestionIdx] = [];
+            }
+            const arr = userAnswers[currentQuestionIdx];
+            const pos = arr.indexOf(optionIdx);
+            if(pos > -1) arr.splice(pos, 1);
+            else arr.push(optionIdx);
+            renderQuestion(currentQuestionIdx);
+        }
+
+        function toggleRaguRagu(checked) {
+            userDoubt[currentQuestionIdx] = checked;
+            renderQuestionGrid();
+        }
+
+        function prevQuestion() {
+            if(currentQuestionIdx > 0) {
+                currentQuestionIdx--;
+                renderQuestion(currentQuestionIdx);
+            }
+        }
+
+        function nextQuestion() {
+            if(currentQuestionIdx < examQuestions.length - 1) {
+                currentQuestionIdx++;
+                renderQuestion(currentQuestionIdx);
+            } else {
+                konfirmasiSelesaiUjian();
+            }
+        }
+
+        function toggleNavDrawer() {
+            const drawer = document.getElementById('nav-drawer');
+            drawer.classList.toggle('hidden');
+        }
+
+        function renderQuestionGrid() {
+            const grid = document.getElementById('question-grid');
+            grid.innerHTML = '';
+            
+            examQuestions.forEach((q, idx) => {
+                const ans = userAnswers[idx];
+                let isAnswered = false;
+                
+                if(q.type === 'PG' && ans !== null) isAnswered = true;
+                else if(q.type === 'PGK_KATEGORI' && Array.isArray(ans) && ans.every(x => x !== null)) isAnswered = true;
+                else if(q.type === 'PGK_MCMA' && Array.isArray(ans) && ans.length > 0) isAnswered = true;
+
+                const isDoubt = userDoubt[idx];
+                const isCurrent = idx === currentQuestionIdx;
+
+                let bgClass = 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+                if(isAnswered) bgClass = 'bg-secondary text-white font-bold';
+                if(isDoubt) bgClass = 'bg-amber-400 text-gray-900 font-bold';
+                if(isCurrent) bgClass += ' ring-2 ring-primary ring-offset-2';
+
+                grid.innerHTML += `
+                    <button onclick="jumpToQuestion(${idx})" class="w-10 h-10 rounded-xl text-xs flex items-center justify-center transition-all ${bgClass}">
+                        ${idx + 1}
+                    </button>
+                `;
+            });
+        }
+
+        function jumpToQuestion(idx) {
+            currentQuestionIdx = idx;
+            renderQuestion(currentQuestionIdx);
+            toggleNavDrawer();
+        }
+
+        function konfirmasiSelesaiUjian() {
+            let belumDiisi = 0;
+            examQuestions.forEach((q, idx) => {
+                const ans = userAnswers[idx];
+                if(q.type === 'PG' && ans === null) belumDiisi++;
+                else if(q.type === 'PGK_KATEGORI' && (!Array.isArray(ans) || ans.some(x => x === null))) belumDiisi++;
+                else if(q.type === 'PGK_MCMA' && (!Array.isArray(ans) || ans.length === 0)) belumDiisi++;
+            });
+
+            let pesan = "Apakah Anda yakin ingin mengakhiri dan mengirim hasil ujian?";
+            if(belumDiisi > 0) {
+                pesan = `Masih ada ${belumDiisi} soal yang belum Anda jawab dengan lengkap.\nYakin ingin menyelesaikannya sekarang?`;
+            }
+
+            if(confirm(pesan)) {
+                if(!document.getElementById('nav-drawer').classList.contains('hidden')) toggleNavDrawer();
+                hitungDanKirimHasil();
+            }
+        }
+
+        async function hitungDanKirimHasil() {
+            if(timerInterval) clearInterval(timerInterval);
+            
+            let totalSkor = 0;
+            let totalBenar = 0;
+
+            examQuestions.forEach((q, idx) => {
+                const ans = userAnswers[idx];
+                let isCorrect = false;
+
+                if(q.type === 'PG') {
+                    if(ans === q.key) isCorrect = true;
+                } else if(q.type === 'PGK_KATEGORI') {
+                    if(Array.isArray(ans) && JSON.stringify(ans) === JSON.stringify(q.key)) isCorrect = true;
+                } else if(q.type === 'PGK_MCMA') {
+                    if(Array.isArray(ans)) {
+                        const sortedUser = [...ans].sort().toString();
+                        const sortedKey = [...q.key].sort().toString();
+                        if(sortedUser === sortedKey) isCorrect = true;
+                    }
+                }
+
+                if(isCorrect) {
+                    totalBenar++;
+                }
+            });
+
+            // Tiap soal bernilai 4 poin (25 x 4 = 100)
+            totalSkor = Math.round((totalBenar / examQuestions.length) * 100);
+            const totalSalah = examQuestions.length - totalBenar;
+            const akurasi = Math.round((totalBenar / examQuestions.length) * 100);
+
+            document.getElementById('final-score-display').innerText = totalSkor;
+            document.getElementById('stat-benar').innerText = totalBenar;
+            document.getElementById('stat-salah').innerText = totalSalah;
+            document.getElementById('stat-akurasi').innerText = `${akurasi}%`;
+
+            // Tampilkan Modal Hasil
+            document.getElementById('modal-hasil').classList.remove('hidden');
+
+            // Kirim ke Google Sheets & Firebase
+            await kirimNilaiOtomatis(totalSkor);
+        }
+
+        async function kirimNilaiOtomatis(nilaiAkhir) {
+            try {
+                let statusCurang = "Tidak";
+                if(db && currentSessionId) {
+                    const snap = await db.ref('sessions/' + currentSessionId).once('value');
+                    if(snap.val() && snap.val().pelanggaran > 0) statusCurang = `Ya (${snap.val().pelanggaran}x Pindah Tab)`;
+                }
+                
+                await fetch(SCRIPT_URL, { 
+                    method: 'POST', 
+                    body: new URLSearchParams({ 
+                        aksi: 'simpanNilai', 
+                        tokenAPI: SECRET_APP_TOKEN, 
+                        tokenGuru: document.getElementById('siswa-token').value, 
+                        nama: document.getElementById('siswa-nama').value, 
+                        kelas: document.getElementById('siswa-kelas').value, 
+                        sekolah: document.getElementById('siswa-sekolah').value, 
+                        nilai: nilaiAkhir, 
+                        curang: statusCurang 
+                    })
+                });
+
+                if(db && currentSessionId) { 
+                    db.ref('sessions/' + currentSessionId).update({ status: 'SELESAI' });
+                    window.onblur = null; 
+                }
+            } catch (err) { console.error("Gagal mengirim nilai otomatis", err); }
+        }
+
+        function selesaiDanKeluar() {
+            document.getElementById('modal-hasil').classList.add('hidden');
+            if(db && currentSessionId) { db.ref('sessions/' + currentSessionId).remove(); }
+            navigate('page-landing');
+        }
+
+        // 5. DASBOR REALTIME GURU
         function muatRealtimeDashboard() {
             if(!db) return;
             db.ref('sessions').on('value', (snapshot) => {
@@ -704,11 +1332,17 @@
                     if (activeAdminToken !== "SUPERADMIN" && siswa.tokenGuru !== activeAdminToken) return;
                     count++;
                     const isFrozen = siswa.status === 'DIBEKUKAN';
+                    const isSelesai = siswa.status === 'SELESAI';
+                    
+                    let statusBadge = '<span class="text-green-400">AKTIF</span>';
+                    if(isFrozen) statusBadge = '<span class="text-red-400 font-bold">DIBEKUKAN (5m)</span>';
+                    if(isSelesai) statusBadge = '<span class="text-sky-400 font-bold">SELESAI</span>';
+
                     tbody.innerHTML += `
                         <tr class="border-b border-gray-800">
                             <td class="px-3 py-2.5 font-semibold text-gray-200">${siswa.nama} <br><span class="text-[10px] text-gray-500">Token: ${siswa.tokenGuru}</span></td>
                             <td class="px-3 py-2.5 text-gray-400">${siswa.kelas}</td>
-                            <td class="px-3 py-2.5"><span class="${isFrozen ? 'text-red-400 font-bold' : 'text-green-400'}">${isFrozen ? 'DIBEKUKAN (5m)' : 'AKTIF'}</span></td>
+                            <td class="px-3 py-2.5">${statusBadge}</td>
                         </tr>
                     `;
                 });
@@ -718,3 +1352,14 @@
     </script>
 </body>
 </html>
+```eof
+
+Saya telah berhasil menyusun dan memasukkan seluruh **25 soal TKA Bahasa Indonesia SMP** lengkap dengan pembagian tipe soalnya (Pilihan Ganda biasa, PG Kompleks Kategori Benar/Salah, dan PG Kompleks Jawaban Banyak) ke dalam satu aplikasi CBT interaktif.
+
+### Ringkasan Pembaruan:
+1. **Dukungan 3 Jenis Soal TKA**:
+   - **Pilihan Ganda (PG)**: Pilihan radio A, B, C, D (Soal No 1–7, 9–15, 17–18, 21–25).
+   - **PG Kompleks Kategori (Benar/Salah)**: Tabel matriks per item pernyataan (Soal No 8 & 19).
+   - **PG Kompleks Multiple Choice (Jawaban Banyak)**: Pilihan centang / checkbox lebih dari satu jawaban benar (Soal No 16 & 20).
+2. **Kesesuaian Stimulus & Wacana**: Seluruh wacana (Teks Berita, Eksplanasi, Cerpen, Puisi, Prosedur, Poster, Editorial, Diskusi, Infografik, Tabel, Sosmed, dan Surat Pembaca) telah dirender dengan tampilan visual yang menarik.
+3. **Sistem Penilaian Otomatis**: Nilai akhir dihitung secara otomatis (skala 0–100) dan dikirim secara *real-time* ke Google Sheets & Firebase saat siswa menekan tombol selesai ujian.
