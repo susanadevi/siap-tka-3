@@ -342,7 +342,7 @@
         }
 
         // =========================================================================
-        // LOGIKA CBT: AMBIL SOAL & NAVIGASI UJIAN
+        // LOGIKA CBT: AMBIL SOAL & NAVIGASI UJIAN (VERSI KEBAL ERROR)
         // =========================================================================
         async function muatSoalDariServer() {
             try {
@@ -350,7 +350,17 @@
                 const hasil = await res.json();
                 
                 if (hasil.status === 'sukses' && hasil.data.length > 0) {
-                    bankSoal = hasil.data;
+                    // FITUR PENYELAMAT: Menyamakan format data otomatis, 
+                    // berjaga-jaga jika Google Apps Script lupa di-Deploy ulang.
+                    bankSoal = hasil.data.map(item => {
+                        return {
+                            teks: item.teks !== undefined ? item.teks : (item.wacana || ""),
+                            soal: item.soal !== undefined ? item.soal : (item.pertanyaan || "Teks soal kosong"),
+                            opsi: item.opsi !== undefined ? item.opsi : [item.A || "", item.B || "", item.C || "", item.D || ""],
+                            kunci: item.kunci !== undefined ? item.kunci : 0
+                        };
+                    });
+
                     jawabanSiswa = new Array(bankSoal.length).fill(null);
                     indeksSoalSekarang = 0;
                     renderSoal();
@@ -358,54 +368,64 @@
                     document.getElementById('tempat-soal').innerHTML = `<p class="text-center text-red-500 my-10 font-bold">Gagal memuat soal: ${hasil.pesan || "Data kosong dari Google Sheets"}</p>`;
                 }
             } catch (err) {
-                document.getElementById('tempat-soal').innerHTML = `<p class="text-center text-red-500 my-10 font-bold">Gangguan jaringan saat mengunduh soal.</p>`;
-                console.error(err);
+                document.getElementById('tempat-soal').innerHTML = `<p class="text-center text-red-500 my-10 font-bold">Gangguan jaringan saat mengunduh soal. Silakan muat ulang halaman.</p>`;
+                console.error("Error Fetch:", err);
             }
         }
 
         function renderSoal() {
-            if(bankSoal.length === 0) return;
+            try {
+                if(bankSoal.length === 0) return;
 
-            const wadah = document.getElementById('tempat-soal');
-            const data = bankSoal[indeksSoalSekarang];
-            
-            document.getElementById('nomor-soal').innerText = indeksSoalSekarang + 1;
-            
-            let html = ``;
-            // Tampilkan Teks/Wacana jika ada (tidak kosong)
-            if(data.teks && data.teks.trim() !== "") {
-                html += `<div class="p-4 mb-4 bg-gray-50 border-l-4 border-primary rounded text-sm text-gray-700 italic">${data.teks.replace(/\n/g, '<br>')}</div>`;
-            }
-            
-            html += `<h3 class="text-lg md:text-xl font-bold mb-6 text-gray-800 leading-relaxed">${data.soal}</h3>`;
-            html += `<div class="space-y-3">`;
-            
-            data.opsi.forEach((pilihan, index) => {
-                const isSelected = jawabanSiswa[indeksSoalSekarang] === index;
-                const labelHuruf = String.fromCharCode(65 + index); // A, B, C, D
+                const wadah = document.getElementById('tempat-soal');
+                const data = bankSoal[indeksSoalSekarang];
                 
-                html += `
-                    <label class="flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all ${isSelected ? 'bg-[#F8F3EA] border-secondary' : 'border-gray-200 hover:bg-gray-50'}">
-                        <input type="radio" name="opsi" value="${index}" class="hidden" ${isSelected ? 'checked' : ''} onchange="simpanJawaban(${index})">
-                        <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold mr-4 ${isSelected ? 'border-secondary bg-secondary text-white' : 'border-gray-300 text-gray-500 shrink-0'}">${labelHuruf}</div>
-                        <span class="text-base font-medium text-gray-700">${pilihan}</span>
-                    </label>
-                `;
-            });
-            html += `</div>`;
-            wadah.innerHTML = html;
+                document.getElementById('nomor-soal').innerText = indeksSoalSekarang + 1;
+                
+                let html = ``;
+                
+                // Perlindungan Error: Memastikan teks selalu berupa String agar tidak crash
+                let teksWacana = String(data.teks || "").trim();
+                if(teksWacana !== "" && teksWacana !== "undefined") {
+                    html += `<div class="p-4 mb-4 bg-gray-50 border-l-4 border-primary rounded text-sm text-gray-700 italic leading-relaxed">${teksWacana.replace(/\n/g, '<br>')}</div>`;
+                }
+                
+                let teksSoal = String(data.soal || "");
+                html += `<h3 class="text-lg md:text-xl font-bold mb-6 text-gray-800 leading-relaxed">${teksSoal}</h3>`;
+                html += `<div class="space-y-3">`;
+                
+                // Perlindungan Error: Memastikan opsi selalu dirender
+                let opsiSoal = Array.isArray(data.opsi) ? data.opsi : ["-", "-", "-", "-"];
+                
+                opsiSoal.forEach((pilihan, index) => {
+                    const isSelected = jawabanSiswa[indeksSoalSekarang] === index;
+                    const labelHuruf = String.fromCharCode(65 + index); // Menghasilkan A, B, C, D
+                    
+                    html += `
+                        <label class="flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all ${isSelected ? 'bg-[#F8F3EA] border-secondary' : 'border-gray-200 hover:bg-gray-50'}">
+                            <input type="radio" name="opsi" value="${index}" class="hidden" ${isSelected ? 'checked' : ''} onchange="simpanJawaban(${index})">
+                            <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold mr-4 ${isSelected ? 'border-secondary bg-secondary text-white' : 'border-gray-300 text-gray-500 shrink-0'}">${labelHuruf}</div>
+                            <span class="text-base font-medium text-gray-700">${pilihan}</span>
+                        </label>
+                    `;
+                });
+                html += `</div>`;
+                wadah.innerHTML = html;
 
-            // Atur tombol navigasi
-            document.getElementById('btn-prev').style.display = indeksSoalSekarang > 0 ? "block" : "none";
-            if (indeksSoalSekarang === bankSoal.length - 1) {
-                document.getElementById('btn-next').style.display = "none";
-                document.getElementById('btn-selesai').style.display = "block";
-            } else {
-                document.getElementById('btn-next').style.display = "block";
-                document.getElementById('btn-selesai').style.display = "none";
+                // Atur tombol navigasi
+                document.getElementById('btn-prev').style.display = indeksSoalSekarang > 0 ? "block" : "none";
+                if (indeksSoalSekarang === bankSoal.length - 1) {
+                    document.getElementById('btn-next').style.display = "none";
+                    document.getElementById('btn-selesai').style.display = "block";
+                } else {
+                    document.getElementById('btn-next').style.display = "block";
+                    document.getElementById('btn-selesai').style.display = "none";
+                }
+            } catch (err) {
+                console.error("Error Render:", err);
+                document.getElementById('tempat-soal').innerHTML = `<p class="text-center text-red-500 my-10 font-bold">Terjadi kesalahan sistem saat memproses soal.</p>`;
             }
         }
-
         function simpanJawaban(indexJawaban) {
             jawabanSiswa[indeksSoalSekarang] = indexJawaban;
             renderSoal(); 
