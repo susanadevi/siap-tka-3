@@ -477,242 +477,486 @@
 
         // BANK SOAL RESMI TKA BAHASA INDONESIA SMP - SERI 03
         const DATABASE_SOAL = [
-            {
-                id: 1,
-                tipe: "pg",
-                wacana: `<h3>Siklus Hidrologi dan Perubahan Iklim Global</h3>
-                <p>Siklus hidrologi merupakan proses sirkulasi air yang tidak pernah berhenti dari atmosfer ke bumi dan kembali lagi ke atmosfer melalui tahapan evaporasi, kondensasi, presipitasi, dan infiltrasi. Keberadaan siklus ini menjamin ketersediaan air bersih bagi seluruh makhluk hidup di bumi.</p>
-                <p>Namun, akibat pemanasan global yang dipicu oleh emisi gas rumah kaca, suhu rata-rata permukaan bumi terus meningkat. Hal ini mempercepat laju evaporasi air laut dan daratan, sehingga terbentuk lebih banyak awan tebal dalam waktu singkat. Akibatnya, pola presipitasi (curah hujan) menjadi tidak menentu, memicu cuaca ekstrem seperti banjir bandang di satu daerah dan kekeringan berkepanjangan di daerah lain.</p>`,
-                pertanyaan: "Berdasarkan teks di atas, informasi penting yang tersurat dalam paragraf kedua adalah ...",
-                pilihan: [
-                    "A. Pemanasan global menyebabkan proses infiltrasi air tanah berhenti total.",
-                    "B. Peningkatan laju evaporasi akibat pemanasan global memicu terjadinya pola curah hujan yang ekstrem.",
-                    "C. Siklus hidrologi hanya terjadi di daerah yang mengalami kekeringan berkepanjangan.",
-                    "D. Emisi gas rumah kaca secara langsung memperlambat pembentukan awan tebal di atmosfer."
-                ],
-                kunci: "B",
-                pembahasan: "Informasi tersurat dapat ditemukan langsung di teks paragraf kedua: 'pemanasan global mempercepat laju evaporasi... akibatnya pola presipitasi menjadi tidak menentu, memicu cuaca ekstrem'."
-            },
-            {
-                id: 2,
-                tipe: "pgk_bs",
-                wacana: `<h3>Siklus Hidrologi dan Perubahan Iklim Global</h3>
-                <p>Siklus hidrologi merupakan proses sirkulasi air yang tidak pernah berhenti dari atmosfer ke bumi dan kembali lagi ke atmosfer melalui tahapan evaporasi, kondensasi, presipitasi, dan infiltrasi. Keberadaan siklus ini menjamin ketersediaan air bersih bagi seluruh makhluk hidup di bumi.</p>
-                <p>Namun, akibat pemanasan global yang dipicu oleh emisi gas rumah kaca, suhu rata-rata permukaan bumi terus meningkat. Hal mepercepat laju evaporasi air laut dan daratan, sehingga terbentuk lebih banyak awan tebal dalam waktu singkat. Akibatnya, pola presipitasi (curah hujan) menjadi tidak menentu, memicu cuaca ekstrem seperti banjir bandang di satu daerah dan kekeringan berkepanjangan di daerah lain.</p>`,
-                pertanyaan: "Tentukan Benar atau Salah untuk setiap pernyataan berikut berdasarkan teks Siklus Hidrologi!",
-                pilihan: [
-                    "Sirkulasi air dalam siklus hidrologi terjadi secara terus-menerus.",
-                    "Pemanasan global menurunkan laju penguapan air di daratan dan lautan.",
-                    "Banjir bandang dan kekeringan merupakan salah satu dampak ketidakstabilan pola presipitasi."
-                ],
-                kunci: [true, false, true],
-                pembahasan: "Pernyataan 1 BENAR (tersurat di paragraf 1). Pernyataan 2 SALAH (pemanasan global justru mempercepat evaporasi/penguapan). Pernyataan 3 BENAR (tersurat di paragraf 2)."
-            },
-            {
-                id: 3,
-                tipe: "pg",
-                wacana: `<h3>Keindahan Pesona Alun-Alun Kota Tua</h3>
-                <p>Di tengah alun-alun kota tua, berdiri sebuah air mancur megah peninggalan era kolonial. Air terjun mininya memancarkan kilau bening saat diterpa sinar matahari sore. Bangunan-bangunan tua di sekelilingnya masih mempertahankan arsitektur khas Belanda dengan jendela-jendela kayu berukuran besar dan pilar-pilar kokoh berwarna krem. Sore itu, senja melukis langit dengan nuansa jingga keemasan, menghadirkan suasana hangat nostalgia bagi para pengunjung yang duduk santai di bangku-bangku taman.</p>`,
-                pertanyaan: "Latar tempat dan suasana yang dideskripsikan secara dominan dalam kutipan teks tersebut adalah ...",
-                pilihan: [
-                    "A. Di dalam museum bersejarah dengan suasana yang sunyi dan menakutkan.",
-                    "B. Di alun-alun kota tua berarsitektur kolonial dengan suasana hangat dan nostalgia di sore hari.",
-                    "C. Di pinggir pantai modern dengan suasana riuh penuh pertunjukan hiburan.",
-                    "D. Di taman perkotaan modern saat fajar menyingsing dengan suasana dingin mencekam."
-                ],
-                kunci: "B",
-                pembahasan: "Kutipan menyebutkan 'alun-alun kota tua', 'bangunan era kolonial', 'senja melukis langit', serta 'suasana hangat nostalgia'."
-            },
-            {
-                id: 4,
-                tipe: "pg",
-                wacana: `<h3>Keanekaragaman Terumbu Karang Raja Ampat</h3>
-                <p>Ekosistem terumbu karang di Kepulauan Raja Ampat dikenal memiliki tingkat biodiversitas tertinggi di dunia. Kawasan perairan ini menjadi rumah bagi lebih dari 75% spesies karang keras dunia dan ribuan jenis ikan tropis. Keberadaan ekosistem yang sehat ini tidak hanya menopang kehidupan biota laut, tetapi juga menjadi benteng alami yang melindungi pesisir pantai dari benturan gelombang laut serta menjadi sumber mata pencaharian utama masyarakat lokal melalui sektor pariwisata berkelanjutan.</p>`,
-                pertanyaan: "Gagasan utama paragraf di atas adalah ...",
-                pilihan: [
-                    "A. Keunggulan biodiversitas terumbu karang Raja Ampat beserta fungsi ekologis dan ekonominya.",
-                    "B. Cara masyarakat lokal menangkap ikan dengan ramah lingkungan di Kepulauan Raja Ampat.",
-                    "C. Penurunan jumlah wisatawan asing akibat gelombang besar di perairan Raja Ampat.",
-                    "D. Satu-satunya tempat di bumi yang memiliki spesies karang keras hanyalah Raja Ampat."
-                ],
-                kunci: "A",
-                pembahasan: "Gagasan utama mencakup keanekaragaman hayati (biodiversitas tinggi) terumbu karang di Raja Ampat serta manfaat ekologis dan ekonominya bagi masyarakat."
-            },
-            {
-                id: 5,
-                tipe: "pgk_mc",
-                wacana: `<h3>Keanekaragaman Terumbu Karang Raja Ampat</h3>
-                <p>Ekosistem terumbu karang di Kepulauan Raja Ampat dikenal memiliki tingkat biodiversitas tertinggi di dunia. Kawasan perairan ini menjadi rumah bagi lebih dari 75% spesies karang keras dunia dan ribuan jenis ikan tropis. Keberadaan ekosistem yang sehat ini tidak hanya menopang kehidupan biota laut, tetapi juga menjadi benteng alami yang melindungi pesisir pantai dari benturan gelombang laut serta menjadi sumber mata pencaharian utama masyarakat lokal melalui sektor pariwisata berkelanjutan.</p>`,
-                pertanyaan: "Manakah informasi tersurat yang BENAR berdasarkan teks di atas? (Pilih lebih dari satu jawaban!)",
-                pilihan: [
-                    "A. Perairan Raja Ampat dihuni lebih dari 75% spesies karang keras dunia.",
-                    "B. Terumbu karang berfungsi sebagai benteng alami pelindung pesisir dari gelombang.",
-                    "C. Seluruh jenis ikan di samudera Atlantik berasal dari Raja Ampat.",
-                    "D. Sektor pariwisata berkelanjutan menjadi sumber mata pencaharian masyarakat lokal."
-                ],
-                kunci: ["A", "B", "D"],
-                pembahasan: "Opsi A, B, dan D tercantum eksplisit dalam teks. Opsi C tidak relevan dan tidak ada dalam teks."
-            },
-            {
-                id: 6,
-                tipe: "pg",
-                wacana: `<h3>Proyek Kereta Cepat Jakarta-Surabaya</h3>
-                <p>Rencana pembangunan jalur kereta cepat Jakarta-Surabaya terus dimatangkan oleh pemerintah. Proyek strategis nasional ini diharapkan dapat memangkas waktu tempuh perjalanan darat secara signifikan dari 9 jam menjadi hanya sekitar 3,5 jam. Selain meningkatkan efisiensi mobilitas masyarakat, proyek ini diyakini akan menciptakan 'efek domino' positif dengan memicu pertumbuhannya pusat-pusat ekonomi dan kawasan industri baru di sepanjang wilayah lintasan yang dilaluinya.</p>`,
-                pertanyaan: "Judul yang paling tepat dan mencakup seluruh isi teks untuk rencana kerangka karangan di atas adalah ...",
-                pilihan: [
-                    "A. Efisiensi Waktu Tempuh Perjalanan Jalur Darat",
-                    "B. Proyek Kereta Cepat Jakarta-Surabaya: Akselerasi Waktu dan Dampak Ekonomi",
-                    "C. Kendala Utama Pembangunan Transportasi Rel di Indonesia",
-                    "D. Sejarah Perkembangan Kereta Api dari Masa ke Masa"
-                ],
-                kunci: "B",
-                pembahasan: "Judul yang ideal mewakili dua aspek utama dalam teks: efisiensi waktu perjalanan (akselerasi waktu) dan dampak pertumbuhan pusat ekonomi."
-            },
-            {
-                id: 7,
-                tipe: "pgk_bs",
-                wacana: `<h3>Pentingnya Program Vaksinasi Booster</h3>
-                <p><strong>Teks 1:</strong> Pemerintah terus menggalakkan program vaksinasi dosis ketiga (booster) untuk menekan laju penyebaran varian baru virus. Vaksinasi ini diprioritaskan bagi tenaga kesehatan serta kelompok lansia guna memperkuat imunitas masyarakat secara berkelanjutan.</p>
-                <p><strong>Teks 2:</strong> Pemberian dosis ketiga vaksin dinilai sangat efektif meningkatkan kadar antibodi yang mulai menurun seiring waktu. Studi klinis menunjukkan bahwa perlindungan terhadap risiko gejala berat dan rawat inap meningkat hingga 90% setelah menerima suntikan booster.</p>`,
-                pertanyaan: "Berdasarkan kedua teks di atas, tentukan Benar atau Salah pernyataan berikut!",
-                pilihan: [
-                    "Kedua teks membahas manfaat dan tujuan dari pemberian vaksin booster.",
-                    "Kelompok lansia dan tenaga kesehatan menjadi prioritas sasaran dalam Teks 1.",
-                    "Berdasarkan Teks 2, vaksin booster menurunkan kadar antibodi seseorang."
-                ],
-                kunci: [true, true, false],
-                pembahasan: "Pernyataan 1 BENAR (keduanya mengulas aspek penting booster). Pernyataan 2 BENAR (tersurat di Teks 1). Pernyataan 3 SALAH (Teks 2 menyebut booster 'meningkatkan kadar antibodi')."
-            },
-            {
-                id: 8,
-                tipe: "pg",
-                wacana: `<h3>Sosok Keteladanan Mbah Rejo</h3>
-                <p>Setiap pagi, jauh sebelum fajar menyingsing, Mbah Rejo sudah melangkah menuju sawahnya. Tangannya yang keriput namun tampak kokoh itu dengan lincah mencabuti rumput-rumput liar yang mengganggu tanaman padi. Ia tak pernah mengeluh sedikit pun meskipun peluh deras membasahi tubuhnya yang renta. Baginya, setiap bulir padi adalah amanah kehidupan yang harus dirawat dengan penuh ketulusan dan rasa syukur.</p>`,
-                pertanyaan: "Karakter atau watak utama tokoh Mbah Rejo yang tergambar dalam deskripsi teks tersebut adalah ...",
-                pilihan: [
-                    "A. Pemarah dan mudah putus asa saat menghadapi tantangan.",
-                    "B. Pekerja keras, gigih, dan penuh rasa tanggung jawab.",
-                    "C. Acuh tak acuh terhadap hasil panen di sawahnya.",
-                    "D. Sangat mengharapkan pujian dan imbalan dari warga desa."
-                ],
-                kunci: "B",
-                pembahasan: "Penggambaran bekerja sebelum fajar, lincah, tak mengeluh walau peluh membasahi tubuh mencerminkan karakter gigih, pekerja keras, dan bertanggung jawab."
-            },
-            {
-                id: 9,
-                tipe: "pg",
-                wacana: `<h3>Dampak Deforestasi Hutan Amazon</h3>
-                <p>Deforestasi di hutan Amazon tidak hanya mengancam keberlangsungan habitat jutaan spesies flora dan fauna, tetapi juga mengganggu keseimbangan iklim global secara drastis. Sebagai 'paru-paru dunia', hutan hujan tropis Amazon menyerap karbon dioksida dalam jumlah raksasa dan menghasilkan oksigen bagi bumi. Kerusakan pada ekosistem hutan ini akan meningkatkan konsentrasi gas rumah kaca di atmosfer, yang mempercepat laju krisis iklim global.</p>`,
-                pertanyaan: "Makna istilah 'paru-paru dunia' yang disematkan pada Hutan Amazon dalam teks adalah ...",
-                pilihan: [
-                    "A. Hutan yang memiliki bentuk geografis menyerupai organ paru-paru manusia.",
-                    "B. Hutan yang berfungsi menyerap karbon dioksida dan menghasilkan oksigen bagi bumi.",
-                    "C. Wilayah yang hanya dapat dikunjungi oleh peneliti kesehatan paru-paru.",
-                    "D. Hutan yang menjadi tempat pengobatan tradisional penyakit pernapasan."
-                ],
-                kunci: "B",
-                pembahasan: "Ungkapan 'paru-paru dunia' merupakan kiasan/konotasi fungsional untuk hutan yang menyerap CO2 dan memproduksi O2 untuk kestabilan atmosfer bumi."
-            },
-            {
-                id: 10,
-                tipe: "pg",
-                wacana: `<h3>Petunjuk Memasak Rendang Tradisional</h3>
-                <p>(1) Haluskan bumbu-bumbu utama seperti bawang merah, bawang putih, cabai, jahe, dan kunyit.<br>
-                (2) Tumis bumbu halus dalam wajan dengan sedikit minyak hingga aromanya harum dan matang.<br>
-                (3) Masukkan santan kental beserta potongan daging sapi, lalu aduk secara perlahan agar santan tidak pecah.<br>
-                (4) Masak dengan api kecil selama beberapa jam hingga santan berminyak, mengering, dan bumbu meresap sempurna menjadi cokelat kehitaman.</p>`,
-                pertanyaan: "Urutan ringkas struktur bagian teks prosedur di atas adalah ...",
-                pilihan: [
-                    "A. Penyiapan Bumbu &rarr; Penumisan &rarr; Pengadukan Santan & Daging &rarr; Pemasakan Hingga Mengering",
-                    "B. Pemotongan Daging &rarr; Perebusan Air &rarr; Penumbukan Rempah &rarr; Penyajian",
-                    "C. Penumisan &rarr; Pembungkusan &rarr; Pengeringan &rarr; Pembakaran Daging",
-                    "D. Pembelian Bahan &rarr; Pemanasan Minyak &rarr; Penyaringan Santan &rarr; Pendinginan"
-                ],
-                kunci: "A",
-                pembahasan: "Langkah (1) Penyiapan bumbu halus, (2) Penumisan bumbu, (3) Pengadukan santan & daging, (4) Pemasakan hingga mengering/hitam."
-            },
-            {
-                id: 11,
-                tipe: "pgk_bs",
-                wacana: `<h3>Urban Farming: Solusi Ketahanan Pangan Perkotaan</h3>
-                <p>Pengembangan <em>urban farming</em> atau pertanian perkotaan menjadi solusi strategis dalam menjaga ketahanan pangan di wilayah perkotaan padat penduduk. Metode ini memanfaatkan lahan terbatas seperti atap bangunan (rooftop), pekarangan rumah, atau dinding bangunan dengan teknik hidroponik dan vertikultur. Selain menyediakan bahan pangan segar bebas pestisida, pertanian perkotaan juga dapat mengurangi efek pulau panas (urban heat island) serta memperindah estetika lingkungan kota.</p>`,
-                pertanyaan: "Berdasarkan teks Urban Farming, tentukan Benar atau Salah untuk pernyataan berikut!",
-                pilihan: [
-                    "Urban farming memerlukan lahan pertanian luas berhektar-hektar di pedesaan.",
-                    "Hidroponik dan vertikultur merupakan teknik penanaman yang dapat diterapkan dalam urban farming.",
-                    "Selain menghasilkan pangan, urban farming bermanfaat mereduksi efek panas di perkotaan."
-                ],
-                kunci: [false, true, true],
-                pembahasan: "Pernyataan 1 SALAH (urban farming justru memanfaatkan lahan terbatas/sempit di kota). Pernyataan 2 BENAR (tersurat di teks). Pernyataan 3 BENAR (tersurat di kalimat terakhir)."
-            },
-            {
-                id: 12,
-                tipe: "pg",
-                wacana: `<h3>Kisah Si Kancil dan Rusa Muda</h3>
-                <p>"Mengapa engkau selalu berlari begitu kencang, Kancil? Tidakkah berlari terlalu cepat bisa membuatmu tersandung dan terluka?" tanya Rusa Muda dengan cemas.</p>
-                <p>Kancil berhenti sejenak di bawah pohon rindang, lalu tersenyum bijak, "Kecepatan dan kewaspadaan adalah karunia yang melindungiku dari marabahaya di hutan ini, Rusa. Namun ingat, berlari cepat tanpa memperhatikan arah dan pijakan justru akan mencelakakan kita. Kecepatan harus selalu diimbangi dengan kehati-hatian."</p>`,
-                pertanyaan: "Amanat atau pesan moral yang terkandung dalam kutipan fabel tersebut adalah ...",
-                pilihan: [
-                    "A. Kita harus berlari sekencang-kencangnya tanpa memedulikan keadaan sekitar.",
-                    "B. Kelebihan atau keahlian yang dimiliki harus disertai dengan kehati-hatian dan kewaspadaan.",
-                    "C. Menghindari teman yang suka memberi nasihat dan teguran di hutan.",
-                    "D. Jangan pernah berhenti berlari sebelum mencapai tepi sungai."
-                ],
-                kunci: "B",
-                pembahasan: "Pesan Kancil secara jelas menegaskan bahwa kecepatan (kelebihan) harus selalu diimbangi dengan kehati-hatian agar tidak mencelakakan diri."
-            },
-            {
-                id: 13,
-                tipe: "pg",
-                wacana: `<h3>Analisis Kalimat Efektif dan Tanda Baca</h3>
-                <p>Perhatikan kalimat-kalimat berikut!</p>
-                <p>(1) Ibu membeli bermacam-macam sayur-sayuran segar di pasar tradisional.<br>
-                (2) Agar supaya juara, atlet itu berlatih keras setiap hari.<br>
-                (3) Dalam rapat itu membahas masalah kebersihan lingkungan sekolah.<br>
-                (4) Siswa yang teliti akan memeriksa kembali lembar jawabannya sebelum dikumpulkan.</p>`,
-                pertanyaan: "Kalimat yang tergolong sebagai **KALIMAT EFEKTIF** secara tepat adalah kalimat nomor ...",
-                pilihan: [
-                    "A. (1)",
-                    "B. (2)",
-                    "C. (3)",
-                    "D. (4)"
-                ],
-                kunci: "D",
-                pembahasan: "Kalimat (1) pemborosan 'bermacam-macam' + 'sayur-sayuran'. Kalimat (2) pemborosan konjungsi 'agar supaya'. Kalimat (3) tidak bersubjek ('Dalam rapat itu membahas...'). Kalimat (4) hemat, lugas, bersubjek dan berpredikat jelas (Kalimat Efektif)."
-            },
-            {
-                id: 14,
-                tipe: "pgk_mc",
-                wacana: `<h3>Ciri-Ciri Teks Laporan Hasil Observasi (LHO)</h3>
-                <p>Teks Laporan Hasil Observasi (LHO) merupakan teks yang memuat klasifikasi dan deskripsi mengenai sesuatu berdasarkan hasil pengamatan langsung secara objektif. Teks ini menyajikan fakta-fakta tanpa dipengaruhi oleh pendapat atau opini pribadi penulis.</p>`,
-                pertanyaan: "Manakah yang merupakan ciri-ciri utama Teks Laporan Hasil Observasi? (Pilih lebih dari satu jawaban!)",
-                pilihan: [
-                    "A. Bersifat objektif dan ditulis berdasarkan fakta lapangan.",
-                    "B. Mengandung unsur imajinasi magis dan jalan cerita fiktif.",
-                    "C. Menyajikan informasi hasil klasifikasi ilmiah secara sistematis.",
-                    "D. Bertujuan memengaruhi pembaca agar membeli suatu produk barang."
-                ],
-                kunci: ["A", "C"],
-                pembahasan: "Teks LHO bersifat objektif, faktual, dan menyajikan klasifikasi sistematis. Opsi B ciri fiksi/fabel, Opsi D ciri teks iklan."
-            },
-            {
-                id: 15,
-                tipe: "pg",
-                wacana: `<h3>Kaidah Kebahasaan: Penggunaan Tanda Baca Semikolon (;)</h3>
-                <p>Perhatikan kalimat berikut:<br>
-                <em>Ibu membeli buku, pensil, dan tinta baju, celana, dan kaus pisang, apel, dan jeruk.</em></p>`,
-                pertanyaan: "Perbaikan penggunaan tanda baca titik koma (;) dan koma (,) yang paling tepat pada kalimat di atas adalah ...",
-                pilihan: [
-                    "A. Ibu membeli buku, pensil, dan tinta; baju, celana, dan kaus; pisang, apel, dan jeruk.",
-                    "B. Ibu membeli buku, pensil dan tinta: baju, celana dan kaus: pisang, apel dan jeruk.",
-                    "C. Ibu membeli buku; pensil; dan tinta, baju; celana; dan kaus, pisang; apel; dan jeruk.",
-                    "D. Ibu membeli buku, pensil, dan tinta, baju, celana, dan kaus, pisang, apel, dan jeruk."
-                ],
-                kunci: "A",
-                pembahasan: "Tanda titik koma (;) digunakan untuk memisahkan kelompok rincian yang sejenis (alat tulis; pakaian; buah-buahan)."
-            }
-        ];
-
+    {
+        id: 1,
+        tipe: "pg",
+        wacana: `<h3>Panen Raya Padi Organik di Desa Sumberagung</h3>
+        <p>Kelompok tani muda di Desa Sumberagung, Kabupaten Ponorogo, berhasil memanen padi organik seluas dua hektare pekan lalu. Hasil panen mencapai enam ton per hektare, lebih tinggi dibandingkan hasil panen padi konvensional di daerah tersebut.</p>
+        <p>Ketua kelompok tani, Dimas Prasetyo, mengatakan bahwa keberhasilan ini merupakan hasil kerja keras selama tiga tahun. “Kami mulai belajar bertani organik sejak 2022. Awalnya hasil panen memang lebih rendah, tetapi setelah tanah kembali subur, produksi justru meningkat,” ujar Dimas.</p>
+        <p>Metode pertanian organik yang diterapkan meliputi penggunaan pupuk kompos dari kotoran ternak, pengendalian hama alami dengan tanaman pengusir serangga, dan penghentian total penggunaan pestisida kimia. Proses peralihan ini membutuhkan waktu karena tanah perlu direhabilitasi terlebih dahulu.</p>
+        <p>Dinas Pertanian Kabupaten Ponorogo menyambut baik keberhasilan tersebut. Kepala Dinas Pertanian, Retno Wulandari, menyatakan pihaknya akan mendampingi lebih banyak kelompok tani untuk beralih ke pertanian organik. Selain lebih ramah lingkungan, beras organik juga dijual dengan harga lebih tinggi di pasaran, sehingga meningkatkan pendapatan petani.</p>
+        <p>Ke depan, kelompok tani ini berencana memperluas lahan organik hingga lima hektare pada musim tanam berikutnya.</p>`,
+        pertanyaan: "Berdasarkan teks tersebut, apa yang menyebabkan hasil panen padi organik Kelompok Tani Desa Sumberagung lebih tinggi dibandingkan padi konvensional?",
+        pilihan: [
+            "A. Penggunaan pestisida kimia dalam jumlah terbatas.",
+            "B. Perluasan lahan tanam hingga lima hektare.",
+            "C. Tanah yang telah pulih kesuburannya setelah menerapkan metode organik.",
+            "D. Bantuan pendampingan rutin dari Dinas Pertanian sejak awal."
+        ],
+        kunci: "C",
+        pembahasan: "Teks secara tersurat menyatakan bahwa “setelah tanah kembali subur, produksi justru meningkat”. Opsi A keliru karena pertanian organik justru menghentikan total penggunaan pestisida kimia. Opsi B keliru karena perluasan lahan baru merupakan rencana ke depan, bukan penyebab hasil panen yang sudah dicapai. Opsi D keliru karena pendampingan Dinas Pertanian disebutkan sebagai respons setelah keberhasilan, bukan penyebabnya."
+    },
+    {
+        id: 2,
+        tipe: "pg",
+        wacana: `<h3>Mengapa Langit Tampak Biru?</h3>
+        <p>Pernahkah kamu memperhatikan warna langit pada siang hari? Hampir setiap hari, langit tampak berwarna biru cerah ketika cuaca sedang baik. Fenomena ini ternyata bukan disebabkan oleh warna udara itu sendiri, melainkan oleh cara cahaya matahari berinteraksi dengan partikel-partikel di atmosfer bumi.</p>
+        <p>Cahaya matahari yang tampak putih sebenarnya terdiri atas berbagai warna dengan panjang gelombang berbeda, mulai dari merah hingga ungu. Ketika cahaya tersebut memasuki atmosfer, ia bertabrakan dengan molekul-molekul gas seperti nitrogen dan oksigen. Peristiwa ini disebut hamburan Rayleigh. Cahaya dengan panjang gelombang pendek, seperti biru dan ungu, terhambur ke segala arah jauh lebih kuat dibandingkan cahaya dengan panjang gelombang panjang seperti merah dan jingga. Karena mata manusia lebih peka terhadap warna biru dibandingkan ungu, langit pun tampak dominan berwarna biru.</p>
+        <p>Fenomena hamburan ini juga menjelaskan mengapa langit berubah warna menjadi merah atau jingga saat matahari terbenam. Pada waktu tersebut, posisi matahari berada rendah di cakrawala sehingga cahaya harus menempuh jarak yang lebih panjang melalui atmosfer sebelum sampai ke mata kita. Sepanjang perjalanan itu, hampir seluruh cahaya biru sudah terhambur ke arah lain, sehingga yang tersisa dan sampai ke mata adalah cahaya dengan panjang gelombang panjang seperti merah dan jingga.</p>
+        <p>Dengan memahami proses hamburan cahaya ini, kita dapat mengetahui bahwa warna langit sesungguhnya bukanlah sifat tetap atmosfer, melainkan hasil interaksi dinamis antara cahaya matahari dan partikel udara yang berubah sesuai posisi matahari.</p>`,
+        pertanyaan: "Berdasarkan teks, apa yang dimaksud dengan hamburan Rayleigh?",
+        pilihan: [
+            "A. Perubahan warna cahaya matahari ketika melewati awan.",
+            "B. Peristiwa bertabrakannya cahaya matahari dengan molekul gas di atmosfer.",
+            "C. Proses terbentuknya warna langit merah pada malam hari.",
+            "D. Pergerakan posisi matahari dari pagi hingga senja."
+        ],
+        kunci: "B",
+        pembahasan: "Paragraf kedua menyatakan secara tersurat bahwa peristiwa cahaya matahari bertabrakan dengan molekul gas di atmosfer disebut hamburan Rayleigh. Opsi A, C, dan D tidak sesuai dengan definisi yang dijelaskan dalam teks."
+    },
+    {
+        id: 3,
+        tipe: "pg",
+        wacana: `<h3>Mengapa Langit Tampak Biru?</h3>
+        <p><em>(Lihat teks pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Apa hubungan antara paragraf kedua dan paragraf ketiga pada teks tersebut?",
+        pilihan: [
+            "A. Paragraf ketiga membantah penjelasan pada paragraf kedua.",
+            "B. Paragraf ketiga menerapkan prinsip pada paragraf kedua untuk menjelaskan fenomena lain.",
+            "C. Paragraf ketiga menjelaskan definisi istilah yang muncul pada paragraf kedua.",
+            "D. Paragraf ketiga membandingkan dua teori berbeda tentang warna langit."
+        ],
+        kunci: "B",
+        pembahasan: "Paragraf kedua menjelaskan prinsip hamburan cahaya penyebab langit biru, sedangkan paragraf ketiga menerapkan prinsip yang sama untuk menjelaskan fenomena berbeda, yaitu warna jingga saat matahari terbenam. Opsi A, C, dan D tidak menggambarkan hubungan tersebut secara tepat."
+    },
+    {
+        id: 4,
+        tipe: "pg",
+        wacana: `<h3>Mengapa Langit Tampak Biru?</h3>
+        <p><em>(Lihat teks pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Jika suatu planet memiliki atmosfer yang jauh lebih tipis daripada atmosfer Bumi, manakah simpulan yang paling tepat mengenai warna langit siang hari di planet tersebut berdasarkan prinsip pada teks?",
+        pilihan: [
+            "A. Langit akan tetap berwarna biru cerah seperti di Bumi karena warna langit tidak dipengaruhi oleh atmosfer.",
+            "B. Langit akan berwarna merah sepanjang hari karena cahaya biru tidak dapat menembus atmosfer yang tipis.",
+            "C. Hamburan cahaya akan berkurang sehingga langit tampak lebih gelap dan warna birunya tidak sejelas di Bumi.",
+            "D. Warna langit tidak dapat diprediksi karena bergantung sepenuhnya pada jarak planet dari matahari."
+        ],
+        kunci: "C",
+        pembahasan: "Teks menjelaskan bahwa warna biru langit dihasilkan oleh hamburan cahaya oleh molekul gas di atmosfer. Jika jumlah molekul gas lebih sedikit (atmosfer tipis), intensitas hamburan menurun sehingga warna biru langit menjadi kurang jelas. Opsi A bertentangan dengan prinsip dalam teks, opsi B dan D tidak didukung oleh penalaran yang konsisten dengan penjelasan hamburan cahaya."
+    },
+    {
+        id: 5,
+        tipe: "pg",
+        wacana: `<h3>Kunci Loker Nomor 12</h3>
+        <p>Bel istirahat baru saja berbunyi ketika Raka menemukan sebuah flashdisk tergeletak di dekat loker nomor 12. Ia mengambilnya dan memeriksa label kecil yang tertempel: “Kunci Jawaban Ulangan Matematika – Bu Sinta”. Jantung Raka berdegup kencang. Besok pagi ia akan mengikuti ulangan matematika, mata pelajaran yang selama ini membuatnya kesulitan.</p>
+        <p>Raka menatap flashdisk itu lama sekali. Pikirannya melayang membayangkan nilai sempurna tanpa harus belajar semalaman. Namun, bayangan wajah kakeknya tiba-tiba muncul. Kakek selalu berkata, “Nilai yang didapat dengan cara curang tidak akan pernah membuatmu bangga pada dirimu sendiri.”</p>
+        <p>“Kenapa bengong, Rak?” tanya Dimas, teman sebangkunya, yang tiba-tiba muncul dari balik pintu kelas.</p>
+        <p>Raka menunjukkan flashdisk itu. “Aku nemu ini di dekat loker nomor 12. Sepertinya isinya kunci jawaban ulangan besok.”</p>
+        <p>Mata Dimas berbinar. “Wah, keren! Kita bisa lihat sebentar saja, kan? Tidak ada yang tahu.”</p>
+        <p>Raka menggeleng pelan. “Aku juga sempat kepikiran begitu. Tapi kalau kita pakai, kita cuma menipu diri sendiri. Nilai bagus tapi kita nggak benar-benar paham materinya.”</p>
+        <p>“Terus mau diapain?” tanya Dimas.</p>
+        <p>“Kukembalikan ke Bu Sinta,” jawab Raka mantap.</p>
+        <p>Sore itu, Raka mendatangi ruang guru dan menyerahkan flashdisk tersebut kepada Bu Sinta. Ia menjelaskan tempat ia menemukannya. Bu Sinta tampak terkejut sekaligus lega. “Terima kasih sudah jujur, Raka. Flashdisk ini memang tertinggal saat aku menyiapkan soal ulangan. Untung kamu menemukannya dan mengembalikannya,” kata Bu Sinta sambil tersenyum.</p>
+        <p>Malam harinya, Raka belajar sungguh-sungguh menghadapi ulangan matematika. Ia membuka kembali catatan-catatan lama dan mengerjakan soal-soal latihan yang pernah diberikan gurunya. Meskipun lelah, ia merasa lega karena tidak perlu menyimpan rahasia yang membebani pikirannya.</p>
+        <p>Keesokan harinya, Raka mengerjakan ulangan dengan tenang. Beberapa soal terasa sulit, tetapi ia tetap berusaha menyelesaikannya sebisa mungkin. Ketika hasil ulangan dibagikan tiga hari kemudian, nilai Raka memang bukan yang tertinggi di kelas. Namun, ia merasa nilai itu benar-benar miliknya sendiri, hasil dari usaha dan kejujurannya.</p>`,
+        pertanyaan: "Apa maksud kalimat ‘kita cuma menipu diri sendiri’ yang diucapkan Raka dalam cerita tersebut?",
+        pilihan: [
+            "A. Menggunakan kunci jawaban tidak akan mengubah nilai ulangan yang didapat.",
+            "B. Nilai bagus yang diperoleh dengan cara curang tidak mencerminkan kemampuan yang sebenarnya.",
+            "C. Bu Sinta pasti akan mengetahui jika mereka menggunakan kunci jawaban tersebut.",
+            "D. Dimas akan merasa bersalah jika mereka menggunakan kunci jawaban itu."
+        ],
+        kunci: "B",
+        pembahasan: "Ungkapan tersebut bermakna bahwa nilai yang diperoleh secara curang bukan cerminan kemampuan sebenarnya, sehingga sesungguhnya hanya menipu diri sendiri. Opsi A, C, dan D tidak menangkap makna kias ungkapan tersebut secara tepat."
+    },
+    {
+        id: 6,
+        tipe: "pg",
+        wacana: `<h3>Kunci Loker Nomor 12</h3>
+        <p><em>(Lihat teks pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Bagaimana watak tokoh Raka dapat disimpulkan berdasarkan keseluruhan cerita tersebut?",
+        pilihan: [
+            "A. Raka adalah anak yang cerdas sehingga tidak memerlukan kunci jawaban.",
+            "B. Raka adalah anak yang jujur dan berpegang pada prinsip meskipun sempat tergoda untuk berbuat curang.",
+            "C. Raka adalah anak yang penakut sehingga tidak berani menyimpan kunci jawaban.",
+            "D. Raka adalah anak yang patuh hanya karena takut dimarahi gurunya."
+        ],
+        kunci: "B",
+        pembahasan: "Sepanjang cerita, Raka digambarkan sempat tergoda (membayangkan nilai sempurna) namun akhirnya memilih mengembalikan flashdisk dan belajar sungguh-sungguh, menunjukkan watak jujur dan berprinsip. Opsi A, C, dan D tidak didukung oleh rangkaian peristiwa dalam cerita."
+    },
+    {
+        id: 7,
+        tipe: "pg",
+        wacana: `<h3>Kunci Loker Nomor 12</h3>
+        <p><em>(Lihat teks pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Manakah situasi kehidupan sehari-hari yang paling relevan dengan nilai yang ditunjukkan Raka dalam cerita tersebut?",
+        pilihan: [
+            "A. Seorang siswa menyalin tugas temannya karena tidak sempat mengerjakan sendiri.",
+            "B. Seorang siswa mengembalikan kelebihan uang kembalian yang salah diberikan oleh kasir.",
+            "C. Seorang siswa memilih untuk tidak masuk sekolah karena malas belajar.",
+            "D. Seorang siswa meminjam buku catatan teman tanpa izin untuk belajar."
+        ],
+        kunci: "B",
+        pembahasan: "Tindakan Raka mengembalikan sesuatu yang bukan haknya, meski bisa menguntungkan dirinya, sejalan dengan situasi mengembalikan kelebihan uang kembalian. Opsi A, C, dan D justru menggambarkan tindakan yang tidak jujur atau tidak bertanggung jawab."
+    },
+    {
+        id: 8,
+        tipe: "pgk_bs",
+        wacana: `<h3>Kunci Loker Nomor 12</h3>
+        <p><em>(Lihat teks pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Jika pada akhir cerita Raka memutuskan menggunakan kunci jawaban tersebut, bagaimana kemungkinan perubahan pesan moral cerita? Tentukan Benar atau Salah untuk setiap pernyataan berikut!",
+        pilihan: [
+            "Pesan tentang pentingnya kejujuran dalam cerita akan hilang.",
+            "Cerita akan tetap mengajarkan nilai kejujuran meskipun Raka bertindak curang.",
+            "Pembaca berpotensi menganggap tindakan curang dapat dibenarkan demi hasil yang baik."
+        ],
+        kunci: [true, false, true],
+        pembahasan: "Jika Raka menggunakan kunci jawaban, pesan tentang kejujuran akan hilang atau bahkan berbalik menjadi pembenaran terhadap kecurangan, sehingga pernyataan 1 dan 3 benar, sedangkan pernyataan 2 salah karena nilai kejujuran justru tidak lagi tergambar dalam cerita."
+    },
+    {
+        id: 9,
+        tipe: "pg",
+        wacana: `<h3>Nelayan Tua</h3>
+        <p>Sejak subuh belum lagi terang<br>
+        Ia dayung perahu menembus ombak<br>
+        Wajahnya keriput dimakan garam<br>
+        Tangannya kasar bekas jaring dan pukat</p>
+        
+        <p>Laut bukan lagi sahabat yang ramah<br>
+        Kadang murka, kadang memberi berkah<br>
+        Namun ia tetap kembali tiap fajar<br>
+        Membawa harap di dasar perahu tua</p>
+        
+        <p>Anak-anaknya kini di kota jauh<br>
+        Meninggalkan desa, mengejar mimpi baru<br>
+        Ia tak pernah menahan langkah mereka<br>
+        Hanya berdoa dari tepi dermaga</p>
+        
+        <p>Ketika senja jingga membakar cakrawala<br>
+        Ia duduk sendiri menambal jala<br>
+        Laut yang dulu penuh ikan berlimpah<br>
+        Kini kian sepi, entah sampai kapan</p>`,
+        pertanyaan: "Apa yang digambarkan pada bait kedua puisi tersebut?",
+        pilihan: [
+            "A. Kekecewaan nelayan terhadap hasil tangkapannya.",
+            "B. Sikap nelayan yang tetap gigih menghadapi laut meski penuh tantangan.",
+            "C. Permintaan nelayan agar laut selalu ramah kepadanya.",
+            "D. Ketakutan nelayan terhadap ombak besar di laut."
+        ],
+        kunci: "B",
+        pembahasan: "Bait kedua menggambarkan laut yang “kadang murka, kadang memberi berkah” namun nelayan “tetap kembali tiap fajar”, menunjukkan kegigihannya. Opsi A, C, dan D tidak sesuai dengan gambaran sikap tokoh pada bait tersebut."
+    },
+    {
+        id: 10,
+        tipe: "pg",
+        wacana: `<h3>Nelayan Tua</h3>
+        <p><em>(Lihat teks puisi pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Apa makna kias dari larik ‘membawa harap di dasar perahu tua’ pada puisi tersebut?",
+        pilihan: [
+            "A. Nelayan menyembunyikan harapannya di dalam perahu miliknya.",
+            "B. Nelayan selalu berangkat melaut dengan penuh harapan meski usianya sudah tua.",
+            "C. Perahu tua tersebut memiliki nilai sejarah yang penting bagi nelayan.",
+            "D. Nelayan berharap mendapatkan perahu baru yang lebih layak."
+        ],
+        kunci: "B",
+        pembahasan: "Larik tersebut merupakan ungkapan kias yang menggambarkan harapan nelayan yang senantiasa dibawa setiap kali melaut, bukan makna harfiah tentang perahu. Opsi A, C, dan D memaknai larik tersebut secara harfiah, tidak sesuai dengan makna kiasnya."
+    },
+    {
+        id: 11,
+        tipe: "pg",
+        wacana: `<h3>Nelayan Tua</h3>
+        <p><em>(Lihat teks puisi pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Isu apa yang tersirat pada bait keempat puisi tersebut dan relevan dengan kondisi lingkungan saat ini?",
+        pilihan: [
+            "A. Kurangnya minat generasi muda untuk menjadi nelayan.",
+            "B. Penurunan hasil tangkapan laut yang mengindikasikan masalah kelestarian sumber daya laut.",
+            "C. Kesulitan nelayan dalam memperbaiki peralatan tangkap ikan yang rusak.",
+            "D. Persaingan antarnelayan dalam memperebutkan wilayah tangkapan ikan."
+        ],
+        kunci: "B",
+        pembahasan: "Larik “Laut yang dulu penuh ikan berlimpah, kini kian sepi” menyiratkan penurunan hasil laut yang berkaitan dengan isu kelestarian sumber daya laut, sebuah persoalan nyata di banyak wilayah pesisir. Opsi A, C, dan D tidak didukung oleh isi bait tersebut."
+    },
+    {
+        id: 12,
+        tipe: "pg",
+        wacana: `<h3>Cara Membuat Pupuk Kompos dari Sampah Dapur</h3>
+        <p>Sampah dapur seperti sisa sayuran dan kulit buah dapat diolah menjadi pupuk kompos yang bermanfaat bagi tanaman. Berikut langkah-langkah sederhana untuk membuatnya.</p>
+        <p>Pertama, siapkan wadah berlubang atau komposter sebagai tempat pengomposan. Lubang-lubang kecil pada wadah berfungsi menjaga sirkulasi udara agar proses pembusukan berjalan optimal.</p>
+        <p>Kedua, kumpulkan sampah organik seperti sisa sayuran, kulit buah, dan ampas kopi. Hindari memasukkan sampah yang mengandung minyak, daging, atau bahan yang sulit terurai.</p>
+        <p>Ketiga, potong sampah organik menjadi bagian-bagian kecil agar proses penguraian berlangsung lebih cepat. Masukkan potongan tersebut ke dalam wadah komposter secara berlapis dengan tanah atau daun kering.</p>
+        <p>Keempat, aduk campuran tersebut setiap dua atau tiga hari sekali menggunakan alat pengaduk. Pengadukan ini penting untuk menjaga kelembapan dan memastikan oksigen tercampur merata.</p>
+        <p>Kelima, diamkan campuran selama tiga hingga empat minggu hingga berubah warna menjadi cokelat kehitaman dan tidak berbau menyengat. Kompos yang sudah matang siap digunakan sebagai pupuk untuk tanaman di kebun maupun pot.</p>`,
+        pertanyaan: "Apa fungsi pengadukan campuran kompos yang dilakukan setiap dua atau tiga hari sekali berdasarkan teks tersebut?",
+        pilihan: [
+            "A. Mempercepat perubahan warna kompos menjadi cokelat kehitaman.",
+            "B. Menjaga kelembapan dan memastikan oksigen tercampur merata dalam kompos.",
+            "C. Mengurangi bau menyengat yang dihasilkan sampah organik.",
+            "D. Memisahkan sampah organik yang belum terurai sempurna."
+        ],
+        kunci: "B",
+        pembahasan: "Teks menyebutkan secara tersurat bahwa pengadukan “penting untuk menjaga kelembapan dan memastikan oksigen tercampur merata”. Opsi A, C, dan D merupakan hasil akhir proses pengomposan, bukan fungsi langsung dari pengadukan."
+    },
+    {
+        id: 13,
+        tipe: "pg",
+        wacana: `<h3>Poster Kampanye Hemat Energi</h3>
+        <p><strong>MATIKAN, JANGAN BIARKAN MENYALA SIA-SIA!</strong></p>
+        <p>Tahukah kamu bahwa lampu yang menyala di ruangan kosong selama satu jam dapat memboroskan listrik yang setara dengan menyalakan lampu belajar selama tiga jam?</p>
+        <p><strong>3 Langkah Hemat Energi:</strong><br>
+        1. Matikan lampu saat meninggalkan ruangan.<br>
+        2. Cabut charger dari stopkontak setelah selesai digunakan.<br>
+        3. Gunakan cahaya matahari pada siang hari.</p>
+        <p>Hemat energi hari ini, selamatkan bumi untuk generasi mendatang!<br>
+        <em>(Sumber: Kampanye Hemat Energi Sekolah Peduli Lingkungan)</em></p>`,
+        pertanyaan: "Mengapa perbandingan ‘lampu menyala di ruangan kosong selama satu jam setara dengan menyalakan lampu belajar selama tiga jam’ efektif digunakan dalam poster tersebut?",
+        pilihan: [
+            "A. Kalimat tersebut menggunakan data statistik resmi dari pemerintah.",
+            "B. Perbandingan tersebut membuat pembaca lebih mudah membayangkan besarnya pemborosan energi secara konkret.",
+            "C. Kalimat tersebut menunjukkan bahwa lampu belajar lebih boros dibandingkan lampu ruangan.",
+            "D. Perbandingan tersebut bertujuan menakut-nakuti pembaca agar mematuhi poster."
+        ],
+        kunci: "B",
+        pembahasan: "Perbandingan konkret membantu pembaca membayangkan besarnya pemborosan energi tanpa perlu memahami satuan listrik secara teknis, sehingga pesan lebih mudah dipahami dan diingat. Opsi A tidak didukung teks (tidak disebutkan sumber data resmi), opsi C salah menafsirkan maksud perbandingan, dan opsi D tidak tepat karena tujuan poster adalah mengedukasi, bukan menakut-nakuti."
+    },
+    {
+        id: 14,
+        tipe: "pg",
+        wacana: `<h3>Gawai di Tangan Remaja: Berkah atau Ancaman?</h3>
+        <p>Penggunaan gawai atau gadget di kalangan remaja semakin sulit dihindari. Survei terbaru sebuah lembaga riset pendidikan menunjukkan bahwa rata-rata remaja Indonesia menghabiskan lebih dari lima jam sehari untuk mengakses ponsel pintar, baik untuk belajar, bermain media sosial, maupun menonton video.</p>
+        <p>Di satu sisi, gawai memberi banyak manfaat. Remaja dapat mengakses informasi pelajaran dengan cepat, berkomunikasi dengan teman, dan mengembangkan kreativitas melalui berbagai aplikasi. Beberapa siswa bahkan berhasil menghasilkan karya digital, seperti desain grafis atau video pendek, berkat kemudahan akses teknologi ini.</p>
+        <p>Namun, di sisi lain, penggunaan gawai yang berlebihan menimbulkan sejumlah persoalan. Banyak remaja mengalami penurunan konsentrasi belajar karena terlalu sering membuka media sosial di sela-sela waktu belajar. Selain itu, paparan konten yang tidak sesuai usia juga menjadi kekhawatiran orang tua dan pendidik.</p>
+        <p>Sayangnya, tidak semua sekolah memiliki kebijakan yang jelas mengenai penggunaan gawai selama jam pelajaran. Sebagian sekolah melarang total penggunaan ponsel, sementara sekolah lain justru mendorong pemanfaatan gawai sebagai media pembelajaran interaktif. Perbedaan kebijakan ini menunjukkan belum adanya kesepahaman bersama tentang cara terbaik mengelola penggunaan teknologi di lingkungan pendidikan.</p>
+        <p>Sudah saatnya sekolah, orang tua, dan pemerintah duduk bersama merumuskan pedoman yang seimbang. Pedoman tersebut idealnya tidak melarang gawai secara total, melainkan mengajarkan siswa untuk menggunakannya secara bijak dan bertanggung jawab. Dengan begitu, remaja tetap dapat menikmati manfaat teknologi tanpa terjebak pada dampak negatifnya.</p>
+        <p>Pendidikan literasi digital sejak dini menjadi kunci utama. Bukan gawai yang perlu dijauhkan dari remaja, melainkan pemahaman tentang cara menggunakannya secara sehat dan produktif yang perlu ditanamkan sejak awal.</p>`,
+        pertanyaan: "Berdasarkan teks, apa dampak negatif penggunaan gawai berlebihan yang disebutkan dalam teks tersebut?",
+        pilihan: [
+            "A. Remaja menjadi lebih kreatif dalam membuat karya digital.",
+            "B. Penurunan konsentrasi belajar dan paparan konten yang tidak sesuai usia.",
+            "C. Sekolah kesulitan menyediakan fasilitas gawai bagi siswa.",
+            "D. Orang tua kehilangan komunikasi dengan anak-anak mereka."
+        ],
+        kunci: "B",
+        pembahasan: "Paragraf ketiga menyebutkan secara tersurat dua dampak negatif tersebut. Opsi A merupakan dampak positif, sedangkan opsi C dan D tidak disebutkan dalam teks."
+    },
+    {
+        id: 15,
+        tipe: "pg",
+        wacana: `<h3>Gawai di Tangan Remaja: Berkah atau Ancaman?</h3>
+        <p><em>(Lihat teks editorial pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Bagaimana sikap penulis terhadap penggunaan gawai oleh remaja berdasarkan keseluruhan teks tersebut?",
+        pilihan: [
+            "A. Penulis sepenuhnya menolak penggunaan gawai oleh remaja karena dampak negatifnya lebih besar.",
+            "B. Penulis mendukung penggunaan gawai tanpa batasan karena manfaatnya sangat besar.",
+            "C. Penulis menyarankan penggunaan gawai secara bijak dengan pendampingan literasi digital, bukan pelarangan total.",
+            "D. Penulis bersikap netral tanpa memberikan pandangan apa pun tentang penggunaan gawai."
+        ],
+        kunci: "C",
+        pembahasan: "Paragraf terakhir menegaskan bahwa “bukan gawai yang perlu dijauhkan”, melainkan pemahaman penggunaannya yang perlu ditanamkan, menunjukkan sikap penulis yang menyarankan penggunaan bijak. Opsi A dan B terlalu ekstrem, opsi D tidak sesuai karena penulis jelas menyampaikan pandangan."
+    },
+    {
+        id: 16,
+        tipe: "pgk_mc",
+        wacana: `<h3>Gawai di Tangan Remaja: Berkah atau Ancaman?</h3>
+        <p><em>(Lihat teks editorial pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Apa saja alasan penulis menganggap perbedaan kebijakan gawai antarsekolah sebagai suatu persoalan? Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.",
+        pilihan: [
+            "A. Menunjukkan belum adanya kesepahaman bersama tentang cara mengelola teknologi di sekolah.",
+            "B. Membuat siswa bingung menentukan sikap yang benar terhadap gawai.",
+            "C. Menghambat sekolah dalam mendapatkan bantuan dana dari pemerintah.",
+            "D. Menyebabkan kesenjangan cara pandang tentang pendidikan teknologi antarsekolah."
+        ],
+        kunci: ["A", "D"],
+        pembahasan: "Paragraf keempat menyatakan bahwa perbedaan kebijakan “menunjukkan belum adanya kesepahaman bersama”, yang berkaitan dengan pernyataan A dan D tentang kesenjangan cara pandang. Pernyataan B dan C tidak didukung oleh informasi dalam teks."
+    },
+    {
+        id: 17,
+        tipe: "pg",
+        wacana: `<h3>Perlukah Sekolah Mempertahankan Seragam?</h3>
+        <p>Perdebatan mengenai perlu tidaknya seragam sekolah dipertahankan kembali muncul di berbagai forum pendidikan. Sebagian pihak berpendapat seragam sebaiknya dipertahankan, sementara pihak lain menilai siswa perlu diberi kebebasan berpakaian.</p>
+        <p>Kelompok yang mendukung seragam berargumen bahwa seragam menciptakan kesetaraan di antara siswa. Tanpa seragam, perbedaan status ekonomi keluarga siswa dapat terlihat jelas dari pakaian yang dikenakan, yang berpotensi memicu kesenjangan sosial dan perundungan. Seragam juga dianggap membantu menumbuhkan disiplin dan identitas kebersamaan sebagai bagian dari satu sekolah. Selain itu, seragam memudahkan pengawasan keamanan karena siswa dari sekolah tertentu dapat dikenali dengan mudah.</p>
+        <p>Di sisi lain, kelompok yang menolak kewajiban seragam berpendapat bahwa pakaian bebas dapat mendukung kreativitas dan ekspresi diri siswa. Mereka menilai kemampuan akademik tidak berkaitan dengan jenis pakaian yang dikenakan. Beberapa penelitian di luar negeri bahkan menunjukkan bahwa kebebasan berpakaian tidak berdampak signifikan terhadap kedisiplinan maupun prestasi belajar siswa. Kelompok ini juga menyoroti bahwa biaya seragam dapat menjadi beban tambahan bagi keluarga kurang mampu, terutama jika sekolah mewajibkan penggantian seragam setiap tahun ajaran baru.</p>
+        <p>Beberapa sekolah kini mencoba jalan tengah dengan menerapkan seragam pada hari-hari tertentu dan mengizinkan pakaian bebas rapi pada hari lain, seperti hari Jumat. Kebijakan ini dianggap dapat mengakomodasi kedua kepentingan, yaitu menjaga identitas sekolah sekaligus memberi ruang ekspresi bagi siswa.</p>
+        <p>Pada akhirnya, keputusan mengenai kebijakan seragam sebaiknya mempertimbangkan kondisi masing-masing sekolah, termasuk latar belakang sosial ekonomi siswa dan tujuan pendidikan karakter yang ingin dicapai.</p>`,
+        pertanyaan: "Apa alasan yang dikemukakan kelompok pendukung seragam sekolah dalam teks tersebut?",
+        pilihan: [
+            "A. Seragam membuat siswa lebih mudah membeli pakaian dengan harga murah.",
+            "B. Seragam menciptakan kesetaraan dan memudahkan pengawasan keamanan siswa.",
+            "C. Seragam terbukti secara ilmiah meningkatkan prestasi akademik siswa.",
+            "D. Seragam membantu siswa lebih bebas berekspresi melalui gaya berpakaian."
+        ],
+        kunci: "B",
+        pembahasan: "Paragraf kedua menyebutkan secara tersurat bahwa seragam menciptakan kesetaraan dan memudahkan pengawasan keamanan. Opsi A, C, dan D tidak disebutkan sebagai argumen kelompok pendukung seragam."
+    },
+    {
+        id: 18,
+        tipe: "pg",
+        wacana: `<h3>Perlukah Sekolah Mempertahankan Seragam?</h3>
+        <p><em>(Lihat teks diskusi pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Apa perbedaan mendasar antara sudut pandang pendukung dan penolak kewajiban seragam sekolah berdasarkan teks tersebut?",
+        pilihan: [
+            "A. Pendukung seragam mengutamakan kesetaraan sosial, sedangkan penolak mengutamakan ekspresi diri dan biaya.",
+            "B. Pendukung seragam mengutamakan biaya murah, sedangkan penolak mengutamakan keamanan sekolah.",
+            "C. Pendukung seragam menolak hasil penelitian, sedangkan penolak seragam mendukung hasil penelitian tanpa syarat.",
+            "D. Pendukung seragam fokus pada prestasi akademik, sedangkan penolak fokus pada kedisiplinan siswa."
+        ],
+        kunci: "A",
+        pembahasan: "Berdasarkan paragraf kedua dan ketiga, kelompok pendukung menonjolkan kesetaraan dan keamanan, sedangkan kelompok penolak menonjolkan ekspresi diri dan beban biaya. Opsi B, C, dan D tidak sesuai dengan uraian argumen dalam teks."
+    },
+    {
+        id: 19,
+        tipe: "pgk_bs",
+        wacana: `<h3>Perlukah Sekolah Mempertahankan Seragam?</h3>
+        <p><em>(Lihat teks diskusi pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Tentukan Benar atau Salah untuk setiap pernyataan berikut mengenai kebijakan ‘seragam pada hari tertentu dan pakaian bebas rapi pada hari lain’!",
+        pilihan: [
+            "Kebijakan tersebut menghapus total biaya seragam yang harus ditanggung siswa.",
+            "Kebijakan tersebut menjaga identitas sekolah sekaligus memberi ruang ekspresi bagi siswa.",
+            "Kebijakan tersebut terbukti meningkatkan prestasi akademik siswa secara signifikan."
+        ],
+        kunci: [false, true, false],
+        pembahasan: "Teks menyebutkan kebijakan tersebut “mengakomodasi kedua kepentingan, yaitu menjaga identitas sekolah sekaligus memberi ruang ekspresi” (pernyataan 2 benar). Teks tidak menyatakan penghapusan total biaya (pernyataan 1 salah) maupun bukti peningkatan prestasi akademik (pernyataan 3 salah)."
+    },
+    {
+        id: 20,
+        tipe: "pgk_mc",
+        wacana: `<h3>Infografik: Jejak Sampah Plastik di Indonesia</h3>
+        <ul>
+            <li>Indonesia menghasilkan sekitar 6,8 juta ton sampah plastik per tahun.</li>
+            <li>Hanya sekitar 10% sampah plastik yang berhasil didaur ulang.</li>
+            <li>Sekitar 620 ribu ton sampah plastik diperkirakan mencemari lautan setiap tahun.</li>
+            <li>Waktu urai kantong plastik: 10–20 tahun.</li>
+            <li>Waktu urai botol plastik: lebih dari 450 tahun.</li>
+        </ul>
+        <p><em>(Sumber: diadaptasi dari data Kementerian Lingkungan Hidup dan Kehutanan)</em></p>`,
+        pertanyaan: "Pernyataan mana saja yang sesuai dengan data pada infografik tersebut? Pilihlah jawaban yang benar! Jawaban benar lebih dari satu.",
+        pilihan: [
+            "A. Hanya sebagian kecil sampah plastik di Indonesia yang berhasil didaur ulang.",
+            "B. Waktu urai botol plastik lebih lama dibandingkan kantong plastik.",
+            "C. Seluruh sampah plastik yang dihasilkan Indonesia mencemari lautan.",
+            "D. Jumlah sampah plastik yang didaur ulang lebih besar daripada yang tidak didaur ulang."
+        ],
+        kunci: ["A", "B"],
+        pembahasan: "Data menunjukkan hanya sekitar 10% sampah plastik yang didaur ulang (pernyataan A benar) dan waktu urai botol plastik (lebih dari 450 tahun) lebih lama daripada kantong plastik (10–20 tahun) (pernyataan B benar). Pernyataan C dan D tidak sesuai karena data menunjukkan sebagian, bukan seluruh, sampah mencemari laut, dan jumlah yang didaur ulang jauh lebih kecil daripada yang tidak."
+    },
+    {
+        id: 21,
+        tipe: "pg",
+        wacana: `<h3>Tabel Minat Membaca Siswa Kelas VII Berdasarkan Jenis Bacaan</h3>
+        <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">
+            <tr>
+                <th>Jenis Bacaan</th>
+                <th>Jumlah Siswa (dari 40 siswa)</th>
+            </tr>
+            <tr>
+                <td>Novel/Cerita Fiksi</td>
+                <td>15</td>
+            </tr>
+            <tr>
+                <td>Komik</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>Buku Pengetahuan Umum</td>
+                <td>8</td>
+            </tr>
+            <tr>
+                <td>Majalah/Artikel Daring</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>Lainnya</td>
+                <td>2</td>
+            </tr>
+        </table>
+        <p><em>Data diperoleh dari survei minat baca yang dilakukan oleh pengurus perpustakaan sekolah pada awal semester.</em></p>`,
+        pertanyaan: "Berdasarkan tabel tersebut, jenis bacaan apa yang paling diminati oleh siswa kelas VII?",
+        pilihan: [
+            "A. Komik",
+            "B. Novel/Cerita Fiksi",
+            "C. Buku Pengetahuan Umum",
+            "D. Majalah/Artikel Daring"
+        ],
+        kunci: "B",
+        pembahasan: "Berdasarkan data pada tabel, Novel/Cerita Fiksi memiliki jumlah peminat tertinggi, yaitu 15 dari 40 siswa. Opsi A, C, dan D memiliki jumlah peminat yang lebih rendah."
+    },
+    {
+        id: 22,
+        tipe: "pg",
+        wacana: `<h3>@BPBD_Kotaku</h3>
+        <p>🧵 UPDATE: Potensi banjir di wilayah bantaran sungai akibat curah hujan tinggi tiga hari terakhir.</p>
+        <p>1/ Warga di RW 03 dan RW 05 diimbau untuk waspada dan menyiapkan barang penting di tempat yang lebih tinggi.<br>
+        2/ Posko pengungsian sementara telah disiapkan di Balai Desa dan Masjid Al-Ikhlas.<br>
+        3/ Hindari beraktivitas di dekat aliran sungai hingga situasi dinyatakan aman oleh petugas.<br>
+        4/ Pantau terus informasi resmi dari akun ini. Jangan mudah percaya informasi yang belum terverifikasi.</p>
+        <p>Tetap tenang dan saling membantu, ya! 🙏 #SiagaBanjir #InformasiResmi</p>`,
+        pertanyaan: "Mengapa imbauan pada poin ke-4 unggahan tersebut penting disampaikan kepada masyarakat dalam situasi kebencanaan?",
+        pilihan: [
+            "A. Agar masyarakat tidak perlu mencari informasi dari sumber lain selain akun tersebut.",
+            "B. Agar masyarakat terhindar dari kepanikan akibat informasi yang belum tentu benar atau simpang siur.",
+            "C. Agar masyarakat lebih fokus mengikuti akun resmi di media sosial.",
+            "D. Agar masyarakat dapat menyebarkan informasi tersebut ke akun lain dengan cepat."
+        ],
+        kunci: "B",
+        pembahasan: "Dalam situasi kebencanaan, informasi yang belum terverifikasi dapat memicu kepanikan atau kesalahpahaman, sehingga imbauan tersebut bertujuan menjaga masyarakat tetap tenang dan terinformasi dengan benar. Opsi A, C, dan D tidak menangkap tujuan utama imbauan tersebut."
+    },
+    {
+        id: 23,
+        tipe: "pg",
+        wacana: `<h3>Surat Pembaca: Usulan Taman Baca di Taman Kota</h3>
+        <p>Kepada Redaksi Yth,</p>
+        <p>Saya seorang pelajar SMP yang tinggal di dekat Taman Kota Melati. Setiap sore, taman ini selalu ramai dikunjungi warga, terutama anak-anak dan remaja yang ingin bersantai atau berolahraga. Sayangnya, taman ini belum memiliki fasilitas taman baca atau pojok literasi yang dapat dimanfaatkan pengunjung, khususnya pelajar seperti saya.</p>
+        <p>Padahal, menurut saya, keberadaan taman baca di ruang publik seperti Taman Kota Melati akan sangat bermanfaat. Selain menjadi tempat rekreasi, taman ini bisa menjadi sarana edukasi bagi anak-anak dan remaja di sekitar kompleks. Beberapa kota lain sudah menerapkan konsep serupa, misalnya dengan menyediakan rak buku sederhana yang bisa diakses gratis oleh siapa saja.</p>
+        <p>Saya juga melihat banyak pengunjung yang hanya duduk-duduk tanpa kegiatan produktif sambil menunggu waktu magrib tiba. Jika ada taman baca, waktu tersebut bisa dimanfaatkan untuk membaca buku atau majalah anak-anak yang mendidik.</p>
+        <p>Melalui surat ini, saya berharap Dinas Perpustakaan dan Kearsipan Kota dapat mempertimbangkan usulan penambahan fasilitas taman baca di Taman Kota Melati. Usulan ini tentu membutuhkan dukungan berbagai pihak, baik dari segi anggaran maupun perawatan buku agar tidak mudah rusak atau hilang.</p>
+        <p>Semoga usulan sederhana ini dapat menjadi bahan pertimbangan demi kemajuan literasi di lingkungan kita bersama.</p>
+        <p>Hormat saya,<br>
+        Nadia Kirana<br>
+        Siswa SMP di sekitar Taman Kota Melati</p>`,
+        pertanyaan: "Apa tujuan utama penulis mengirimkan surat pembaca tersebut?",
+        pilihan: [
+            "A. Melaporkan kerusakan fasilitas yang ada di Taman Kota Melati.",
+            "B. Mengusulkan penambahan fasilitas taman baca di Taman Kota Melati.",
+            "C. Mengeluhkan banyaknya pengunjung yang tidak tertib di taman.",
+            "D. Meminta penambahan petugas kebersihan di taman kota."
+        ],
+        kunci: "B",
+        pembahasan: "Sepanjang surat, penulis secara konsisten mengusulkan penambahan fasilitas taman baca di Taman Kota Melati. Opsi A, C, dan D tidak sesuai dengan isi maupun tujuan surat tersebut."
+    },
+    {
+        id: 24,
+        tipe: "pg",
+        wacana: `<h3>Surat Pembaca: Usulan Taman Baca di Taman Kota</h3>
+        <p><em>(Lihat teks pada soal sebelumnya)</em></p>`,
+        pertanyaan: "Bukti apa yang digunakan penulis untuk memperkuat usulannya tentang pentingnya taman baca di Taman Kota Melati?",
+        pilihan: [
+            "A. Data jumlah pengunjung taman yang dikumpulkan penulis secara langsung.",
+            "B. Pengamatan penulis bahwa banyak pengunjung hanya duduk tanpa kegiatan produktif serta contoh penerapan di kota lain.",
+            "C. Hasil wawancara penulis dengan petugas Dinas Perpustakaan setempat.",
+            "D. Perbandingan biaya pembangunan taman baca di beberapa kota besar."
+        ],
+        kunci: "B",
+        pembahasan: "Penulis memperkuat usulannya dengan pengamatan langsung tentang pengunjung yang tidak beraktivitas produktif serta menyebut contoh penerapan taman baca di kota lain sebagai pembanding. Opsi A, C, dan D tidak disebutkan dalam surat tersebut."
+    },
+    {
+        id: 25,
+        tipe: "pg",
+        wacana: `<h3>Pembelajaran Daring, Efektifkah untuk Semua Siswa?</h3>
+        <p>Sejak pandemi beberapa tahun lalu, pembelajaran daring menjadi alternatif yang terus digunakan sebagian sekolah, terutama untuk kegiatan tertentu seperti pengayaan materi atau saat kondisi cuaca ekstrem menghalangi siswa datang ke sekolah.</p>
+        <p>Pendukung metode ini menilai pembelajaran daring memberi fleksibilitas waktu dan tempat belajar. Siswa dapat mengulang video pembelajaran kapan saja hingga benar-benar paham, sesuatu yang sulit dilakukan pada pembelajaran tatap muka biasa.</p>
+        <p>Namun, tidak semua siswa merasakan manfaat yang sama. Siswa yang tinggal di daerah dengan akses internet terbatas kerap kesulitan mengikuti pembelajaran daring secara maksimal. Selain itu, interaksi sosial antarsiswa yang biasanya terjadi di kelas menjadi berkurang, padahal interaksi tersebut penting untuk perkembangan keterampilan sosial remaja.</p>
+        <p>Sejumlah guru juga mengungkapkan bahwa memantau pemahaman siswa lebih sulit dilakukan secara daring dibandingkan tatap muka langsung, karena guru tidak dapat langsung melihat ekspresi maupun kesulitan siswa saat belajar.</p>
+        <p>Melihat kelebihan dan kekurangan tersebut, banyak pihak berpendapat bahwa pembelajaran campuran atau hybrid, yang memadukan tatap muka dan daring secara proporsional, mungkin menjadi solusi paling sesuai untuk kondisi pendidikan yang beragam di Indonesia.</p>`,
+        pertanyaan: "Mengapa pembelajaran campuran (hybrid) dianggap sebagai solusi yang paling sesuai berdasarkan permasalahan yang diuraikan dalam teks tersebut?",
+        pilihan: [
+            "A. Karena pembelajaran hybrid sepenuhnya menghilangkan kebutuhan akan internet.",
+            "B. Karena pembelajaran hybrid dapat mengakomodasi kelebihan fleksibilitas daring sekaligus mempertahankan interaksi sosial dan pemantauan langsung dari tatap muka.",
+            "C. Karena pembelajaran hybrid terbukti lebih murah dibandingkan metode lainnya.",
+            "D. Karena pembelajaran hybrid hanya cocok diterapkan di kota besar dengan akses internet baik."
+        ],
+        kunci: "B",
+        pembahasan: "Teks menguraikan kelebihan daring (fleksibilitas) dan kekurangannya (minim interaksi sosial, sulit dipantau), sehingga pembelajaran hybrid dianggap solusi karena menggabungkan kelebihan kedua metode. Opsi A, C, dan D tidak didukung oleh informasi dalam teks."
+    }
+];
         let state = {
             role: null, // 'siswa', 'guru', 'admin'
             studentData: {},
