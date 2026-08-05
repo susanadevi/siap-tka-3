@@ -122,39 +122,75 @@
         </div>
     </section>
 
-    <!-- LAYAR UJIAN SISWA -->
-    <section id="view-exam" class="view-section h-screen flex flex-col bg-white">
+    <!-- LAYAR UJIAN SISWA DENGAN DRAWER -->
+    <section id="view-exam" class="view-section h-screen flex flex-col bg-gray-50 relative overflow-hidden">
         <!-- Header Ujian -->
-        <header class="bg-primary text-white p-4 flex justify-between items-center shadow-md z-10">
-            <div>
-                <h1 class="font-bold text-lg">Siap TKA - Bahasa Indonesia</h1>
-                <p class="text-xs text-accent" id="info-siswa">Siswa: - | Kelas: -</p>
+        <header class="bg-primary text-white p-4 flex justify-between items-center shadow-md z-20">
+            <div class="flex items-center space-x-4">
+                <h1 class="font-bold text-lg hidden sm:block">Siap TKA - Bahasa Indonesia</h1>
+                <div class="bg-white/20 px-3 py-1 rounded-md text-sm">
+                    Soal No. <span id="hdr-soal-no" class="font-bold">1</span> / <span id="hdr-soal-total">25</span>
+                </div>
             </div>
             <div class="flex items-center space-x-4">
-                <div class="bg-red-800 px-4 py-1 rounded-full font-mono text-xl" id="timer-display">90:00</div>
-                <button onclick="selesaiUjian()" class="bg-secondary hover:bg-yellow-600 text-white px-4 py-2 rounded-lg font-semibold transition">Selesai</button>
+                <span class="text-sm font-semibold truncate max-w-[120px]" id="info-siswa">Siswa</span>
+                <div class="bg-secondary px-3 py-1 rounded-md font-mono text-lg font-bold flex items-center space-x-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span id="timer-display">90:00</span>
+                </div>
+                <button onclick="toggleNavDrawer()" class="bg-white text-primary hover:bg-gray-200 px-4 py-2 rounded-lg font-semibold transition shadow">
+                    Daftar Soal
+                </button>
             </div>
         </header>
 
         <!-- Area Konten 70:30 -->
-        <div class="flex-grow grid grid-cols-1 md:grid-cols-10 overflow-hidden">
+        <div class="flex-grow grid grid-cols-1 lg:grid-cols-10 overflow-hidden relative">
             <!-- Wacana (70%) -->
-            <div class="col-span-7 p-6 overflow-y-auto bg-background border-r border-gray-300" id="exam-wacana">
+            <div class="lg:col-span-7 p-6 overflow-y-auto bg-white border-r border-gray-200" id="exam-wacana">
                 <!-- Wacana dirender di sini -->
             </div>
             <!-- Soal & Opsi (30%) -->
-            <div class="col-span-3 p-6 overflow-y-auto bg-white" id="exam-soal">
+            <div class="lg:col-span-3 p-6 overflow-y-auto bg-gray-50" id="exam-soal">
                 <!-- Soal dirender di sini -->
             </div>
         </div>
         
-        <!-- Navigasi Bawah -->
-        <footer class="bg-gray-100 p-3 border-t flex justify-between items-center shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
-            <button onclick="prevSoal()" class="bg-gray-300 px-4 py-2 rounded font-semibold text-gray-700 hover:bg-gray-400">Sebelumnya</button>
-            <div id="nav-nomor" class="flex space-x-1 overflow-x-auto px-4 max-w-lg mx-auto">
-                <!-- Kotak nomor soal -->
+        <!-- Drawer Navigasi Soal (Off-canvas) -->
+        <div id="nav-drawer" class="fixed inset-y-0 right-0 w-80 bg-white shadow-2xl z-40 transform translate-x-full transition-transform duration-300 flex flex-col">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                <h3 class="font-bold text-lg text-gray-800">Navigasi Soal</h3>
+                <button onclick="toggleNavDrawer()" class="text-gray-500 hover:text-red-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
             </div>
-            <button onclick="nextSoal()" class="bg-primary px-4 py-2 rounded font-semibold text-white hover:bg-red-900">Selanjutnya</button>
+            <div class="p-4 flex-grow overflow-y-auto">
+                <!-- Grid Nomor Soal -->
+                <div id="nav-nomor" class="grid grid-cols-5 gap-2 mb-6">
+                    <!-- Kotak nomor soal digenerate oleh JS -->
+                </div>
+                <!-- Legenda Status -->
+                <div class="space-y-2 text-sm text-gray-600 border-t pt-4">
+                    <div class="flex items-center"><div class="w-4 h-4 bg-green-500 rounded mr-2"></div> Sudah dijawab</div>
+                    <div class="flex items-center"><div class="w-4 h-4 bg-gray-100 border border-gray-300 rounded mr-2"></div> Belum dijawab</div>
+                    <div class="flex items-center"><div class="w-4 h-4 bg-white border-2 border-primary ring-2 ring-primary rounded mr-2"></div> Sedang aktif</div>
+                </div>
+            </div>
+            <!-- Tombol Kumpulkan -->
+            <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <button onclick="selesaiUjian()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-bold transition shadow-md">
+                    Kumpulkan Jawaban
+                </button>
+            </div>
+        </div>
+
+        <!-- Overlay Latar Belakang Drawer -->
+        <div id="nav-overlay" onclick="toggleNavDrawer()" class="fixed inset-0 bg-black/30 z-30 hidden backdrop-blur-sm transition-opacity"></div>
+
+        <!-- Navigasi Bawah (Prev/Next) -->
+        <footer class="bg-white p-3 border-t flex justify-between items-center shadow-[0_-2px_10px_rgba(0,0,0,0.05)] z-10">
+            <button onclick="prevSoal()" class="bg-gray-200 px-6 py-2 rounded-lg font-semibold text-gray-700 hover:bg-gray-300 transition">Sebelumnya</button>
+            <button onclick="nextSoal()" class="bg-primary px-6 py-2 rounded-lg font-semibold text-white hover:bg-red-900 transition">Selanjutnya</button>
         </footer>
     </section>
 
@@ -207,162 +243,163 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // --- DATABASE SOAL (Berdasarkan Dokumen Wacana 1-5) ---
+        // --- DATABASE SOAL (Menggunakan 12 Soal dari Dokumen Wacana 1-5 Sebagai Representasi) ---
+        // Catatan: Array ini bisa dilanjutkan hingga 25 soal menggunakan pola yang sama[cite: 1]
         const dbSoal = [
             {
                 id: 1, type: "PG",
-                stimulus: "<h3>Teks Berita: Panen Raya Padi Organik di Desa Sumberagung[cite: 1]</h3><p>Kelompok tani muda di Desa Sumberagung, Kabupaten Ponorogo, berhasil memanen padi organik seluas dua hektare pekan lalu. Hasil panen mencapai enam ton per hektare, lebih tinggi dibandingkan hasil panen padi konvensional di daerah tersebut.[cite: 1]</p><p>Ketua kelompok tani, Dimas Prasetyo, mengatakan bahwa keberhasilan ini merupakan hasil kerja keras selama tiga tahun. “Kami mulai belajar bertani organik sejak 2022. Awalnya hasil panen memang lebih rendah, tetapi setelah tanah kembali subur, produksi justru meningkat,” ujar Dimas.[cite: 1]</p><p>Metode pertanian organik yang diterapkan meliputi penggunaan pupuk kompos dari kotoran ternak, pengendalian hama alami dengan tanaman pengusir serangga, dan penghentian total penggunaan pestisida kimia. Proses peralihan ini membutuhkan waktu karena tanah perlu direhabilitasi terlebih dahulu.[cite: 1]</p><p>Dinas Pertanian Kabupaten Ponorogo menyambut baik keberhasilan tersebut. Kepala Dinas Pertanian, Retno Wulandari, menyatakan pihaknya akan mendampingi lebih banyak kelompok tani untuk beralih ke pertanian organik. Selain lebih ramah lingkungan, beras organik juga dijual dengan harga lebih tinggi di pasaran, sehingga meningkatkan pendapatan petani.[cite: 1]</p><p>Ke depan, kelompok tani ini berencana memperluas lahan organik hingga lima hektare pada musim tanam berikutnya.[cite: 1]</p>",
-                question: "Berdasarkan teks tersebut, apa yang menyebabkan hasil panen padi organik Kelompok Tani Desa Sumberagung lebih tinggi dibandingkan padi konvensional?[cite: 1]",
+                stimulus: "<h3>Teks Berita: Panen Raya Padi Organik di Desa Sumberagung</h3><p>Kelompok tani muda di Desa Sumberagung, Kabupaten Ponorogo, berhasil memanen padi organik seluas dua hektare pekan lalu. Hasil panen mencapai enam ton per hektare, lebih tinggi dibandingkan hasil panen padi konvensional di daerah tersebut.</p><p>Ketua kelompok tani, Dimas Prasetyo, mengatakan bahwa keberhasilan ini merupakan hasil kerja keras selama tiga tahun. “Kami mulai belajar bertani organik sejak 2022. Awalnya hasil panen memang lebih rendah, tetapi setelah tanah kembali subur, produksi justru meningkat,” ujar Dimas.</p><p>Metode pertanian organik yang diterapkan meliputi penggunaan pupuk kompos dari kotoran ternak, pengendalian hama alami dengan tanaman pengusir serangga, dan penghentian total penggunaan pestisida kimia. Proses peralihan ini membutuhkan waktu karena tanah perlu direhabilitasi terlebih dahulu.</p><p>Dinas Pertanian Kabupaten Ponorogo menyambut baik keberhasilan tersebut. Kepala Dinas Pertanian, Retno Wulandari, menyatakan pihaknya akan mendampingi lebih banyak kelompok tani untuk beralih ke pertanian organik. Selain lebih ramah lingkungan, beras organik juga dijual dengan harga lebih tinggi di pasaran, sehingga meningkatkan pendapatan petani.</p><p>Ke depan, kelompok tani ini berencana memperluas lahan organik hingga lima hektare pada musim tanam berikutnya.</p>",
+                question: "Berdasarkan teks tersebut, apa yang menyebabkan hasil panen padi organik Kelompok Tani Desa Sumberagung lebih tinggi dibandingkan padi konvensional?",
                 options: [
-                    "Penggunaan pestisida kimia dalam jumlah terbatas.[cite: 1]",
-                    "Perluasan lahan tanam hingga lima hektare.[cite: 1]",
-                    "Tanah yang telah pulih kesuburannya setelah menerapkan metode organik.[cite: 1]",
-                    "Bantuan pendampingan rutin dari Dinas Pertanian sejak awal.[cite: 1]"
+                    "Penggunaan pestisida kimia dalam jumlah terbatas.",
+                    "Perluasan lahan tanam hingga lima hektare.",
+                    "Tanah yang telah pulih kesuburannya setelah menerapkan metode organik.",
+                    "Bantuan pendampingan rutin dari Dinas Pertanian sejak awal."
                 ],
                 answer: 2,
-                pembahasan: "Kunci: C. Teks secara tersurat menyatakan bahwa “setelah tanah kembali subur, produksi justru meningkat”. Opsi A keliru karena pertanian organik justru menghentikan total penggunaan pestisida kimia. Opsi B keliru karena perluasan lahan baru merupakan rencana ke depan, bukan penyebab hasil panen yang sudah dicapai. Opsi D keliru karena pendampingan Dinas Pertanian disebutkan sebagai respons setelah keberhasilan, bukan penyebabnya.[cite: 1]"
+                pembahasan: "Kunci: C. Teks secara tersurat menyatakan bahwa “setelah tanah kembali subur, produksi justru meningkat”. Opsi A keliru karena pertanian organik justru menghentikan total penggunaan pestisida kimia. Opsi B keliru karena perluasan lahan baru merupakan rencana ke depan, bukan penyebab hasil panen yang sudah dicapai. Opsi D keliru karena pendampingan Dinas Pertanian disebutkan sebagai respons setelah keberhasilan, bukan penyebabnya."
             },
             {
                 id: 2, type: "PG",
-                stimulus: "<h3>Teks Eksplanasi: Mengapa Langit Tampak Biru?[cite: 1]</h3><p>Pernahkah kamu memperhatikan warna langit pada siang hari? Hampir setiap hari, langit tampak berwarna biru cerah ketika cuaca sedang baik. Fenomena ini ternyata bukan disebabkan oleh warna udara itu sendiri, melainkan oleh cara cahaya matahari berinteraksi dengan partikel-partikel di atmosfer bumi.[cite: 1]</p><p>Cahaya matahari yang tampak putih sebenarnya terdiri atas berbagai warna dengan panjang gelombang berbeda, mulai dari merah hingga ungu. Ketika cahaya tersebut memasuki atmosfer, ia bertabrakan dengan molekul-molekul gas seperti nitrogen dan oksigen. Peristiwa ini disebut hamburan Rayleigh. Cahaya dengan panjang gelombang pendek, seperti biru dan ungu, terhambur ke segala arah jauh lebih kuat dibandingkan cahaya dengan panjang gelombang panjang seperti merah dan jingga. Karena mata manusia lebih peka terhadap warna biru dibandingkan ungu, langit pun tampak dominan berwarna biru.[cite: 1]</p><p>Fenomena hamburan ini juga menjelaskan mengapa langit berubah warna menjadi merah atau jingga saat matahari terbenam. Pada waktu tersebut, posisi matahari berada rendah di cakrawala sehingga cahaya harus menempuh jarak yang lebih panjang melalui atmosfer sebelum sampai ke mata kita. Sepanjang perjalanan itu, hampir seluruh cahaya biru sudah terhambur ke arah lain, sehingga yang tersisa dan sampai ke mata adalah cahaya dengan panjang gelombang panjang seperti merah dan jingga.[cite: 1]</p><p>Dengan memahami proses hamburan cahaya ini, kita dapat mengetahui bahwa warna langit sesungguhnya bukanlah sifat tetap atmosfer, melainkan hasil interaksi dinamis antara cahaya matahari dan partikel udara yang berubah sesuai posisi matahari.[cite: 1]</p>",
-                question: "Berdasarkan teks, apa yang dimaksud dengan hamburan Rayleigh?[cite: 1]",
+                stimulus: "<h3>Teks Eksplanasi: Mengapa Langit Tampak Biru?</h3><p>Pernahkah kamu memperhatikan warna langit pada siang hari? Hampir setiap hari, langit tampak berwarna biru cerah ketika cuaca sedang baik. Fenomena ini ternyata bukan disebabkan oleh warna udara itu sendiri, melainkan oleh cara cahaya matahari berinteraksi dengan partikel-partikel di atmosfer bumi.</p><p>Cahaya matahari yang tampak putih sebenarnya terdiri atas berbagai warna dengan panjang gelombang berbeda, mulai dari merah hingga ungu. Ketika cahaya tersebut memasuki atmosfer, ia bertabrakan dengan molekul-molekul gas seperti nitrogen dan oksigen. Peristiwa ini disebut hamburan Rayleigh. Cahaya dengan panjang gelombang pendek, seperti biru dan ungu, terhambur ke segala arah jauh lebih kuat dibandingkan cahaya dengan panjang gelombang panjang seperti merah dan jingga. Karena mata manusia lebih peka terhadap warna biru dibandingkan ungu, langit pun tampak dominan berwarna biru.</p><p>Fenomena hamburan ini juga menjelaskan mengapa langit berubah warna menjadi merah atau jingga saat matahari terbenam. Pada waktu tersebut, posisi matahari berada rendah di cakrawala sehingga cahaya harus menempuh jarak yang lebih panjang melalui atmosfer sebelum sampai ke mata kita. Sepanjang perjalanan itu, hampir seluruh cahaya biru sudah terhambur ke arah lain, sehingga yang tersisa dan sampai ke mata adalah cahaya dengan panjang gelombang panjang seperti merah dan jingga.</p><p>Dengan memahami proses hamburan cahaya ini, kita dapat mengetahui bahwa warna langit sesungguhnya bukanlah sifat tetap atmosfer, melainkan hasil interaksi dinamis antara cahaya matahari dan partikel udara yang berubah sesuai posisi matahari.</p>",
+                question: "Berdasarkan teks, apa yang dimaksud dengan hamburan Rayleigh?",
                 options: [
-                    "Perubahan warna cahaya matahari ketika melewati awan.[cite: 1]",
-                    "Peristiwa bertabrakannya cahaya matahari dengan molekul gas di atmosfer.[cite: 1]",
-                    "Proses terbentuknya warna langit merah pada malam hari.[cite: 1]",
-                    "Pergerakan posisi matahari dari pagi hingga senja.[cite: 1]"
+                    "Perubahan warna cahaya matahari ketika melewati awan.",
+                    "Peristiwa bertabrakannya cahaya matahari dengan molekul gas di atmosfer.",
+                    "Proses terbentuknya warna langit merah pada malam hari.",
+                    "Pergerakan posisi matahari dari pagi hingga senja."
                 ],
                 answer: 1,
-                pembahasan: "Kunci: B. Paragraf kedua menyatakan secara tersurat bahwa peristiwa cahaya matahari bertabrakan dengan molekul gas di atmosfer disebut hamburan Rayleigh. Opsi A, C, dan D tidak sesuai dengan definisi yang dijelaskan dalam teks.[cite: 1]"
+                pembahasan: "Kunci: B. Paragraf kedua menyatakan secara tersurat bahwa peristiwa cahaya matahari bertabrakan dengan molekul gas di atmosfer disebut hamburan Rayleigh. Opsi A, C, dan D tidak sesuai dengan definisi yang dijelaskan dalam teks."
             },
             {
                 id: 3, type: "PG",
-                stimulus: "Sama dengan wacana Teks Eksplanasi sebelumnya. (Mengapa Langit Tampak Biru?)[cite: 1]",
-                question: "Apa hubungan antara paragraf kedua dan paragraf ketiga pada teks tersebut?[cite: 1]",
+                stimulus: "Sama dengan wacana Teks Eksplanasi sebelumnya. (Mengapa Langit Tampak Biru?)",
+                question: "Apa hubungan antara paragraf kedua dan paragraf ketiga pada teks tersebut?",
                 options: [
-                    "Paragraf ketiga membantah penjelasan pada paragraf kedua.[cite: 1]",
-                    "Paragraf ketiga menerapkan prinsip pada paragraf kedua untuk menjelaskan fenomena lain.[cite: 1]",
-                    "Paragraf ketiga menjelaskan definisi istilah yang muncul pada paragraf kedua.[cite: 1]",
-                    "Paragraf ketiga membandingkan dua teori berbeda tentang warna langit.[cite: 1]"
+                    "Paragraf ketiga membantah penjelasan pada paragraf kedua.",
+                    "Paragraf ketiga menerapkan prinsip pada paragraf kedua untuk menjelaskan fenomena lain.",
+                    "Paragraf ketiga menjelaskan definisi istilah yang muncul pada paragraf kedua.",
+                    "Paragraf ketiga membandingkan dua teori berbeda tentang warna langit."
                 ],
                 answer: 1,
-                pembahasan: "Kunci: B. Paragraf kedua menjelaskan prinsip hamburan cahaya penyebab langit biru, sedangkan paragraf ketiga menerapkan prinsip yang sama untuk menjelaskan fenomena berbeda, yaitu warna jingga saat matahari terbenam. Opsi A, C, dan D tidak menggambarkan hubungan tersebut secara tepat.[cite: 1]"
+                pembahasan: "Kunci: B. Paragraf kedua menjelaskan prinsip hamburan cahaya penyebab langit biru, sedangkan paragraf ketiga menerapkan prinsip yang sama untuk menjelaskan fenomena berbeda, yaitu warna jingga saat matahari terbenam. Opsi A, C, dan D tidak menggambarkan hubungan tersebut secara tepat."
             },
             {
                 id: 4, type: "PG",
-                stimulus: "Sama dengan wacana Teks Eksplanasi sebelumnya. (Mengapa Langit Tampak Biru?)[cite: 1]",
-                question: "Jika suatu planet memiliki atmosfer yang jauh lebih tipis daripada atmosfer Bumi, manakah simpulan yang paling tepat mengenai warna langit siang hari di planet tersebut berdasarkan prinsip pada teks?[cite: 1]",
+                stimulus: "Sama dengan wacana Teks Eksplanasi sebelumnya. (Mengapa Langit Tampak Biru?)",
+                question: "Jika suatu planet memiliki atmosfer yang jauh lebih tipis daripada atmosfer Bumi, manakah simpulan yang paling tepat mengenai warna langit siang hari di planet tersebut berdasarkan prinsip pada teks?",
                 options: [
-                    "Langit akan tetap berwarna biru cerah seperti di Bumi karena warna langit tidak dipengaruhi oleh atmosfer.[cite: 1]",
-                    "Langit akan berwarna merah sepanjang hari karena cahaya biru tidak dapat menembus atmosfer yang tipis.[cite: 1]",
-                    "Hamburan cahaya akan berkurang sehingga langit tampak lebih gelap dan warna birunya tidak sejelas di Bumi.[cite: 1]",
-                    "Warna langit tidak dapat diprediksi karena bergantung sepenuhnya pada jarak planet dari matahari.[cite: 1]"
+                    "Langit akan tetap berwarna biru cerah seperti di Bumi karena warna langit tidak dipengaruhi oleh atmosfer.",
+                    "Langit akan berwarna merah sepanjang hari karena cahaya biru tidak dapat menembus atmosfer yang tipis.",
+                    "Hamburan cahaya akan berkurang sehingga langit tampak lebih gelap dan warna birunya tidak sejelas di Bumi.",
+                    "Warna langit tidak dapat diprediksi karena bergantung sepenuhnya pada jarak planet dari matahari."
                 ],
                 answer: 2,
-                pembahasan: "Kunci: C. Teks menjelaskan bahwa warna biru langit dihasilkan oleh hamburan cahaya oleh molekul gas di atmosfer. Jika jumlah molekul gas lebih sedikit (atmosfer tipis), intensitas hamburan menurun sehingga warna biru langit menjadi kurang jelas. Opsi A bertentangan dengan prinsip dalam teks, opsi B dan D tidak didukung oleh penalaran yang konsisten dengan penjelasan hamburan cahaya.[cite: 1]"
+                pembahasan: "Kunci: C. Teks menjelaskan bahwa warna biru langit dihasilkan oleh hamburan cahaya oleh molekul gas di atmosfer. Jika jumlah molekul gas lebih sedikit (atmosfer tipis), intensitas hamburan menurun sehingga warna biru langit menjadi kurang jelas. Opsi A bertentangan dengan prinsip dalam teks, opsi B dan D tidak didukung oleh penalaran yang konsisten dengan penjelasan hamburan cahaya."
             },
             {
                 id: 5, type: "PG",
-                stimulus: "<h3>Cerpen: Kunci Loker Nomor 12[cite: 1]</h3><p>Bel istirahat baru saja berbunyi ketika Raka menemukan sebuah flashdisk tergeletak di dekat loker nomor 12. Ia mengambilnya dan memeriksa label kecil yang tertempel: “Kunci Jawaban Ulangan Matematika – Bu Sinta”. Jantung Raka berdegup kencang. Besok pagi ia akan mengikuti ulangan matematika, mata pelajaran yang selama ini membuatnya kesulitan.[cite: 1]</p><p>Raka menatap flashdisk itu lama sekali. Pikirannya melayang membayangkan nilai sempurna tanpa harus belajar semalaman. Namun, bayangan wajah kakeknya tiba-tiba muncul. Kakek selalu berkata, “Nilai yang didapat dengan cara curang tidak akan pernah membuatmu bangga pada dirimu sendiri.”[cite: 1]</p><p>“Kenapa bengong, Rak?” tanya Dimas, teman sebangkunya, yang tiba-tiba muncul dari balik pintu kelas.[cite: 1]</p><p>Raka menunjukkan flashdisk itu. “Aku nemu ini di dekat loker nomor 12. Sepertinya isinya kunci jawaban ulangan besok.”[cite: 1]</p><p>Mata Dimas berbinar. “Wah, keren! Kita bisa lihat sebentar saja, kan? Tidak ada yang tahu.”[cite: 1]</p><p>Raka menggeleng pelan. “Aku juga sempat kepikiran begitu. Tapi kalau kita pakai, kita cuma menipu diri sendiri. Nilai bagus tapi kita nggak benar-benar paham materinya.”[cite: 1]</p><p>“Terus mau diapain?” tanya Dimas.[cite: 1]</p><p>“Kukembalikan ke Bu Sinta,” jawab Raka mantap.[cite: 1]</p><p>Sore itu, Raka mendatangi ruang guru dan menyerahkan flashdisk tersebut kepada Bu Sinta. Ia menjelaskan tempat ia menemukannya. Bu Sinta tampak terkejut sekaligus lega. “Terima kasih sudah jujur, Raka. Flashdisk ini memang tertinggal saat aku menyiapkan soal ulangan. Untung kamu menemukannya dan mengembalikannya,” kata Bu Sinta sambil tersenyum.[cite: 1]</p><p>Malam harinya, Raka belajar sungguh-sungguh menghadapi ulangan matematika. Ia membuka kembali catatan-catatan lama dan mengerjakan soal-soal latihan yang pernah diberikan gurunya. Meskipun lelah, ia merasa lega karena tidak perlu menyimpan rahasia yang membebani pikirannya.[cite: 1]</p><p>Keesokan harinya, Raka mengerjakan ulangan dengan tenang. Beberapa soal terasa sulit, tetapi ia tetap berusaha menyelesaikannya sebisa mungkin. Ketika hasil ulangan dibagikan tiga hari kemudian, nilai Raka memang bukan yang tertinggi di kelas. Namun, ia merasa nilai itu benar-benar miliknya sendiri, hasil dari usaha dan kejujurannya.[cite: 1]</p>",
-                question: "Apa maksud kalimat ‘kita cuma menipu diri sendiri’ yang diucapkan Raka dalam cerita tersebut?[cite: 1]",
+                stimulus: "<h3>Cerpen: Kunci Loker Nomor 12</h3><p>Bel istirahat baru saja berbunyi ketika Raka menemukan sebuah flashdisk tergeletak di dekat loker nomor 12. Ia mengambilnya dan memeriksa label kecil yang tertempel: “Kunci Jawaban Ulangan Matematika – Bu Sinta”. Jantung Raka berdegup kencang. Besok pagi ia akan mengikuti ulangan matematika, mata pelajaran yang selama ini membuatnya kesulitan.</p><p>Raka menatap flashdisk itu lama sekali. Pikirannya melayang membayangkan nilai sempurna tanpa harus belajar semalaman. Namun, bayangan wajah kakeknya tiba-tiba muncul. Kakek selalu berkata, “Nilai yang didapat dengan cara curang tidak akan pernah membuatmu bangga pada dirimu sendiri.”</p><p>“Kenapa bengong, Rak?” tanya Dimas, teman sebangkunya, yang tiba-tiba muncul dari balik pintu kelas.</p><p>Raka menunjukkan flashdisk itu. “Aku nemu ini di dekat loker nomor 12. Sepertinya isinya kunci jawaban ulangan besok.”</p><p>Mata Dimas berbinar. “Wah, keren! Kita bisa lihat sebentar saja, kan? Tidak ada yang tahu.”</p><p>Raka menggeleng pelan. “Aku juga sempat kepikiran begitu. Tapi kalau kita pakai, kita cuma menipu diri sendiri. Nilai bagus tapi kita nggak benar-benar paham materinya.”</p><p>“Terus mau diapain?” tanya Dimas.</p><p>“Kukembalikan ke Bu Sinta,” jawab Raka mantap.</p><p>Sore itu, Raka mendatangi ruang guru dan menyerahkan flashdisk tersebut kepada Bu Sinta. Ia menjelaskan tempat ia menemukannya. Bu Sinta tampak terkejut sekaligus lega. “Terima kasih sudah jujur, Raka. Flashdisk ini memang tertinggal saat aku menyiapkan soal ulangan. Untung kamu menemukannya dan mengembalikannya,” kata Bu Sinta sambil tersenyum.</p><p>Malam harinya, Raka belajar sungguh-sungguh menghadapi ulangan matematika. Ia membuka kembali catatan-catatan lama dan mengerjakan soal-soal latihan yang pernah diberikan gurunya. Meskipun lelah, ia merasa lega karena tidak perlu menyimpan rahasia yang membebani pikirannya.</p><p>Keesokan harinya, Raka mengerjakan ulangan dengan tenang. Beberapa soal terasa sulit, tetapi ia tetap berusaha menyelesaikannya sebisa mungkin. Ketika hasil ulangan dibagikan tiga hari kemudian, nilai Raka memang bukan yang tertinggi di kelas. Namun, ia merasa nilai itu benar-benar miliknya sendiri, hasil dari usaha dan kejujurannya.</p>",
+                question: "Apa maksud kalimat ‘kita cuma menipu diri sendiri’ yang diucapkan Raka dalam cerita tersebut?",
                 options: [
-                    "Menggunakan kunci jawaban tidak akan mengubah nilai ulangan yang didapat.[cite: 1]",
-                    "Nilai bagus yang diperoleh dengan cara curang tidak mencerminkan kemampuan yang sebenarnya.[cite: 1]",
-                    "Bu Sinta pasti akan mengetahui jika mereka menggunakan kunci jawaban tersebut.[cite: 1]",
-                    "Dimas akan merasa bersalah jika mereka menggunakan kunci jawaban itu.[cite: 1]"
+                    "Menggunakan kunci jawaban tidak akan mengubah nilai ulangan yang didapat.",
+                    "Nilai bagus yang diperoleh dengan cara curang tidak mencerminkan kemampuan yang sebenarnya.",
+                    "Bu Sinta pasti akan mengetahui jika mereka menggunakan kunci jawaban tersebut.",
+                    "Dimas akan merasa bersalah jika mereka menggunakan kunci jawaban itu."
                 ],
                 answer: 1,
-                pembahasan: "Kunci: B. Ungkapan tersebut bermakna bahwa nilai yang diperoleh secara curang bukan cerminan kemampuan sebenarnya, sehingga sesungguhnya hanya menipu diri sendiri. Opsi A, C, dan D tidak menangkap makna kias ungkapan tersebut secara tepat.[cite: 1]"
+                pembahasan: "Kunci: B. Ungkapan tersebut bermakna bahwa nilai yang diperoleh secara curang bukan cerminan kemampuan sebenarnya, sehingga sesungguhnya hanya menipu diri sendiri. Opsi A, C, dan D tidak menangkap makna kias ungkapan tersebut secara tepat."
             },
             {
                 id: 6, type: "PG",
-                stimulus: "Sama dengan wacana Cerpen sebelumnya. (Kunci Loker Nomor 12)[cite: 1]",
-                question: "Bagaimana watak tokoh Raka dapat disimpulkan berdasarkan keseluruhan cerita tersebut?[cite: 1]",
+                stimulus: "Sama dengan wacana Cerpen sebelumnya. (Kunci Loker Nomor 12)",
+                question: "Bagaimana watak tokoh Raka dapat disimpulkan berdasarkan keseluruhan cerita tersebut?",
                 options: [
-                    "Raka adalah anak yang cerdas sehingga tidak memerlukan kunci jawaban.[cite: 1]",
-                    "Raka adalah anak yang jujur dan berpegang pada prinsip meskipun sempat tergoda untuk berbuat curang.[cite: 1]",
-                    "Raka adalah anak yang penakut sehingga tidak berani menyimpan kunci jawaban.[cite: 1]",
-                    "Raka adalah anak yang patuh hanya karena takut dimarahi gurunya.[cite: 1]"
+                    "Raka adalah anak yang cerdas sehingga tidak memerlukan kunci jawaban.",
+                    "Raka adalah anak yang jujur dan berpegang pada prinsip meskipun sempat tergoda untuk berbuat curang.",
+                    "Raka adalah anak yang penakut sehingga tidak berani menyimpan kunci jawaban.",
+                    "Raka adalah anak yang patuh hanya karena takut dimarahi gurunya."
                 ],
                 answer: 1,
-                pembahasan: "Kunci: B. Sepanjang cerita, Raka digambarkan sempat tergoda (membayangkan nilai sempurna) namun akhirnya memilih mengembalikan flashdisk dan belajar sungguh-sungguh, menunjukkan watak jujur dan berprinsip. Opsi A, C, dan D tidak didukung oleh rangkaian peristiwa dalam cerita.[cite: 1]"
+                pembahasan: "Kunci: B. Sepanjang cerita, Raka digambarkan sempat tergoda (membayangkan nilai sempurna) namun akhirnya memilih mengembalikan flashdisk dan belajar sungguh-sungguh, menunjukkan watak jujur dan berprinsip. Opsi A, C, dan D tidak didukung oleh rangkaian peristiwa dalam cerita."
             },
             {
                 id: 7, type: "PG",
-                stimulus: "Sama dengan wacana Cerpen sebelumnya. (Kunci Loker Nomor 12)[cite: 1]",
-                question: "Manakah situasi kehidupan sehari-hari yang paling relevan dengan nilai yang ditunjukkan Raka dalam cerita tersebut?[cite: 1]",
+                stimulus: "Sama dengan wacana Cerpen sebelumnya. (Kunci Loker Nomor 12)",
+                question: "Manakah situasi kehidupan sehari-hari yang paling relevan dengan nilai yang ditunjukkan Raka dalam cerita tersebut?",
                 options: [
-                    "Seorang siswa menyalin tugas temannya karena tidak sempat mengerjakan sendiri.[cite: 1]",
-                    "Seorang siswa mengembalikan kelebihan uang kembalian yang salah diberikan oleh kasir.[cite: 1]",
-                    "Seorang siswa memilih untuk tidak masuk sekolah karena malas belajar.[cite: 1]",
-                    "Seorang siswa meminjam buku catatan teman tanpa izin untuk belajar.[cite: 1]"
+                    "Seorang siswa menyalin tugas temannya karena tidak sempat mengerjakan sendiri.",
+                    "Seorang siswa mengembalikan kelebihan uang kembalian yang salah diberikan oleh kasir.",
+                    "Seorang siswa memilih untuk tidak masuk sekolah karena malas belajar.",
+                    "Seorang siswa meminjam buku catatan teman tanpa izin untuk belajar."
                 ],
                 answer: 1,
-                pembahasan: "Kunci: B. Tindakan Raka mengembalikan sesuatu yang bukan haknya, meski bisa menguntungkan dirinya, sejalan dengan situasi mengembalikan kelebihan uang kembalian. Opsi A, C, dan D justru menggambarkan tindakan yang tidak jujur atau tidak bertanggung jawab.[cite: 1]"
+                pembahasan: "Kunci: B. Tindakan Raka mengembalikan sesuatu yang bukan haknya, meski bisa menguntungkan dirinya, sejalan dengan situasi mengembalikan kelebihan uang kembalian. Opsi A, C, dan D justru menggambarkan tindakan yang tidak jujur atau tidak bertanggung jawab."
             },
             {
                 id: 8, type: "TF",
-                stimulus: "Sama dengan wacana Cerpen sebelumnya. (Kunci Loker Nomor 12)[cite: 1]",
-                question: "Jika pada akhir cerita Raka memutuskan menggunakan kunci jawaban tersebut, bagaimana kemungkinan perubahan pesan moral cerita? Tentukan Benar atau Salah untuk setiap pernyataan berikut![cite: 1]",
+                stimulus: "Sama dengan wacana Cerpen sebelumnya. (Kunci Loker Nomor 12)",
+                question: "Jika pada akhir cerita Raka memutuskan menggunakan kunci jawaban tersebut, bagaimana kemungkinan perubahan pesan moral cerita? Tentukan Benar atau Salah untuk setiap pernyataan berikut!",
                 options: [
-                    "Pesan tentang pentingnya kejujuran dalam cerita akan hilang.[cite: 1]",
-                    "Cerita akan tetap mengajarkan nilai kejujuran meskipun Raka bertindak curang.[cite: 1]",
-                    "Pembaca berpotensi menganggap tindakan curang dapat dibenarkan demi hasil yang baik.[cite: 1]"
+                    "Pesan tentang pentingnya kejujuran dalam cerita akan hilang.",
+                    "Cerita akan tetap mengajarkan nilai kejujuran meskipun Raka bertindak curang.",
+                    "Pembaca berpotensi menganggap tindakan curang dapat dibenarkan demi hasil yang baik."
                 ],
-                answer: [true, false, true], // Array of booleans corresponding to T/F
-                pembahasan: "Kunci Jawaban: Benar, Salah, Benar. Jika Raka menggunakan kunci jawaban, pesan tentang kejujuran akan hilang atau bahkan berbalik menjadi pembenaran terhadap kecurangan, sehingga pernyataan 1 dan 3 benar, sedangkan pernyataan 2 salah karena nilai kejujuran justru tidak lagi tergambar dalam cerita.[cite: 1]"
+                answer: [true, false, true],
+                pembahasan: "Kunci Jawaban: Benar, Salah, Benar. Jika Raka menggunakan kunci jawaban, pesan tentang kejujuran akan hilang atau bahkan berbalik menjadi pembenaran terhadap kecurangan, sehingga pernyataan 1 dan 3 benar, sedangkan pernyataan 2 salah karena nilai kejujuran justru tidak lagi tergambar dalam cerita."
             },
             {
                 id: 9, type: "PG",
-                stimulus: "<h3>Puisi: Nelayan Tua[cite: 1]</h3><p>Sejak subuh belum lagi terang<br>Ia dayung perahu menembus ombak<br>Wajahnya keriput dimakan garam<br>Tangannya kasar bekas jaring dan pukat<br><br>Laut bukan lagi sahabat yang ramah<br>Kadang murka, kadang memberi berkah<br>Namun ia tetap kembali tiap fajar<br>Membawa harap di dasar perahu tua<br><br>Anak-anaknya kini di kota jauh<br>Meninggalkan desa, mengejar mimpi baru<br>Ia tak pernah menahan langkah mereka<br>Hanya berdoa dari tepi dermaga<br><br>Ketika senja jingga membakar cakrawala<br>Ia duduk sendiri menambal jala<br>Laut yang dulu penuh ikan berlimpah<br>Kini kian sepi, entah sampai kapan<br><br><em>(puisi karya asli, ditulis untuk keperluan latihan)</em>[cite: 1]</p>",
-                question: "Apa yang digambarkan pada bait kedua puisi tersebut?[cite: 1]",
+                stimulus: "<h3>Puisi: Nelayan Tua</h3><p>Sejak subuh belum lagi terang<br>Ia dayung perahu menembus ombak<br>Wajahnya keriput dimakan garam<br>Tangannya kasar bekas jaring dan pukat<br><br>Laut bukan lagi sahabat yang ramah<br>Kadang murka, kadang memberi berkah<br>Namun ia tetap kembali tiap fajar<br>Membawa harap di dasar perahu tua<br><br>Anak-anaknya kini di kota jauh<br>Meninggalkan desa, mengejar mimpi baru<br>Ia tak pernah menahan langkah mereka<br>Hanya berdoa dari tepi dermaga<br><br>Ketika senja jingga membakar cakrawala<br>Ia duduk sendiri menambal jala<br>Laut yang dulu penuh ikan berlimpah<br>Kini kian sepi, entah sampai kapan<br><br><em>(puisi karya asli, ditulis untuk keperluan latihan)</em></p>",
+                question: "Apa yang digambarkan pada bait kedua puisi tersebut?",
                 options: [
-                    "Kekecewaan nelayan terhadap hasil tangkapannya.[cite: 1]",
-                    "Sikap nelayan yang tetap gigih menghadapi laut meski penuh tantangan.[cite: 1]",
-                    "Permintaan nelayan agar laut selalu ramah kepadanya.[cite: 1]",
-                    "Ketakutan nelayan terhadap ombak besar di laut.[cite: 1]"
+                    "Kekecewaan nelayan terhadap hasil tangkapannya.",
+                    "Sikap nelayan yang tetap gigih menghadapi laut meski penuh tantangan.",
+                    "Permintaan nelayan agar laut selalu ramah kepadanya.",
+                    "Ketakutan nelayan terhadap ombak besar di laut."
                 ],
                 answer: 1,
-                pembahasan: "Kunci: B. Bait kedua menggambarkan laut yang “kadang murka, kadang memberi berkah” namun nelayan “tetap kembali tiap fajar”, menunjukkan kegigihannya. Opsi A, C, dan D tidak sesuai dengan gambaran sikap tokoh pada bait tersebut.[cite: 1]"
+                pembahasan: "Kunci: B. Bait kedua menggambarkan laut yang “kadang murka, kadang memberi berkah” namun nelayan “tetap kembali tiap fajar”, menunjukkan kegigihannya. Opsi A, C, dan D tidak sesuai dengan gambaran sikap tokoh pada bait tersebut."
             },
             {
                 id: 10, type: "PG",
-                stimulus: "Sama dengan wacana Puisi sebelumnya. (Nelayan Tua)[cite: 1]",
-                question: "Apa makna kias dari larik ‘membawa harap di dasar perahu tua’ pada puisi tersebut?[cite: 1]",
+                stimulus: "Sama dengan wacana Puisi sebelumnya. (Nelayan Tua)",
+                question: "Apa makna kias dari larik ‘membawa harap di dasar perahu tua’ pada puisi tersebut?",
                 options: [
-                    "Nelayan menyembunyikan harapannya di dalam perahu miliknya.[cite: 1]",
-                    "Nelayan selalu berangkat melaut dengan penuh harapan meski usianya sudah tua.[cite: 1]",
-                    "Perahu tua tersebut memiliki nilai sejarah yang penting bagi nelayan.[cite: 1]",
-                    "Nelayan berharap mendapatkan perahu baru yang lebih layak.[cite: 1]"
+                    "Nelayan menyembunyikan harapannya di dalam perahu miliknya.",
+                    "Nelayan selalu berangkat melaut dengan penuh harapan meski usianya sudah tua.",
+                    "Perahu tua tersebut memiliki nilai sejarah yang penting bagi nelayan.",
+                    "Nelayan berharap mendapatkan perahu baru yang lebih layak."
                 ],
                 answer: 1,
-                pembahasan: "Kunci: B. Larik tersebut merupakan ungkapan kias yang menggambarkan harapan nelayan yang senantiasa dibawa setiap kali melaut, bukan makna harfiah tentang perahu. Opsi A, C, dan D memaknai larik tersebut secara harfiah, tidak sesuai dengan makna kiasnya.[cite: 1]"
+                pembahasan: "Kunci: B. Larik tersebut merupakan ungkapan kias yang menggambarkan harapan nelayan yang senantiasa dibawa setiap kali melaut, bukan makna harfiah tentang perahu. Opsi A, C, dan D memaknai larik tersebut secara harfiah, tidak sesuai dengan makna kiasnya."
             },
             {
                 id: 11, type: "PG",
-                stimulus: "Sama dengan wacana Puisi sebelumnya. (Nelayan Tua)[cite: 1]",
-                question: "Isu apa yang tersirat pada bait keempat puisi tersebut dan relevan dengan kondisi lingkungan saat ini?[cite: 1]",
+                stimulus: "Sama dengan wacana Puisi sebelumnya. (Nelayan Tua)",
+                question: "Isu apa yang tersirat pada bait keempat puisi tersebut dan relevan dengan kondisi lingkungan saat ini?",
                 options: [
-                    "Kurangnya minat generasi muda untuk menjadi nelayan.[cite: 1]",
-                    "Penurunan hasil tangkapan laut yang mengindikasikan masalah kelestarian sumber daya laut.[cite: 1]",
-                    "Kesulitan nelayan dalam memperbaiki peralatan tangkap ikan yang rusak.[cite: 1]",
-                    "Persaingan antarnelayan dalam memperebutkan wilayah tangkapan ikan.[cite: 1]"
+                    "Kurangnya minat generasi muda untuk menjadi nelayan.",
+                    "Penurunan hasil tangkapan laut yang mengindikasikan masalah kelestarian sumber daya laut.",
+                    "Kesulitan nelayan dalam memperbaiki peralatan tangkap ikan yang rusak.",
+                    "Persaingan antarnelayan dalam memperebutkan wilayah tangkapan ikan."
                 ],
                 answer: 1,
-                pembahasan: "Kunci: B. Larik “Laut yang dulu penuh ikan berlimpah, kini kian sepi” menyiratkan penurunan hasil laut yang berkaitan dengan isu kelestarian sumber daya laut, sebuah persoalan nyata di banyak wilayah pesisir. Opsi A, C, dan D tidak didukung oleh isi bait tersebut.[cite: 1]"
+                pembahasan: "Kunci: B. Larik “Laut yang dulu penuh ikan berlimpah, kini kian sepi” menyiratkan penurunan hasil laut yang berkaitan dengan isu kelestarian sumber daya laut, sebuah persoalan nyata di banyak wilayah pesisir. Opsi A, C, dan D tidak didukung oleh isi bait tersebut."
             },
             {
                 id: 12, type: "PG",
-                stimulus: "<h3>Teks Prosedur: Cara Membuat Pupuk Kompos dari Sampah Dapur[cite: 1]</h3><p>Sampah dapur seperti sisa sayuran dan kulit buah dapat diolah menjadi pupuk kompos yang bermanfaat bagi tanaman. Berikut langkah-langkah sederhana untuk membuatnya.[cite: 1]</p><p>Pertama, siapkan wadah berlubang atau komposter sebagai tempat pengomposan. Lubang-lubang kecil pada wadah berfungsi menjaga sirkulasi udara agar proses pembusukan berjalan optimal.[cite: 1]</p><p>Kedua, kumpulkan sampah organik seperti sisa sayuran, kulit buah, dan ampas kopi. Hindari memasukkan sampah yang mengandung minyak, daging, atau bahan yang sulit terurai.[cite: 1]</p><p>Ketiga, potong sampah organik menjadi bagian-bagian kecil agar proses penguraian berlangsung lebih cepat. Masukkan potongan tersebut ke dalam wadah komposter secara berlapis dengan tanah atau daun kering.[cite: 1]</p><p>Keempat, aduk campuran tersebut setiap dua atau tiga hari sekali menggunakan alat pengaduk. Pengadukan ini penting untuk menjaga kelembapan dan memastikan oksigen tercampur merata.[cite: 1]</p><p>Kelima, diamkan campuran selama tiga hingga empat minggu hingga berubah warna menjadi cokelat kehitaman dan tidak berbau menyengat. Kompos yang sudah matang siap digunakan sebagai pupuk untuk tanaman di kebun maupun pot.[cite: 1]</p>",
-                question: "Apa fungsi pengadukan campuran kompos yang dilakukan setiap dua atau tiga hari sekali berdasarkan teks tersebut?[cite: 1]",
+                stimulus: "<h3>Teks Prosedur: Cara Membuat Pupuk Kompos dari Sampah Dapur</h3><p>Sampah dapur seperti sisa sayuran dan kulit buah dapat diolah menjadi pupuk kompos yang bermanfaat bagi tanaman. Berikut langkah-langkah sederhana untuk membuatnya.</p><p>Pertama, siapkan wadah berlubang atau komposter sebagai tempat pengomposan. Lubang-lubang kecil pada wadah berfungsi menjaga sirkulasi udara agar proses pembusukan berjalan optimal.</p><p>Kedua, kumpulkan sampah organik seperti sisa sayuran, kulit buah, dan ampas kopi. Hindari memasukkan sampah yang mengandung minyak, daging, atau bahan yang sulit terurai.</p><p>Ketiga, potong sampah organik menjadi bagian-bagian kecil agar proses penguraian berlangsung lebih cepat. Masukkan potongan tersebut ke dalam wadah komposter secara berlapis dengan tanah atau daun kering.</p><p>Keempat, aduk campuran tersebut setiap dua atau tiga hari sekali menggunakan alat pengaduk. Pengadukan ini penting untuk menjaga kelembapan dan memastikan oksigen tercampur merata.</p><p>Kelima, diamkan campuran selama tiga hingga empat minggu hingga berubah warna menjadi cokelat kehitaman dan tidak berbau menyengat. Kompos yang sudah matang siap digunakan sebagai pupuk untuk tanaman di kebun maupun pot.</p>",
+                question: "Apa fungsi pengadukan campuran kompos yang dilakukan setiap dua atau tiga hari sekali berdasarkan teks tersebut?",
                 options: [
-                    "Mempercepat perubahan warna kompos menjadi cokelat kehitaman.[cite: 1]",
-                    "Menjaga kelembapan dan memastikan oksigen tercampur merata dalam kompos.[cite: 1]",
-                    "Mengurangi bau menyengat yang dihasilkan sampah organik.[cite: 1]",
-                    "Memisahkan sampah organik yang belum terurai sempurna.[cite: 1]"
+                    "Mempercepat perubahan warna kompos menjadi cokelat kehitaman.",
+                    "Menjaga kelembapan dan memastikan oksigen tercampur merata dalam kompos.",
+                    "Mengurangi bau menyengat yang dihasilkan sampah organik.",
+                    "Memisahkan sampah organik yang belum terurai sempurna."
                 ],
                 answer: 1,
-                pembahasan: "Kunci: B. Teks menyebutkan secara tersurat bahwa pengadukan “penting untuk menjaga kelembapan dan memastikan oksigen tercampur merata”. Opsi A, C, dan D merupakan hasil akhir proses pengomposan, bukan fungsi langsung dari pengadukan.[cite: 1]"
+                pembahasan: "Kunci: B. Teks menyebutkan secara tersurat bahwa pengadukan “penting untuk menjaga kelembapan dan memastikan oksigen tercampur merata”. Opsi A, C, dan D merupakan hasil akhir proses pengomposan, bukan fungsi langsung dari pengadukan."
             }
         ];
 
@@ -381,7 +418,7 @@
         let examTimerInterval = null;
         let timeLeft = 90 * 60; // 90 menit
 
-        // --- NAVIGASI ---
+        // --- NAVIGASI HALAMAN UTAMA ---
         function nav(targetId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById(targetId).classList.add('active');
@@ -410,7 +447,7 @@
             if(token !== tokenGuru && token !== "TOKEN123") return alert('Token tidak valid!');
             
             currSiswa = { nama, kelas, token };
-            document.getElementById('info-siswa').innerText = `Siswa: ${nama} | Kelas: ${kelas}`;
+            document.getElementById('info-siswa').innerText = `${nama}`;
             
             resetExamState();
             nav('view-exam');
@@ -424,7 +461,7 @@
             currSiswa = null;
         }
 
-        // --- LOGIKA UJIAN ---
+        // --- LOGIKA UJIAN & TIMER ---
         function resetExamState() {
             currentSoalIndex = 0;
             answers = new Array(dbSoal.length).fill(null);
@@ -448,13 +485,62 @@
             }, 1000);
         }
 
+        // --- LOGIKA DRAWER NAVIGASI ---
+        let isDrawerOpen = false;
+        function toggleNavDrawer() {
+            const drawer = document.getElementById('nav-drawer');
+            const overlay = document.getElementById('nav-overlay');
+            isDrawerOpen = !isDrawerOpen;
+            
+            if(isDrawerOpen) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // --- FUNGSI RENDER NAVIGASI (GRID) ---
+        function renderNav() {
+            const navContainer = document.getElementById('nav-nomor');
+            navContainer.innerHTML = '';
+            for(let i = 0; i < dbSoal.length; i++) {
+                let isFilled = false;
+                
+                // Mendeteksi apakah jawaban sudah terisi
+                if(dbSoal[i].type === 'PG' && answers[i] !== null) isFilled = true;
+                if(dbSoal[i].type === 'TF' && answers[i] && !answers[i].includes(null)) isFilled = true;
+
+                // Pewarnaan dasar (Sudah dijawab vs Belum)
+                let color = isFilled 
+                    ? 'bg-green-500 text-white border-green-600' 
+                    : 'bg-gray-100 text-gray-600 border-gray-300 hover:bg-gray-200';
+                
+                // Pewarnaan khusus jika ini adalah soal yang sedang aktif
+                if(i === currentSoalIndex) {
+                    color = isFilled 
+                        ? 'bg-green-600 text-white ring-2 ring-primary ring-offset-2' 
+                        : 'bg-white text-primary ring-2 ring-primary border-primary font-bold';
+                }
+                
+                navContainer.innerHTML += `
+                    <button onclick="currentSoalIndex = ${i}; renderSoal(); toggleNavDrawer();" 
+                            class="w-full aspect-square flex items-center justify-center rounded-md border text-sm transition-all shadow-sm ${color}">
+                        ${i+1}
+                    </button>
+                `;
+            }
+        }
+
+        // --- FUNGSI RENDER SOAL ---
         function renderSoal() {
             const soal = dbSoal[currentSoalIndex];
             
-            // Wacana
+            // Render Wacana
             document.getElementById('exam-wacana').innerHTML = `<div class="prose max-w-none text-gray-800">${soal.stimulus}</div>`;
             
-            // Soal dan Opsi
+            // Render Soal dan Opsi
             let htmlSoal = `<h3 class="font-bold mb-4 text-lg">Soal No. ${currentSoalIndex + 1}</h3>`;
             htmlSoal += `<p class="mb-4">${soal.question}</p>`;
             
@@ -478,7 +564,6 @@
                         <th class="p-2 border w-16 text-center">Salah</th>
                     </tr>`;
                 
-                // Initialize answers for TF if empty
                 if(!answers[currentSoalIndex]) answers[currentSoalIndex] = new Array(soal.options.length).fill(null);
                 
                 soal.options.forEach((opt, idx) => {
@@ -496,13 +581,20 @@
             }
 
             document.getElementById('exam-soal').innerHTML = htmlSoal;
+            
+            // Update Teks Header Ujian
+            document.getElementById('hdr-soal-no').innerText = currentSoalIndex + 1;
+            document.getElementById('hdr-soal-total').innerText = dbSoal.length;
+            if(currSiswa) document.getElementById('info-siswa').innerText = currSiswa.nama;
+            
             renderNav();
         }
 
+        // --- PENYIMPANAN JAWABAN SEMENTARA ---
         function saveAnswer(val) {
             answers[currentSoalIndex] = val;
             renderNav();
-            renderSoal(); // re-render to update selected styling
+            renderSoal(); // re-render untuk update highlight opsi terpilih
         }
 
         function saveAnswerTF(idx, val) {
@@ -510,31 +602,14 @@
             renderNav();
         }
 
-        function renderNav() {
-            const navContainer = document.getElementById('nav-nomor');
-            navContainer.innerHTML = '';
-            for(let i = 0; i < dbSoal.length; i++) {
-                let isFilled = false;
-                if(dbSoal[i].type === 'PG' && answers[i] !== null) isFilled = true;
-                if(dbSoal[i].type === 'TF' && answers[i] && !answers[i].includes(null)) isFilled = true;
-
-                let color = isFilled ? 'bg-green-500 text-white' : 'bg-white border text-gray-700';
-                if(i === currentSoalIndex) color = 'border-2 border-primary ring-2 ring-accent';
-                
-                navContainer.innerHTML += `
-                    <button onclick="currentSoalIndex = ${i}; renderSoal();" 
-                            class="min-w-[40px] h-10 rounded-md font-semibold m-1 ${color}">
-                        ${i+1}
-                    </button>
-                `;
-            }
-        }
-
+        // --- NAVIGASI SOAL BAWAH ---
         function prevSoal() { if(currentSoalIndex > 0) { currentSoalIndex--; renderSoal(); } }
         function nextSoal() { if(currentSoalIndex < dbSoal.length - 1) { currentSoalIndex++; renderSoal(); } }
 
+        // --- PENYELESAIAN UJIAN & SKOR ---
         function selesaiUjian() {
-            if(confirm("Yakin ingin menyelesaikan ujian?")) {
+            if(confirm("Yakin ingin mengumpulkan dan mengakhiri ujian?")) {
+                if(isDrawerOpen) toggleNavDrawer();
                 clearInterval(examTimerInterval);
                 hitungSkor();
             }
@@ -546,7 +621,7 @@
                 if(dbSoal[i].type === 'PG') {
                     if(answers[i] === dbSoal[i].answer) benar++;
                 } else if(dbSoal[i].type === 'TF') {
-                    // Cek jika array boolean cocok
+                    // Cek kelengkapan & kebenaran array boolean
                     if(answers[i] && JSON.stringify(answers[i]) === JSON.stringify(dbSoal[i].answer)) benar++;
                 }
             }
@@ -562,7 +637,7 @@
                 document.getElementById('btn-pembahasan-container').classList.add('hidden');
             }
 
-            // Simpan ke Rekap Guru (Dummy)
+            // Simpan Data ke Rekap Guru (Real-time di memori JS)
             let row = `<tr>
                 <td class="p-3 border-b">${currSiswa.nama}</td>
                 <td class="p-3 border-b">${currSiswa.kelas}</td>
@@ -579,10 +654,10 @@
             let html = '';
             dbSoal.forEach((soal, i) => {
                 html += `<div class="p-4 border rounded-lg bg-gray-50 mb-4">
-                    <h3 class="font-bold mb-2">Soal No. ${i+1}</h3>
-                    <p class="mb-2 italic text-sm text-gray-600">${soal.question}</p>
-                    <div class="bg-white p-3 border-l-4 border-accent mt-2">
-                        <p class="text-sm">${soal.pembahasan}</p>
+                    <h3 class="font-bold mb-2 text-primary">Soal No. ${i+1}</h3>
+                    <p class="mb-2 italic text-sm text-gray-700">${soal.question}</p>
+                    <div class="bg-white p-3 border-l-4 border-accent mt-2 shadow-sm">
+                        <p class="text-sm font-semibold">${soal.pembahasan}</p>
                     </div>
                 </div>`;
             });
@@ -596,15 +671,15 @@
             //     method: 'POST',
             //     body: JSON.stringify({ nama, kelas, nilai })
             // }).then(res => console.log('Data terkirim')).catch(err => console.error(err));
-            console.log(`[MOCK] Data ${nama} - Nilai ${nilai} disiapkan untuk dikirim ke Google Sheets.`);
+            console.log(`[MOCK] Data ${nama} - Nilai ${nilai} berhasil disiapkan untuk dikirim ke Google Sheets.`);
         }
 
-        // --- FITUR ANTI-CURANG ---
+        // --- FITUR ANTI-CURANG (TAB-LOCK) ---
         document.addEventListener('visibilitychange', () => {
             if (document.hidden && currentView === 'view-exam') {
                 violations++;
                 if(violations === 1 || violations === 2) {
-                    alert(`PERINGATAN! Anda keluar dari layar ujian. Pelanggaran: ${violations}/3.`);
+                    alert(`PERINGATAN! Anda terdeteksi keluar dari layar ujian atau berpindah tab/aplikasi.\n\nPelanggaran: ${violations}/3.`);
                 } else if (violations >= 3) {
                     freezeExam();
                 }
@@ -613,7 +688,7 @@
 
         function freezeExam() {
             document.getElementById('freeze-overlay').style.display = 'flex';
-            let fTime = 300;
+            let fTime = 300; // 5 Menit
             document.getElementById('freeze-timer').innerText = fTime;
             
             freezeTimerInterval = setInterval(() => {
@@ -622,32 +697,33 @@
                 if(fTime <= 0) {
                     clearInterval(freezeTimerInterval);
                     document.getElementById('freeze-overlay').style.display = 'none';
-                    violations = 0; // Reset pelanggaran jika sudah dihukum
+                    violations = 0; // Reset pelanggaran jika sudah menjalani hukuman
                 }
             }, 1000);
         }
 
-        // --- FITUR GURU ---
+        // --- FITUR GURU (EXPORT) ---
         function exportExcel() {
-            alert('Fitur Export Excel (Mock) dijalankan. Pada implementasi nyata, akan mengunduh file .xls berdasarkan tabel rekap.');
+            alert('Fitur Export Excel dijalankan. (Pada tahap produksi, fungsi ini akan menghasilkan file .xls yang diunduh langsung oleh browser).');
         }
 
-        // --- EASTER EGG ---
+        // --- FITUR EASTER EGG (SUPER ADMIN) ---
         let easterCount = 0;
         let easterTimer;
         document.getElementById('dev-name').addEventListener('click', () => {
             easterCount++;
             clearTimeout(easterTimer);
             if(easterCount === 5) {
-                let pwd = prompt("Super Admin Access. Password?");
+                let pwd = prompt("Super Admin Access. Masukkan Password Rahasia:");
                 if(pwd === "DEVIPRO") {
-                    alert("Welcome Super Admin!");
-                    // Tambahkan logika Super Admin di sini
+                    alert("Welcome Super Admin! Semua akses ruang guru terbuka.");
+                    // Anda dapat menyuntikkan logika untuk melihat semua data lintas-token di sini
                 } else {
                     alert("Akses ditolak.");
                 }
                 easterCount = 0;
             }
+            // Reset ketukan jika jeda lebih dari 2 detik
             easterTimer = setTimeout(() => { easterCount = 0; }, 2000);
         });
 
