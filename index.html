@@ -52,6 +52,42 @@
 
     <div id="cbt-app-root" class="text-gray-800">
 
+        <!-- MODAL SUPERADMIN TERSEMBUNYI -->
+        <div id="modal-superadmin" class="hidden fixed inset-0 bg-black/80 z-[999999] flex items-center justify-center p-4 backdrop-blur-sm">
+            <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm border-t-4 border-red-800">
+                <h2 class="text-xl font-black text-primary mb-1 uppercase tracking-wider">Akses Superadmin</h2>
+                <p class="text-xs text-gray-500 mb-4 font-bold">Pendaftaran Ruang Guru Baru</p>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase">Kunci Master</label>
+                        <input type="password" id="input-master-key" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-bold focus:border-primary focus:outline-none" placeholder="Masukkan Kunci Master...">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase">Nama Guru Baru</label>
+                        <input type="text" id="input-new-guru" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-bold focus:border-primary focus:outline-none" placeholder="Ketik nama guru...">
+                    </div>
+                    <div class="flex gap-2">
+                        <div class="w-1/2">
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase">Token (Custom)</label>
+                            <input type="text" id="input-new-token" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-bold uppercase focus:border-primary focus:outline-none" placeholder="Contoh: PRODEV">
+                        </div>
+                        <div class="w-1/2">
+                            <label class="block text-[10px] font-bold text-gray-500 uppercase">PIN Guru</label>
+                            <input type="password" id="input-new-pin" class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg text-sm font-bold focus:border-primary focus:outline-none" placeholder="6 Digit Angka">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="superadmin-notif" class="mt-3 text-xs font-bold text-center hidden p-2 rounded-lg"></div>
+
+                <div class="mt-5 flex gap-2">
+                    <button onclick="tutupSuperadmin()" class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 rounded-lg text-sm transition-all">Batal</button>
+                    <button onclick="daftarGuruBaru()" id="btn-daftar-guru" class="w-1/2 bg-primary hover:bg-red-900 text-white font-bold py-2 rounded-lg text-sm transition-all">Daftarkan</button>
+                </div>
+            </div>
+        </div>
+
         <!-- OVERLAY BEKU 5 MENIT -->
         <div id="freeze-overlay" class="hidden fixed inset-0 bg-black/95 z-[999999] flex flex-col items-center justify-center text-white p-6 backdrop-blur-md select-none">
             <h1 class="text-4xl md:text-5xl font-extrabold text-red-500 mb-4 tracking-widest uppercase text-center">UJIAN DIBEKUKAN</h1>
@@ -92,23 +128,24 @@
                 </div>
             </div>
 
-            <div class="mt-4 mb-2 text-center select-none shrink-0">
-                <p class="text-xs text-gray-400 font-medium">Dikembangkan oleh</p>
-                <p class="font-allura text-2xl text-primary cursor-pointer hover:opacity-80 transition-opacity" onclick="handleAdminClick()">Susana Devi Anggasari, S.Pd.</p>
+            <!-- AREA TAP RAHASIA -->
+            <div class="mt-4 mb-2 text-center select-none shrink-0" onclick="tapRahasia()">
+                <p class="text-xs text-gray-400 font-medium cursor-default">Dikembangkan oleh</p>
+                <p class="font-allura text-2xl text-primary cursor-default">Susana Devi Anggasari, S.Pd.</p>
             </div>
         </div>
 
-        <!-- 2. LOGIN GURU (NAMA & PIN) -->
+        <!-- 2. LOGIN GURU -->
         <div id="page-guru-auth" class="page flex-col items-center justify-center p-4">
             <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm">
                 <h2 class="text-2xl font-bold text-primary mb-6 text-center">Akses Dasbor Guru</h2>
                 <div class="mb-4">
                     <label class="block text-sm font-bold text-gray-700 mb-1">Nama Guru</label>
-                    <input type="text" id="input-nama-guru" class="w-full px-4 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-800" placeholder="Ketik nama Anda...">
+                    <input type="text" id="input-nama-guru" class="w-full px-4 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-800" placeholder="Ketik nama terdaftar...">
                 </div>
                 <div class="mb-6">
                     <label class="block text-sm font-bold text-gray-700 mb-1">PIN Akses</label>
-                    <input type="password" id="input-pin-guru" class="w-full px-4 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-800" placeholder="Ketik PIN (1234)">
+                    <input type="password" id="input-pin-guru" class="w-full px-4 py-2 border border-gray-300 rounded-xl bg-gray-50 text-gray-800" placeholder="Ketik PIN Guru">
                 </div>
                 <button onclick="loginGuru()" class="w-full bg-primary hover:bg-red-900 text-white font-bold py-2.5 rounded-xl transition-all shadow-md">
                     Buka Dasbor
@@ -136,17 +173,11 @@
                     <!-- Pengaturan Token Guru -->
                     <div class="bg-gray-800 rounded-xl p-4 border border-gray-700 flex-1 relative overflow-hidden">
                         <div class="relative z-10">
-                            <p class="text-gray-400 text-xs font-bold uppercase mb-1">Token Ujian Guru (Bisa Buat Sendiri)</p>
+                            <p class="text-gray-400 text-xs font-bold uppercase mb-1">Token Ujian Guru</p>
                             <div class="flex gap-2 items-center mt-2">
-                                <input type="text" id="input-token-custom" class="bg-gray-900 border border-gray-600 text-yellow-400 font-mono font-black text-2xl px-4 py-2 rounded-xl uppercase tracking-wider w-full focus:outline-none focus:border-yellow-500" placeholder="PRODEV">
-                                <button onclick="acakTokenGuru()" class="bg-gray-700 hover:bg-gray-600 text-white text-xs px-3 py-3 rounded-xl font-bold transition-all border border-gray-600 shrink-0">
-                                    Acak
-                                </button>
+                                <input type="text" id="input-token-custom" class="bg-gray-900 border border-gray-600 text-yellow-400 font-mono font-black text-2xl px-4 py-2 rounded-xl uppercase tracking-wider w-full focus:outline-none focus:border-yellow-500" readonly>
                             </div>
-                            <button onclick="simpanTokenGuru()" class="mt-3 w-full bg-secondary hover:bg-yellow-600 text-white text-xs py-2.5 rounded-xl font-extrabold transition-all shadow-md">
-                                Simpan & Aktifkan Token Ini
-                            </button>
-                            <p class="text-[10px] text-gray-400 mt-1.5 italic">*Token tersimpan dan bisa digunakan siswa kapan saja selama belum diganti.</p>
+                            <p class="text-xs text-gray-400 mt-2 italic">*Token ini terhubung dengan Spreadsheet. Berikan token ini ke siswa.</p>
                         </div>
                     </div>
                     
@@ -312,9 +343,13 @@
     </div>
 
     <script>
-        const APP_VERSION = "v3.1.0-PERMANENT-TOKEN";
+        const APP_VERSION = "v4.0.0-SECURITY-EDITION";
+        
+        // --- KONFIGURASI SERVER ---
+        const SECRET_APP_TOKEN = "MISI RAHASIA DEVI"; 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYYV2SkA6LjGFfFXpNc5I5XpBheRyjmmCIJu95WNWlZJ2Edln8EEMfVB_yrM1DGZIBRA/exec";
         
+        // --- KONFIGURASI FIREBASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyAozoqP9tSqDj8ZL2gCiYWyggmAtZ45qPA",
             authDomain: "siap-tka-3.firebaseapp.com",
@@ -328,6 +363,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // Variabel Global
         let listSoal = [];
         let jawabanSiswa = {};
         let currentIndex = 0;
@@ -343,10 +379,11 @@
         
         let currentSessionId = "";
         let currentSiswa = { nama: "", kelas: "", sekolah: "", tokenGuru: "" };
-        let activeAdminToken = "PRODEV";
+        let activeAdminToken = "";
         let namaGuruAktif = "Guru";
         let realtimeListener = null;
 
+        // UI Listeners
         document.getElementById('input-siswa-sekolah').addEventListener('change', function() {
             const inputLainnya = document.getElementById('input-sekolah-lainnya');
             if(this.value === 'Lainnya') {
@@ -377,63 +414,150 @@
             }
         }
 
-        /* GURU & TOKEN CUSTOM PERMANEN */
-        let clickCount = 0;
-        function handleAdminClick() {
-            clickCount++;
-            if(clickCount >= 3) {
-                navigate('page-guru-auth');
-                clickCount = 0;
-            }
-        }
+        // --- SISTEM TAP RAHASIA (SUPERADMIN) ---
+        let tapCount = 0;
+        let tapTimeout;
 
-        function loginGuru() {
-            const pin = document.getElementById('input-pin-guru').value;
-            const nama = document.getElementById('input-nama-guru').value.trim() || "Guru";
+        function tapRahasia() {
+            tapCount++;
+            clearTimeout(tapTimeout);
             
-            if(pin === "1234" || pin === "123456") {
-                namaGuruAktif = nama;
-                document.getElementById('display-nama-guru').innerText = `Halo, ${nama}`;
-                document.getElementById('input-token-custom').value = activeAdminToken;
-                navigate('page-dashboard');
-                simpanTokenGuru(false);
-                muatRealtimeDashboard();
-            } else {
-                alert("PIN Salah! Akses ditolak.");
+            tapTimeout = setTimeout(() => { tapCount = 0; }, 1500);
+
+            if(tapCount >= 7) {
+                tapCount = 0;
+                document.getElementById('input-master-key').value = "";
+                document.getElementById('input-new-guru').value = "";
+                document.getElementById('input-new-token').value = "";
+                document.getElementById('input-new-pin').value = "";
+                document.getElementById('superadmin-notif').className = "hidden";
+                document.getElementById('modal-superadmin').classList.remove('hidden');
             }
         }
 
-        function acakTokenGuru() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let token = '';
-            for (let i = 0; i < 6; i++) {
-                token += chars.charAt(Math.floor(Math.random() * chars.length));
+        function tutupSuperadmin() {
+            document.getElementById('modal-superadmin').classList.add('hidden');
+        }
+
+        async function daftarGuruBaru() {
+            const masterKey = document.getElementById('input-master-key').value;
+            const namaGuru = document.getElementById('input-new-guru').value.trim();
+            const tokenBaru = document.getElementById('input-new-token').value.trim().toUpperCase();
+            const pinGuru = document.getElementById('input-new-pin').value;
+            const btn = document.getElementById('btn-daftar-guru');
+            const notif = document.getElementById('superadmin-notif');
+
+            if(!masterKey || !namaGuru || !tokenBaru || !pinGuru) {
+                tampilkanNotif(notif, "Lengkapi semua data!", "error");
+                return;
             }
-            document.getElementById('input-token-custom').value = token;
+
+            btn.disabled = true;
+            btn.innerText = "Memproses...";
+
+            const payload = new URLSearchParams({
+                tokenAPI: SECRET_APP_TOKEN,
+                aksi: "daftarGuru",
+                masterKey: masterKey,
+                namaGuru: namaGuru,
+                tokenBaru: tokenBaru,
+                pinGuru: pinGuru
+            });
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: payload
+                });
+                const result = await response.json();
+
+                if(result.status === "sukses") {
+                    tampilkanNotif(notif, result.pesan, "success");
+                    setTimeout(() => { tutupSuperadmin(); }, 2000);
+                } else {
+                    tampilkanNotif(notif, result.pesan, "error");
+                }
+            } catch (error) {
+                tampilkanNotif(notif, "Koneksi ke server gagal!", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Daftarkan";
+            }
+        }
+
+        function tampilkanNotif(element, pesan, tipe) {
+            element.innerText = pesan;
+            element.className = `mt-3 text-xs font-bold text-center p-2 rounded-lg ${tipe === 'success' ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-red-100 text-red-700 border border-red-200'}`;
+            element.classList.remove('hidden');
+        }
+
+        // --- SISTEM LOGIN GURU (SERVER SIDE) ---
+        async function loginGuru() {
+            const namaInput = document.getElementById('input-nama-guru').value.trim();
+            const pinInput = document.getElementById('input-pin-guru').value.trim();
+            
+            const btn = document.querySelector('#page-guru-auth button[onclick="loginGuru()"]');
+            const teksAsli = btn.innerText;
+            
+            if(!namaInput || !pinInput) {
+                alert("Nama Guru dan PIN tidak boleh kosong!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `Memeriksa Data... <svg class="animate-spin inline w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+
+            const payload = new URLSearchParams({
+                tokenAPI: SECRET_APP_TOKEN,
+                aksi: "loginGuru",
+                namaGuru: namaInput,
+                pinGuru: pinInput
+            });
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: payload
+                });
+                
+                const result = await response.json();
+
+                if (result.status === "sukses") {
+                    namaGuruAktif = result.nama;
+                    activeAdminToken = result.tokenGuru;
+                    
+                    document.getElementById('display-nama-guru').innerText = `Halo, ${namaGuruAktif}`;
+                    document.getElementById('input-token-custom').value = activeAdminToken;
+                    
+                    navigate('page-dashboard');
+                    simpanTokenGuru(false); // Simpan status token ke Firebase agar siswa bisa masuk
+                    muatRealtimeDashboard();
+                } else {
+                    alert(result.pesan);
+                }
+            } catch (error) {
+                alert("Gagal terhubung ke server. Periksa koneksi internet Anda.");
+                console.error("Error Login Guru:", error);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = teksAsli;
+            }
         }
 
         function simpanTokenGuru(notif = true) {
-            const tokenInput = document.getElementById('input-token-custom').value.trim().toUpperCase();
-            if(!tokenInput) {
-                alert("Token tidak boleh kosong!");
-                return;
-            }
-            activeAdminToken = tokenInput;
-            
-            // Simpan ke Firebase tanpa pernah menghapusnya saat logout
-            db.ref('tokens/' + tokenInput).set({
+            if(!activeAdminToken) return;
+            // Simpan ke Firebase agar klien siswa bisa langsung memverifikasi
+            db.ref('tokens/' + activeAdminToken).set({
                 aktif: true,
                 guru: namaGuruAktif,
                 dibuat: new Date().getTime()
             });
-
             if(notif) {
-                alert(`Token "${tokenInput}" berhasil disimpan & diaktifkan! Siswa bisa menggunakannya kapan saja.`);
+                alert(`Token berhasil disinkronisasi dengan sistem Live.`);
             }
         }
 
         function logoutGuru() {
-            // Token TIDAK dihapus agar tetap bisa digunakan kapan saja oleh siswa
             navigate('page-landing');
         }
 
@@ -483,7 +607,7 @@
             });
         }
 
-        /* LOGIN SISWA */
+        // --- SISTEM LOGIN SISWA & UJIAN ---
         async function loginSiswa() {
             const btn = document.getElementById('btn-masuk-ujian');
             const errDiv = document.getElementById('login-error');
@@ -505,14 +629,19 @@
             errDiv.classList.add('hidden');
 
             try {
-                const tokenPromise = db.ref('tokens/' + token).once('value');
-                const timeoutPromise = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error("TOKEN TIDAK DITEMUKAN! Pastikan Guru sudah menyimpan token tersebut di Dasbor.")), 4000)
-                );
+                const payloadCek = new URLSearchParams({
+                    tokenAPI: SECRET_APP_TOKEN,
+                    aksi: "cekTokenGuru",
+                    tokenGuru: token
+                });
+                
+                const responseCek = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: payloadCek
+                });
+                const resultCek = await responseCek.json();
 
-                const tokenRef = await Promise.race([tokenPromise, timeoutPromise]);
-
-                if(!tokenRef.exists() || !tokenRef.val().aktif) {
+                if (resultCek.status !== "sukses") {
                     throw new Error("TOKEN TIDAK VALID! Periksa kembali atau minta token aktif ke Guru.");
                 }
 
@@ -521,11 +650,11 @@
                 
                 btn.innerHTML = `Mengunduh Soal...`;
                 
-                const res = await fetch(`${SCRIPT_URL}?action=getSoal`);
-                const data = await res.json();
+                const resSoal = await fetch(`${SCRIPT_URL}?action=getSoal`);
+                const dataSoal = await resSoal.json();
                 
-                if(data.status === 'success') {
-                    listSoal = data.data.sort(() => Math.random() - 0.5);
+                if(dataSoal.status === 'success') {
+                    listSoal = dataSoal.data.sort(() => Math.random() - 0.5);
                     mulaiSesiFirebase();
                     
                     document.getElementById('exam-siswa-info').innerText = `${nama} - ${kelas}`;
@@ -764,30 +893,27 @@
                 </div>
             `;
 
-            const payload = {
-                action: "submitJawaban",
+            const payload = new URLSearchParams({
+                tokenAPI: SECRET_APP_TOKEN,
+                aksi: "simpanNilai",
                 waktu: waktuMulai,
                 tokenGuru: currentSiswa.tokenGuru,
                 nama: currentSiswa.nama,
                 kelas: currentSiswa.kelas,
                 sekolah: currentSiswa.sekolah,
                 nilai: nilaiAkhir,
-                statusCurang: curangStatus,
-                jawaban: JSON.stringify(arrayJawabanDikirim)
-            };
+                curang: curangStatus
+            });
 
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams(payload)
+                    body: payload
                 });
                 
                 const result = await response.json();
                 
-                if(result.status === 'success') {
+                if(result.status === 'sukses') {
                     document.body.innerHTML = `
                         <div class="fixed inset-0 bg-bgcream z-[999999] flex flex-col items-center justify-center p-4">
                             <div class="bg-white p-8 rounded-3xl shadow-xl max-w-sm w-full text-center border-t-4 border-green-500">
@@ -801,7 +927,7 @@
                         </div>
                     `;
                 } else {
-                    throw new Error("Gagal menyimpan ke Spreadsheet.");
+                    throw new Error("Gagal menyimpan ke Spreadsheet: " + result.pesan);
                 }
 
             } catch (error) {
