@@ -67,8 +67,15 @@
 
   <!-- CONFIGURATION BACKEND SCRIPT -->
   <script>
-    // URL Web App Google Apps Script Anda
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBSlA4-UfHwHBN6OQmm4i8NlsF0FuXjSis422EXVVKcx-CZLGnGwjB5rMIfPYj6dQ1ig/exec";
+    // 1) Ganti SCRIPT_URL di bawah ini dengan URL Web App hasil deploy
+    //    Apps Script kamu (harus diakhiri "/exec").
+    // 2) API_TOKEN HARUS SAMA PERSIS dengan APP_SECRET_TOKEN di Code.gs.
+    const APP_CONFIG = {
+      SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzz7LolZFbe7CgHXOdgz7DzxcvkjGO1hnu1vxqczJ2XB3rjFGCegUTFZewZB-S92CHQDQ/exec",
+      API_TOKEN: "MISI RAHASIA DEVI"
+    };
+    // Dipertahankan untuk kompatibilitas, dipakai di seluruh fetch() di bawah.
+    const SCRIPT_URL = APP_CONFIG.SCRIPT_URL;
   </script>
 
   <!-- HEADER NAVIGASI (DIPAKAI SAAT UJIAN) -->
@@ -491,7 +498,7 @@
       try {
         const res = await fetch(SCRIPT_URL, {
           method: 'POST',
-          body: JSON.stringify({ action: 'getSoal', token: token })
+          body: JSON.stringify({ action: 'getSoal', token: token, tokenAPI: APP_CONFIG.API_TOKEN })
         }).then(r => r.json());
 
         Swal.close();
@@ -660,6 +667,7 @@
 
       const payload = {
         action: 'submitUjian',
+        tokenAPI: APP_CONFIG.API_TOKEN,
         tokenGuru: state.siswa.token,
         namaSiswa: state.siswa.nama,
         kelas: state.siswa.kelas,
@@ -733,7 +741,7 @@
       try {
         const res = await fetch(SCRIPT_URL, {
           method: 'POST',
-          body: JSON.stringify({ action: 'registerGuru', masterToken, nama, token, pin })
+          body: JSON.stringify({ action: 'registerGuru', tokenAPI: APP_CONFIG.API_TOKEN, masterToken, nama, token, pin })
         }).then(r => r.json());
 
         Swal.close();
@@ -759,7 +767,7 @@
       try {
         const res = await fetch(SCRIPT_URL, {
           method: 'POST',
-          body: JSON.stringify({ action: 'getHasilGuru', nama, pin })
+          body: JSON.stringify({ action: 'getHasilGuru', tokenAPI: APP_CONFIG.API_TOKEN, nama, pin })
         }).then(r => r.json());
 
         Swal.close();
