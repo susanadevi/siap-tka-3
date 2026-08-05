@@ -173,35 +173,36 @@
             </div>
         </div>
 
-        <!-- 5. RUANG UJIAN -->
-<div id="page-exam" class="page flex-col w-full bg-bgcream">
-    <div class="bg-primary text-white p-4 shadow-lg flex justify-between items-center shrink-0">
-        <div class="font-bold">SOAL NO. <span id="nomor-soal" class="text-xl text-yellow-300 ml-1">1</span></div>
-        <div id="exam-student-name" class="font-bold text-sm">Siswa</div>
-    </div>
-    <div class="p-4 sm:p-10 flex-1 overflow-y-auto flex flex-col items-center w-full">
-        <div class="w-full max-w-3xl flex-1 flex flex-col">
-            <!-- Wadah Pertanyaan dan Pilihan Ganda -->
-            <div id="tempat-soal" class="bg-white p-6 rounded-xl shadow-md mb-6 w-full text-left">
-                <!-- Soal akan dirender otomatis oleh JavaScript di sini -->
+        <!-- 5. RUANG UJIAN (BARU) -->
+        <div id="page-exam" class="page flex-col w-full bg-bgcream">
+            <div class="bg-primary text-white p-4 shadow-lg flex justify-between items-center shrink-0">
+                <div class="font-bold">SOAL NO. <span id="nomor-soal" class="text-xl text-yellow-300 ml-1">1</span></div>
+                <div id="exam-student-name" class="font-bold text-sm">Siswa</div>
             </div>
-            
-            <!-- Tombol Navigasi -->
-            <div class="flex justify-between items-center mt-auto pb-4">
-                <button id="btn-prev" onclick="soalSebelumnya()" class="bg-gray-500 text-white font-bold py-3 px-6 rounded-xl hover:bg-gray-600 transition-all shadow-md hidden">
-                    ← Sebelumnya
-                </button>
-                <div class="flex-1"></div> <!-- Spacer -->
-                <button id="btn-next" onclick="soalSelanjutnya()" class="bg-secondary text-white font-bold py-3 px-6 rounded-xl hover:bg-yellow-600 transition-all shadow-md">
-                    Selanjutnya →
-                </button>
-                <button id="btn-selesai" onclick="konfirmasiSelesai()" class="bg-green-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-green-700 transition-all shadow-md hidden">
-                    Kirim Jawaban & Selesai
-                </button>
+            <div class="p-4 sm:p-10 flex-1 overflow-y-auto flex flex-col items-center w-full">
+                <div class="w-full max-w-3xl flex-1 flex flex-col">
+                    <!-- Wadah Pertanyaan dan Pilihan Ganda -->
+                    <div id="tempat-soal" class="bg-white p-6 rounded-xl shadow-md mb-6 w-full text-left">
+                        <!-- Soal akan dirender otomatis oleh JavaScript di sini -->
+                        <p class="text-center text-gray-500 my-10">Mengunduh soal dari server...</p>
+                    </div>
+                    
+                    <!-- Tombol Navigasi -->
+                    <div class="flex justify-between items-center mt-auto pb-4">
+                        <button id="btn-prev" onclick="soalSebelumnya()" class="bg-gray-500 text-white font-bold py-3 px-6 rounded-xl hover:bg-gray-600 transition-all shadow-md hidden">
+                            ← Sebelumnya
+                        </button>
+                        <div class="flex-1"></div> <!-- Spacer -->
+                        <button id="btn-next" onclick="soalSelanjutnya()" class="bg-secondary text-white font-bold py-3 px-6 rounded-xl hover:bg-yellow-600 transition-all shadow-md hidden">
+                            Selanjutnya →
+                        </button>
+                        <button id="btn-selesai" onclick="konfirmasiSelesai()" class="bg-green-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-green-700 transition-all shadow-md hidden">
+                            Kirim Jawaban & Selesai
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
         <!-- 6. DASBOR GURU -->
         <div id="page-dashboard" class="page flex-col w-full bg-gray-900 text-white p-4 md:p-8">
@@ -243,10 +244,10 @@
     <script>
         // =========================================================================
         // PENGATURAN KREDENSIAL APLIKASI
-        // Semua konfigurasi rahasia disatukan di sini agar mudah dikelola
         // =========================================================================
         const APP_CONFIG = {
-            GAS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyApbEUWAadq_O7u346AwuCG-oeSTWJZ-C9gGekgr1hJp4TrenKXdyc-awED6gEd01VcQ/exec",
+            // URL Web App Deployment Apps Script Anda yang terbaru
+            GAS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbycGQVWGAaOVFwChtNxDsPWLsQSvYuEl_HrZFGobXmUEkuTn9U5Ku3JnWOsZnFm1I-jow/exec",
             APP_SECRET_TOKEN: "MISI RAHASIA DEVI",
             SUPERADMIN_PIN: "SusanaDevi2026"
         };
@@ -272,6 +273,11 @@
 
         let currentSessionId = null; let activeAdminToken = null; let activeAdminPin = null;
         let freezeInterval = null;
+
+        // Data CBT
+        let bankSoal = [];
+        let indeksSoalSekarang = 0;
+        let jawabanSiswa = [];
 
         function navigate(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -335,7 +341,160 @@
             });
         }
 
-        // 1. REGISTRASI GURU MANDIRI
+        // =========================================================================
+        // LOGIKA CBT: AMBIL SOAL & NAVIGASI UJIAN
+        // =========================================================================
+        async function muatSoalDariServer() {
+            try {
+                const res = await fetchServer({ aksi: 'getSoal' });
+                const hasil = await res.json();
+                
+                if (hasil.status === 'sukses' && hasil.data.length > 0) {
+                    bankSoal = hasil.data;
+                    jawabanSiswa = new Array(bankSoal.length).fill(null);
+                    indeksSoalSekarang = 0;
+                    renderSoal();
+                } else {
+                    document.getElementById('tempat-soal').innerHTML = `<p class="text-center text-red-500 my-10 font-bold">Gagal memuat soal: ${hasil.pesan || "Data kosong dari Google Sheets"}</p>`;
+                }
+            } catch (err) {
+                document.getElementById('tempat-soal').innerHTML = `<p class="text-center text-red-500 my-10 font-bold">Gangguan jaringan saat mengunduh soal.</p>`;
+                console.error(err);
+            }
+        }
+
+        function renderSoal() {
+            if(bankSoal.length === 0) return;
+
+            const wadah = document.getElementById('tempat-soal');
+            const data = bankSoal[indeksSoalSekarang];
+            
+            document.getElementById('nomor-soal').innerText = indeksSoalSekarang + 1;
+            
+            let html = ``;
+            // Tampilkan Teks/Wacana jika ada (tidak kosong)
+            if(data.teks && data.teks.trim() !== "") {
+                html += `<div class="p-4 mb-4 bg-gray-50 border-l-4 border-primary rounded text-sm text-gray-700 italic">${data.teks.replace(/\n/g, '<br>')}</div>`;
+            }
+            
+            html += `<h3 class="text-lg md:text-xl font-bold mb-6 text-gray-800 leading-relaxed">${data.soal}</h3>`;
+            html += `<div class="space-y-3">`;
+            
+            data.opsi.forEach((pilihan, index) => {
+                const isSelected = jawabanSiswa[indeksSoalSekarang] === index;
+                const labelHuruf = String.fromCharCode(65 + index); // A, B, C, D
+                
+                html += `
+                    <label class="flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all ${isSelected ? 'bg-[#F8F3EA] border-secondary' : 'border-gray-200 hover:bg-gray-50'}">
+                        <input type="radio" name="opsi" value="${index}" class="hidden" ${isSelected ? 'checked' : ''} onchange="simpanJawaban(${index})">
+                        <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center font-bold mr-4 ${isSelected ? 'border-secondary bg-secondary text-white' : 'border-gray-300 text-gray-500 shrink-0'}">${labelHuruf}</div>
+                        <span class="text-base font-medium text-gray-700">${pilihan}</span>
+                    </label>
+                `;
+            });
+            html += `</div>`;
+            wadah.innerHTML = html;
+
+            // Atur tombol navigasi
+            document.getElementById('btn-prev').style.display = indeksSoalSekarang > 0 ? "block" : "none";
+            if (indeksSoalSekarang === bankSoal.length - 1) {
+                document.getElementById('btn-next').style.display = "none";
+                document.getElementById('btn-selesai').style.display = "block";
+            } else {
+                document.getElementById('btn-next').style.display = "block";
+                document.getElementById('btn-selesai').style.display = "none";
+            }
+        }
+
+        function simpanJawaban(indexJawaban) {
+            jawabanSiswa[indeksSoalSekarang] = indexJawaban;
+            renderSoal(); 
+        }
+
+        function soalSelanjutnya() {
+            if(indeksSoalSekarang < bankSoal.length - 1) {
+                indeksSoalSekarang++;
+                renderSoal();
+            }
+        }
+
+        function soalSebelumnya() {
+            if(indeksSoalSekarang > 0) {
+                indeksSoalSekarang--;
+                renderSoal();
+            }
+        }
+
+        function konfirmasiSelesai() {
+            const belumDijawab = jawabanSiswa.filter(j => j === null).length;
+            let pesan = belumDijawab > 0 
+                ? `Masih ada ${belumDijawab} soal yang belum dijawab. Anda yakin ingin menyelesaikan ujian?`
+                : "Anda yakin ingin mengumpulkan jawaban sekarang?";
+                
+            if(confirm(pesan)) {
+                hitungDanKirimNilai();
+            }
+        }
+
+        async function hitungDanKirimNilai() {
+            const btn = document.getElementById('btn-selesai'); 
+            btn.innerText = "Mengirim..."; 
+            btn.disabled = true;
+            
+            // Kalkulasi nilai
+            let jumlahBenar = 0;
+            jawabanSiswa.forEach((jawaban, index) => {
+                if(jawaban === bankSoal[index].kunci) {
+                    jumlahBenar++;
+                }
+            });
+            
+            let nilaiAkhir = bankSoal.length > 0 ? Math.round((jumlahBenar / bankSoal.length) * 100) : 0;
+
+            try {
+                let statusCurang = "Tidak";
+                if(db && currentSessionId) {
+                    const snap = await db.ref('sessions/' + currentSessionId).once('value');
+                    if(snap.val() && snap.val().pelanggaran > 0) {
+                        statusCurang = `Ya (${snap.val().pelanggaran}x Pindah Tab)`;
+                    }
+                }
+                
+                const res = await fetchServer({ 
+                    aksi: 'simpanNilai', 
+                    tokenGuru: document.getElementById('siswa-token').value, 
+                    nama: document.getElementById('siswa-nama').value, 
+                    kelas: document.getElementById('siswa-kelas').value, 
+                    sekolah: document.getElementById('siswa-sekolah').value, 
+                    nilai: nilaiAkhir,
+                    curang: statusCurang 
+                });
+                
+                const hasil = await res.json();
+                
+                if (hasil.status === 'sukses') {
+                    alert(`Selesai! Nilai Anda: ${nilaiAkhir}. Jawaban berhasil disimpan.`); 
+                    if(db && currentSessionId) { 
+                        db.ref('sessions/' + currentSessionId).remove(); 
+                        window.onblur = null; 
+                    }
+                    bankSoal = [];
+                    jawabanSiswa = [];
+                    navigate('page-landing');
+                } else {
+                    alert(hasil.pesan);
+                }
+            } catch (err) { 
+                alert("Gangguan koneksi."); 
+            } finally { 
+                btn.innerText = "Kirim Jawaban & Selesai"; 
+                btn.disabled = false; 
+            }
+        }
+
+        // =========================================================================
+        // AKSI GURU
+        // =========================================================================
         async function handleDaftarGuru(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-daftar'); btn.innerText = "Mendaftarkan..."; btn.disabled = true;
@@ -362,7 +521,6 @@
             }
         }
 
-        // 2. RESET TOKEN GURU
         async function resetTokenForm() {
             let tokenBaru = prompt("Masukkan Token Baru Anda:");
             if(!tokenBaru) return;
@@ -378,7 +536,6 @@
             } catch(err) { alert("Gagal mereset token."); }
         }
 
-        // 3. LOGIN GURU
         async function handleGuruLogin(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-login-guru'); btn.innerText = "Memvalidasi..."; btn.disabled = true;
@@ -400,7 +557,9 @@
             } catch(err) { alert("Gangguan jaringan."); } finally { btn.innerText = "Masuk Dasbor"; btn.disabled = false; }
         }
 
-        // 4. LOGIN SISWA
+        // =========================================================================
+        // AKSI SISWA & FIREBASE
+        // =========================================================================
         async function handleSiswaLogin(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-login-siswa'); btn.innerText = "Validasi..."; btn.disabled = true;
@@ -409,34 +568,46 @@
                 const res = await fetchServer({ aksi: 'cekTokenGuru', tokenGuru: t });
                 const hasil = await res.json();
                 if (hasil.status === 'sukses') {
-                    mulaiSesiFirebase(document.getElementById('siswa-nama').value, document.getElementById('siswa-kelas').value, document.getElementById('siswa-sekolah').value, t.toUpperCase());
+                    mulaiSesiFirebase(
+                        document.getElementById('siswa-nama').value, 
+                        document.getElementById('siswa-kelas').value, 
+                        document.getElementById('siswa-sekolah').value, 
+                        t.toUpperCase()
+                    );
                 } else alert(hasil.pesan);
-            } catch(err) { alert("Gagal terhubung."); } finally { btn.innerText = "Mulai Ujian"; btn.disabled = false; }
+            } catch(err) { alert("Gagal terhubung ke server."); } finally { btn.innerText = "Mulai Ujian"; btn.disabled = false; }
         }
 
         function mulaiSesiFirebase(nama, kelas, sekolah, tokenGuru) {
-            if(!db) { alert("Koneksi Firebase gagal. Menjalankan versi tanpa monitor."); return; }
-            currentSessionId = "siswa_" + Date.now();
+            if(!db) { alert("Koneksi Firebase gagal. Menjalankan versi tanpa monitor."); }
             
-            db.ref('sessions/' + currentSessionId).set({ id: currentSessionId, nama: nama, kelas: kelas, sekolah: sekolah, tokenGuru: tokenGuru, status: 'AKTIF', pelanggaran: 0 });
+            if(db) {
+                currentSessionId = "siswa_" + Date.now();
+                db.ref('sessions/' + currentSessionId).set({ id: currentSessionId, nama: nama, kelas: kelas, sekolah: sekolah, tokenGuru: tokenGuru, status: 'AKTIF', pelanggaran: 0 });
+                
+                db.ref('sessions/' + currentSessionId).on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if(data && data.status === 'DIBEKUKAN') {
+                        document.getElementById('freeze-overlay').classList.remove('hidden'); jalankanTimerFreeze();
+                    } else {
+                        document.getElementById('freeze-overlay').classList.add('hidden'); hentikanTimerFreeze();
+                    }
+                });
+                
+                window.onblur = function() {
+                    if(currentSessionId && db) { 
+                        db.ref('sessions/' + currentSessionId).update({ status: 'DIBEKUKAN', pelanggaran: firebase.database.ServerValue.increment(1) });
+                        setTimeout(() => { if(db && currentSessionId) db.ref('sessions/' + currentSessionId).update({ status: 'AKTIF' }); }, 300000); 
+                    }
+                };
+            }
             
-            db.ref('sessions/' + currentSessionId).on('value', (snapshot) => {
-                const data = snapshot.val();
-                if(data && data.status === 'DIBEKUKAN') {
-                    document.getElementById('freeze-overlay').classList.remove('hidden'); jalankanTimerFreeze();
-                } else {
-                    document.getElementById('freeze-overlay').classList.add('hidden'); hentikanTimerFreeze();
-                }
-            });
+            document.getElementById('exam-student-name').innerText = nama; 
+            navigate('page-exam');
             
-            document.getElementById('exam-student-name').innerText = nama; navigate('page-exam');
-            
-            window.onblur = function() {
-                if(currentSessionId && db) { 
-                    db.ref('sessions/' + currentSessionId).update({ status: 'DIBEKUKAN', pelanggaran: firebase.database.ServerValue.increment(1) });
-                    setTimeout(() => { if(db && currentSessionId) db.ref('sessions/' + currentSessionId).update({ status: 'AKTIF' }); }, 300000); // Buka setelah 5 menit (300.000 ms)
-                }
-            };
+            // Panggil fungsi unduh soal
+            document.getElementById('tempat-soal').innerHTML = `<p class="text-center text-gray-500 my-10">Mengunduh soal dari server...</p>`;
+            muatSoalDariServer();
         }
 
         function jalankanTimerFreeze() {
@@ -454,7 +625,6 @@
         
         function hentikanTimerFreeze() { if(freezeInterval) clearInterval(freezeInterval); }
 
-        // 5. DASBOR REALTIME GURU
         function muatRealtimeDashboard() {
             if(!db) return;
             db.ref('sessions').on('value', (snapshot) => {
@@ -478,30 +648,6 @@
                 });
                 if(count === 0) tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-gray-500">Tidak ada siswa aktif di token Anda.</td></tr>';
             });
-        }
-
-        // 6. SIMPAN DATA NILAI AKHIR
-        async function kirimNilaiKeGoogleSheets() {
-            const btn = document.getElementById('btn-selesai'); btn.innerText = "Mengirim..."; btn.disabled = true;
-            try {
-                let statusCurang = "Tidak";
-                if(db && currentSessionId) {
-                    const snap = await db.ref('sessions/' + currentSessionId).once('value');
-                    if(snap.val() && snap.val().pelanggaran > 0) statusCurang = `Ya (${snap.val().pelanggaran}x Pindah Tab)`;
-                }
-                const res = await fetchServer({ 
-                    aksi: 'simpanNilai', tokenGuru: document.getElementById('siswa-token').value, 
-                    nama: document.getElementById('siswa-nama').value, kelas: document.getElementById('siswa-kelas').value, 
-                    sekolah: document.getElementById('siswa-sekolah').value, nilai: document.getElementById('simulasi-nilai').value, 
-                    curang: statusCurang 
-                });
-                const hasil = await res.json();
-                if (hasil.status === 'sukses') {
-                    alert("Selesai! Jawaban dan Nilai berhasil disimpan."); 
-                    if(db && currentSessionId) { db.ref('sessions/' + currentSessionId).remove(); window.onblur = null; }
-                    navigate('page-landing');
-                } else alert(hasil.pesan);
-            } catch (err) { alert("Gangguan koneksi."); } finally { btn.innerText = "Kirim Jawaban & Selesai"; btn.disabled = false; }
         }
     </script>
 </body>
